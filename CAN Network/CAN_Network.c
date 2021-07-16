@@ -24,6 +24,29 @@
 /* Mandatory C header */
 #include "CAN_Network.h"
 
+/* Internal fields */
+static bool internal_new_message = false;
+static uint8_t internal_data[8];
+static uint32_t internal_ID = 0;
+static uint8_t internal_DLC = 0;
+
+/* Internal functions */
+static void Internal_Transmit(uint32_t ID, uint8_t data[], uint8_t DLC) {
+	internal_ID = ID;
+	internal_DLC = DLC;
+	for(uint8_t i = 0; i < DLC; i++)
+		internal_data[i] = data[i];
+	internal_new_message = true;
+}
+
+static void Internal_Receive(uint32_t *ID, uint8_t data[], bool *is_new_message) {
+	*ID = internal_ID;
+	for(uint8_t i = 0; i < internal_DLC; i++)
+		data[i] = internal_data[i];
+	*is_new_message = internal_new_message;
+	internal_new_message = false;
+}
+
 ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[], uint8_t delay) {
 	ENUM_J1939_STATUS_CODES status;
 	#if PROCESSOR_CHOICE == STM32
@@ -42,11 +65,15 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[], uint8_t de
 	/* Implement your CAN send 8 bytes message function for the PIC platform */
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN send 8 bytes message function for the AVR platform */
+	#else
+	Internal_Transmit(ID, data, 8);								/* If no processor are used, use internal feedback for debugging */
 	#endif
 	return status;
 }
 
-/* PGN 00EA00 - Send a PGN request */
+/* Send a PGN request
+ * PGN: 0x00EA00 (59904)
+ */
 ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[], uint8_t delay) {
 	ENUM_J1939_STATUS_CODES status;
 	#if PROCESSOR_CHOICE == STM32
@@ -65,6 +92,8 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[], uint8_t del
 	/* Implement your CAN send 3 bytes message function for the PIC platform */
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN send 3 bytes message function for the AVR platform */
+	#else
+	Internal_Transmit(ID, PGN, 3);								/* If no processor are used, use internal feedback for debugging */
 	#endif
 	return status;
 }
@@ -80,6 +109,8 @@ bool CAN_Read_Message(uint32_t *ID, uint8_t data[]) {
 	/* Implement your CAN function to get ID, data[] and the flag is_new_message here for the PIC platform */
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN function to get ID, data[] and the flag is_new_message here for the AVR platform */
+	#else
+	Internal_Receive(ID, data, &is_new_message);				/* If no processor are used, use internal feedback for debugging */
 	#endif
 	return is_new_message;
 }
