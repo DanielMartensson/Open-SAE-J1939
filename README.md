@@ -59,5 +59,5 @@ That's the debugging mode.
  		- Auxiliary Valve Estimated Flow
  		- Auxiliary Valve Measured Position
  		- General Purpose Valve Command
- 		- General Purpose Estimated Flow
+ 		- General Purpose Valve Estimated Flow
  	
