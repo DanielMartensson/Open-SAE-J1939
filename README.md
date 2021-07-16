@@ -35,6 +35,7 @@ Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc.
  - SAE J1939:73 Diagnostics Layer
  	- DM1
  	- DM2
+ 	- DM3
  	- DM14
  	- DM15
  	- DM16
