@@ -15,6 +15,9 @@ Learn the structure of the project, else you won't be able to understand SAE J19
 After you have got a basic understanding of the project, you are able to build on it. Keep it simple and follow the 
 SAE J1939 standard!
 
+After you have understand the structure of the project, then select processor choice in `CAN_Netork.c` file.
+Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc.
+
 # The structure of the project
 
 ![a](https://raw.githubusercontent.com/DanielMartensson/Open-SAE-J1939/main/Documention/Pictures/Project%20structure.png)
