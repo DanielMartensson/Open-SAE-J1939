@@ -26,10 +26,10 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM14(J1939* j1939, uint8_t DA, ui
 }
 
 /*
- * Response the request of DM14 memory request to other ECU about this ECU
+ * Read the request of DM14 memory request to other ECU about this ECU
  * PGN: 0x00D900 (55552)
  */
-ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM14(J1939 *j1939, uint8_t DA, uint8_t data[]) {
+ENUM_J1939_STATUS_CODES SAE_J1939_Read_Request_DM14(J1939 *j1939, uint8_t DA, uint8_t data[]) {
 	uint16_t number_of_requested_bytes = ((data[1] & 0b11100000) << 3) | data[0];
 	uint8_t pointer_type = (data[1] >> 4) & 0b0001;
 	uint8_t command = (data[1] >> 1) & 0b0000111;
@@ -44,15 +44,15 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM14(J1939 *j1939, uint8_t DA
 	uint32_t EDC_parameter = 0;
 	uint8_t EDCP_extention = 0;
 	uint16_t seed = 0;
-	SAE_J1939_Response_Request_DM15(j1939, DA, number_of_allowed_bytes, status, EDC_parameter, EDCP_extention, seed);
+	SAE_J1939_Send_Response_DM15(j1939, DA, number_of_allowed_bytes, status, EDC_parameter, EDCP_extention, seed);
 
 	/* Check if our message was OK - Send DM16 binary data transfer */
 	if(status == STATUS_DM15_PROCEED) {
 		uint8_t number_of_occurences = 256;
 		uint8_t raw_binary_data[256];
 		if(SAE_J1939_Send_Binary_Data_Transfer_DM16(j1939, DA, number_of_occurences, raw_binary_data) == STATUS_SEND_OK)
-			SAE_J1939_Response_Request_DM15(j1939, DA, number_of_allowed_bytes, STATUS_DM15_OPERATION_COMPLETED, EDC_parameter, EDCP_extention, seed);
+			SAE_J1939_Send_Response_DM15(j1939, DA, number_of_allowed_bytes, STATUS_DM15_OPERATION_COMPLETED, EDC_parameter, EDCP_extention, seed);
 		else
-			SAE_J1939_Response_Request_DM15(j1939, DA, number_of_allowed_bytes, STATUS_DM15_OPERATION_FAILED, EDC_parameter, EDCP_extention, seed);
+			SAE_J1939_Send_Response_DM15(j1939, DA, number_of_allowed_bytes, STATUS_DM15_OPERATION_FAILED, EDC_parameter, EDCP_extention, seed);
 	}
 }

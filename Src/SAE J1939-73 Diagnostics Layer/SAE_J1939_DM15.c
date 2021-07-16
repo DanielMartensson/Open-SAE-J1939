@@ -11,7 +11,7 @@
  * Send a memory response. This will be sent after a DM14 memory request
  * PGN: 0x00D800 (55296)
  */
-ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM15(J1939 *j1939, uint8_t DA, uint16_t number_of_allowed_bytes, uint8_t status, uint32_t EDC_parameter, uint8_t EDCP_extention, uint16_t seed) {
+ENUM_J1939_STATUS_CODES SAE_J1939_Send_Response_DM15(J1939 *j1939, uint8_t DA, uint16_t number_of_allowed_bytes, uint8_t status, uint32_t EDC_parameter, uint8_t EDCP_extention, uint16_t seed) {
 	uint32_t ID = (0x18D8 << 16) | (DA << 8) | j1939->this_ECU_address;
 	uint8_t response_data[8];
 	response_data[0] = number_of_allowed_bytes;
@@ -29,7 +29,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM15(J1939 *j1939, uint8_t DA
  * Store the DM15 information about other ECU (This is actually a DM14 response according to the J1939 standard)
  * PGN: 0x00D800 (55296)
  */
-void SAE_J1939_Read_Response_Request_DM15(J1939 *j1939, uint8_t SA, uint8_t data[]) {
+void SAE_J1939_Read_Response_DM15(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	j1939->dm[SA].dm15.number_of_allowed_bytes = (data[1] >> 3) | data[0];
 	j1939->dm[SA].dm15.status = (data[1] >> 1) & 0b0000111;
 	j1939->dm[SA].dm15.error_indicator_EDC_parameter = (data[4] << 16) | (data[3] << 8) | data[2];

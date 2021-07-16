@@ -50,9 +50,6 @@ void SAE_J1939_Read_Request(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	} else if (PGN == PGN_COMPONENT_IDENTIFICATION) {
 		SAE_J1939_Send_Acknowledgement(SA, j1939->this_ECU_address, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
 		SAE_J1939_Response_Request_Component_Identification(j1939, SA);
-	} else if (PGN == PGN_DM14) {
-		SAE_J1939_Send_Acknowledgement(SA, j1939->this_ECU_address, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
-		SAE_J1939_Response_Request_DM14(j1939, SA);
 	} else {
 		SAE_J1939_Send_Acknowledgement(SA, j1939->this_ECU_address, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_NOT_SUPPORTED, 0xFF, j1939->this_ECU_address, PGN);
 	}
