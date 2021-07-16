@@ -29,7 +29,7 @@ That's the debugging mode.
 
 # The structure of the project
 
-![a](https://raw.githubusercontent.com/DanielMartensson/Open-SAE-J1939/main/Documentation/Pictures/Project%20structure.png)
+![a](https://raw.githubusercontent.com/DanielMartensson/Open-SAE-J1939/main/Src/Documentation/Pictures/Project%20structure.png)
 
 # SAE J1939 functionality
  - SAE J1939:21 Transport Layer
