@@ -10,7 +10,7 @@ With this library, you can communicate with valves, engines, actuators, hardware
 
 # Getting started
 
-The first thing you need to know is to read the document `Open SAE J1939.pdf` inside the `Documention` folder.
+The first thing you need to know is to read the document `Open SAE J1939.pdf` inside the `Documentation` folder.
 Learn the structure of the project, else you won't be able to understand SAE J1939. 
 After you have got a basic understanding of the project, you are able to build on it. Keep it simple and follow the 
 SAE J1939 standard!
@@ -29,7 +29,7 @@ That's the debugging mode.
 
 # The structure of the project
 
-![a](https://raw.githubusercontent.com/DanielMartensson/Open-SAE-J1939/main/Documention/Pictures/Project%20structure.png)
+![a](https://raw.githubusercontent.com/DanielMartensson/Open-SAE-J1939/main/Documentation/Pictures/Project%20structure.png)
 
 # SAE J1939 functionality
  - SAE J1939:21 Transport Layer
