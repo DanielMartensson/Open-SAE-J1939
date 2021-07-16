@@ -21,7 +21,7 @@
 #elif PROCESSOR_CHOICE == AVR
 #endif
 
-/* Mandatory C header */
+/* Layer */
 #include "CAN_Network.h"
 
 /* Internal fields */

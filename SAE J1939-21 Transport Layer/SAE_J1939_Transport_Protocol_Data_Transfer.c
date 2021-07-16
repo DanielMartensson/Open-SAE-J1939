@@ -83,13 +83,13 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t DA, uint8_t data[], uint16_t total_message_size, uint8_t number_of_packages){
 	uint32_t ID = (0x1CEB << 16) | (DA << 8) | j1939->this_ECU_address;
 	uint8_t package[8];
-	uint16_t sendt_bytes = 0;
+	uint16_t bytes_sent = 0;
 	ENUM_J1939_STATUS_CODES status = STATUS_SEND_OK;
 	for(uint8_t i = 1; i <= number_of_packages; i++) {
 		package[0] = i; 													/* Number of package */
 		for(uint8_t j = 0; j < 7; j++)
-			if(sendt_bytes < total_message_size)
-				package[j+1] = data[sendt_bytes++];							/* Data */
+			if(bytes_sent < total_message_size)
+				package[j+1] = data[bytes_sent++];							/* Data */
 			 else
 				package[j+1] = 0xFF; 										/* Reserved */
 
