@@ -43,10 +43,11 @@ Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc.
  	- Commanded Address
  
 # Extra functionality
- - ISO 117383 Tractors And Machinery For Agriculture And Forestry
- 	- Auxiliary Valve Command
- 	- Auxiliary Valve Estimated Flow
- 	- Auxiliary Valve Measured Position
- 	- General Purpose Valve Command
- 	- General Purpose Estimated Flow
+ - ISO 11783 Tractors And Machinery For Agriculture And Forestry
+ 	- ISO 11783-7 Implement messages application layer
+ 		- Auxiliary Valve Command
+ 		- Auxiliary Valve Estimated Flow
+ 		- Auxiliary Valve Measured Position
+ 		- General Purpose Valve Command
+ 		- General Purpose Estimated Flow
  	
