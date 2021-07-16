@@ -15,8 +15,17 @@ Learn the structure of the project, else you won't be able to understand SAE J19
 After you have got a basic understanding of the project, you are able to build on it. Keep it simple and follow the 
 SAE J1939 standard!
 
-After you have understand the structure of the project, then select processor choice in `CAN_Netork.c` file.
+After you have understand the structure of the project, then select processor choice in `CAN_Network.c` file.
 Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc.
+
+# How to use the project
+
+You only need to download this project and paste it into your `IDE`. Then you create the `J1939` structure and
+use the functions of this project. You don't need to do anything else. But you still need to understand what all
+these function does.
+
+I have added some examples inside the `Src` folder. Notice that you need to have `PROCESSOR_CHOICE 0` inside the `CAN_Network.h` first.
+That's the debugging mode.
 
 # The structure of the project
 
