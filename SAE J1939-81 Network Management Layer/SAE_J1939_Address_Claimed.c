@@ -5,6 +5,8 @@
  *      Author: Daniel Mårtensson
  */
 
+#include "SAE_J1939-81_Network_Management_Layer.h"
+
 /*
  * Send request address claimed to another ECU
  * PGN 0x00EE00 (60928)
@@ -18,7 +20,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Address_Claimed(J1939* j1939, uin
  * PGN 0x00EE00 (60928)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Address_Claimed(J1939* j1939, uint8_t DA) {
-	uint32_t ID = (0x18EE << 16) | (DA << 8) | j1939->this_address;
+	uint32_t ID = (0x18EE << 16) | (DA << 8) | j1939->this_ECU_address;
 	uint8_t data[8];
 	data[0] = j1939->this_name.identity_number;
 	data[1] = j1939->this_name.identity_number >> 8;
@@ -47,11 +49,11 @@ void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, u
 	j1939->name[SA].vehicle_system_instance = data[7] & 0b00001111;
 	/* Remember the source address of the ECU */
 	bool exist = false;
-	for (uint8_t i = 0; i < 255; i++)
-		if (j1939->addresses_ECU[i] == SA)
+	for (uint8_t i = 0; i < 256; i++)
+		if (j1939->ECU_address[i] == SA)
 			exist = true;
 	if (!exist) {
-		j1939->addresses_ECU[j1939->number_of_ECU] = SA;
+		j1939->ECU_address[j1939->number_of_ECU] = SA;
 		j1939->number_of_ECU++;
 	}
 }

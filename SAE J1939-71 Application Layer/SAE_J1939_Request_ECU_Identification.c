@@ -9,8 +9,6 @@
 
 /*
  * Request ECU identification to another ECU
- * *j1939: Pointer to structure J1939
- * DA: Destination ECU address between 0 to 255 (DA 255 = Broadcast to all ECU)
  * PGN: 0x00FDC5 (64965)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_ECU_Identification(J1939 *j1939, uint8_t DA) {
@@ -19,8 +17,6 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_ECU_Identification(J1939 *j1939, 
 
 /*
  * Response the request of the ECU identification about this ECU
- * *j1939: Pointer to structure J1939
- * DA: Destination ECU address between 0 to 255 (DA 255 = Broadcast to all ECU)
  * PGN: 0x00FDC5 (64965)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_ECU_Identification(J1939* j1939, uint8_t DA) {
@@ -28,7 +24,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_ECU_Identification(J1939* j19
 	uint8_t length_of_each_field = j1939->this_ecu_identification.length_of_each_field;
 	if (length_of_each_field < 2) {
 		/* If each field have the length 1, then we can send ECU identification as it was a normal message */
-		uint32_t ID = (0x18FDC5 << 8) | j1939->this_address;
+		uint32_t ID = (0x18FDC5 << 8) | j1939->this_ECU_address;
 		uint8_t data[8];
 		data[0] = j1939->this_ecu_identification.ecu_part_number[0];
 		data[1] = j1939->this_ecu_identification.ecu_serial_number[0];
@@ -54,18 +50,15 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_ECU_Identification(J1939* j19
 
 		/* Send TP CM BAM and then TP DT data */
 		uint8_t number_of_packages = total_message_size % 8 > 1 ? total_message_size/8 + 1 : total_message_size/8; /* Rounding up */
-		ENUM_J1939_STATUS_CODES status = J1939_Core_Send_TP_CM(DA, j1939->this_address, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_ECU_IDENTIFICATION);
-		if(status != J1939_OK)
+		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_ECU_IDENTIFICATION);
+		if(status != STATUS_SEND_OK)
 			return status;
-		return J1939_Core_Send_TP_DT(DA, j1939->this_address, data, total_message_size, number_of_packages);
+		return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA, data, total_message_size, number_of_packages);
 	}
 }
 
 /*
  * Store the ECU identification about other ECU
- * *j1939: Pointer to structure J1939
- * SA: Source address from which ECU address the message came from
- * data[]: 8 bytes data array
  * PGN: 0x00FDC5 (64965)
  */
 void SAE_J1939_Read_Response_Request_ECU_Identification(J1939 *j1939, uint8_t SA, uint8_t data[]) {

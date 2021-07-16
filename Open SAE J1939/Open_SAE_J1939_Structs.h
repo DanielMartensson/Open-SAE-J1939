@@ -5,25 +5,25 @@
  *      Author: Daniel Mårtensson
  */
 
-#ifndef SRC_STM32_PLC_SAE_J1939_SAE_J1939_SAE_J1939_STRUCTS_H_
-#define SRC_STM32_PLC_SAE_J1939_SAE_J1939_SAE_J1939_STRUCTS_H_
+#ifndef OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_
+#define OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_
 
 #include "stdint.h"
 
 /* PGN 00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {
-	uint8_t control_byte;							/* This indicates the status of the requested information about PGN. See J1939_Enum_Control_Byte.h */
-	uint8_t group_function_value;					/* The ECU function */
+	uint8_t control_byte;							/* This indicates the status of the requested information about PGN */
+	uint8_t group_function_value;					/* The function code that specify cause of the control byte e.g time out or aborted */
 	uint8_t address;								/* Address from the ECU where the acknowledgement is comming from */
 	uint32_t PGN_of_requested_info;					/* Information request about the PGN */
 };
 
 /* PGN 00EC00 - Storing the Transport Protocol Connection Management from the reading process */
 struct TP_CM {
-	uint8_t control_byte;							/* What type of message are we going to send. See See J1939_Enum_Control_Byte.h */
+	uint8_t control_byte;							/* What type of message are we going to send */
 	uint16_t total_message_size;					/* Total bytes our complete message includes */
 	uint8_t number_of_packages;						/* How many times we are going to send packages via TP_DT */
-	uint32_t PGN_of_the_packeted_message;			/* Our message is going to activate a PGN, see J1939_Enum_PGN.h */
+	uint32_t PGN_of_the_packeted_message;			/* Our message is going to activate a PGN */
 };
 
 /* PGN 00EB00 - Storing the Transport Protocol Data Transfer from the reading process */
@@ -58,19 +58,19 @@ struct DM1 {
 	uint8_t SAE_flash_lamp_protect_lamp;
 
 	/* Fault location, problem and codes */
-	uint32_t SPN;									/* Location where the fault exist - Look at J1939_Enum_DM1.h */
-	uint8_t FMI;									/* Type of problem - Look at J1939_Enum_DM1.h */
+	uint32_t SPN;									/* Location where the fault exist */
+	uint8_t FMI;									/* Type of problem */
 	uint8_t SPN_conversion_method;					/* If SPN_conversion_method = 1 that means Diagnostics Trouble Code are aligned using a newer conversion method. If SPN_conversion_method = 0 means one of the three Diagnostics Trouble Code conversion methods is used and ECU manufacture shall know which of the three methods is used */
 	uint8_t occurence_count;						/* This tells how many times failure has occurred. Every time fault goes from inactive to active, the occurence_count is incremented by 1. If fault becomes active for more than 126 times the occurence_count remains 126 */
 };
 
 /* PGN 00D800 - Storing the DM15 response from the reading process */
 struct DM15 {
-	uint16_t number_of_allowed_bytes;				/* Todo: vad är detta? */
-	uint8_t status;									/* Look for status in J1939_Enums.h */
-	uint32_t error_indicator_EDC_parameter;			/* Vad är detta */
-	uint8_t EDCP_extention;							/* Vad är detta */
-	uint16_t seed;									/* Vad är detta */
+	uint16_t number_of_allowed_bytes;				/* How many bytes we are allowed to write or read to */
+	uint8_t status;									/* Status of the response */
+	uint32_t error_indicator_EDC_parameter;			/* TODO: Vad är detta */
+	uint8_t EDCP_extention;							/* TODO: Vad är detta */
+	uint16_t seed;									/* TODO: Vad är detta */
 };
 
 /* PGN 00D700 - Storing the DM16 binary data transfer from the reading process */
@@ -82,18 +82,18 @@ struct DM16 {
 struct Auxiliary_valve_estimated_flow {
 	uint8_t extend_estimated_flow_standard;			/* A measurement */
 	uint8_t retract_estimated_flow_standard;		/* A measurement */
-	uint8_t valve_state;							/* Look for valve_state in J1939_Enums.h */
-	uint8_t fail_safe_mode;							/* Look for fail_safe_mode in J1939_Enums.h */
-	uint8_t limit;									/* Look for limit in J1939_Enums.h */
-	uint8_t exit_code;								/* Look for exit_code in J1939_Enums.h */
+	uint8_t valve_state;							/* What status should we send to the valve */
+	uint8_t fail_safe_mode;							/* The mode if we are going to use fail safe mode or not */
+	uint8_t limit;									/* Enter a limit code */
+	uint8_t exit_code;								/* Enter an exit code */
 };
 
 struct General_purpose_valve_estimated_flow {
 	uint8_t extend_estimated_flow_standard;			/* A measurement */
 	uint8_t retract_estimated_flow_standard;		/* A measurement */
-	uint8_t valve_state;							/* Look for valve_state in J1939_Enums.h */
-	uint8_t fail_safe_mode;							/* Look for fail_safe_mode in J1939_Enums.h */
-	uint8_t limit;									/* Look for limit in J1939_Enums.h */
+	uint8_t valve_state;							/* What status should we send to the valve */
+	uint8_t fail_safe_mode;							/* The mode if we are going to use fail safe mode or not */
+	uint8_t limit;									/* Enter a limit code */
 	uint16_t extend_estimated_flow_extended;		/* A measurement */
 	uint16_t retract_estimated_flow_extended;		/* A measurement */
 };
@@ -140,7 +140,7 @@ typedef struct {
 	/* For information about other ECU */
 	uint8_t number_of_ECU;
 	uint8_t number_of_cannot_claim_address;
-	uint8_t addresses_ECU[256];
+	uint8_t ECU_address[256];
 	struct Acknowledgement acknowledgement[256];
 	struct TP_CM tp_cm[256];
 	struct TP_DT tp_dt[256];
@@ -154,7 +154,7 @@ typedef struct {
 
 	/* For information about this ECU */
 	struct Name this_name;
-	uint8_t this_address;
+	uint8_t this_ECU_address;
 	struct DM this_dm;
 	struct Software_identification this_software_identification;
 	struct ECU_identification this_ecu_identification;
@@ -163,4 +163,4 @@ typedef struct {
 	struct General_purpose_valve_estimated_flow this_general_purpose_valve_estimated_flow;
 } J1939;
 
-#endif /* SRC_STM32_PLC_SAE_J1939_SAE_J1939_SAE_J1939_STRUCTS_H_ */
+#endif /* OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_ */

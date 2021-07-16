@@ -9,8 +9,6 @@
 
 /*
  * Request DM1 from another ECU
- * *j1939: Pointer to structure J1939
- * DA: Destination ECU address between 0 to 255 (DA 255 = Broadcast to all ECU)
  * PGN: 0x00FECA (65226)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM1(J1939 *j1939, uint8_t DA) {
@@ -19,13 +17,11 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM1(J1939 *j1939, uint8_t DA) {
 
 /*
  * Response the request of DM1 information to other ECU about this ECU
- * *j1939: Pointer to structure J1939
- * DA: Destination ECU address between 0 to 255 (DA 255 = Broadcast to all ECU)
  * PGN: 0x00FECA (65226)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM1(J1939* j1939, uint8_t DA) {
 	if(j1939->this_dm.errors_dm1_active < 2) {
-		uint32_t ID = (0x18FECA << 8) | j1939->this_address;
+		uint32_t ID = (0x18FECA << 8) | j1939->this_ECU_address;
 		uint8_t data[8];
 		data[0] = (j1939->this_dm.dm1[0].SAE_lamp_status_malfunction_indicator << 6) | (j1939->this_dm.dm1[0].SAE_lamp_status_red_stop << 4) | (j1939->this_dm.dm1[0].SAE_lamp_status_amber_warning << 2) | (j1939->this_dm.dm1[0].SAE_lamp_status_protect_lamp);
 		data[1] = (j1939->this_dm.dm1[0].SAE_flash_lamp_malfunction_indicator << 6) | (j1939->this_dm.dm1[0].SAE_flash_lamp_red_stop << 4) | (j1939->this_dm.dm1[0].SAE_flash_lamp_amber_warning << 2) | (j1939->this_dm.dm1[0].SAE_flash_lamp_protect_lamp);
@@ -51,19 +47,15 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM1(J1939* j1939, uint8_t DA)
 			data[total_message_size++] = 0xFF;							/* Reserved */
 			data[total_message_size++] = 0xFF;							/* Reserved */
 		}
-		ENUM_J1939_STATUS_CODES status = J1939_Core_Send_TP_CM(DA, j1939->this_address, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_DM1);
-		if(status != J1939_OK)
+		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_DM1);
+		if(status != STATUS_SEND_OK)
 			return status;
-		return J1939_Core_Send_TP_DT(DA, j1939->this_address, data, total_message_size, number_of_packages);
+		return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA, data, total_message_size, number_of_packages);
 	}
 }
 
 /*
  * Store the DM1 information about other ECU
- * *j1939: Pointer to structure J1939
- * SA: Source address from which ECU address the message came from
- * data[]: X bytes data array
- * errors_dm1_active: How many errors we have. For example if errors_dm1_active = 2, then data[] contains 2*8 bytes
  * PGN: 0x00FECA (65226)
  */
 void SAE_J1939_Read_Response_Request_DM1(J1939 *j1939, uint8_t SA, uint8_t data[], uint8_t errors_dm1_active) {

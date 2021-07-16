@@ -12,7 +12,7 @@
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t DA, uint8_t number_of_occurences, uint8_t raw_binary_data[]) {
 	if(number_of_occurences < 8) {
-		uint32_t ID = (0x18D7 << 16) | (DA << 8) | j1939->this_address;
+		uint32_t ID = (0x18D7 << 16) | (DA << 8) | j1939->this_ECU_address;
 		uint8_t data[number_of_occurences + 1];								/* number_of_occurences must be 7 */
 		data[0] = number_of_occurences;										/* How much binary data we want to send */
 		for(uint8_t i = 0; i < number_of_occurences; i++)
@@ -28,10 +28,10 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, u
 
 		/* Send TP CM BAM and then TP DT data */
 		uint8_t number_of_packages = total_message_size % 8 > 1 ? total_message_size/8 + 1 : total_message_size/8; /* Rounding up */
-		ENUM_J1939_STATUS_CODES status = J1939_Core_Send_TP_CM(j1939->this_address, DA, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_DM16);
-		if(status != J1939_OK)
+		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_DM16);
+		if(status != STATUS_SEND_OK)
 			return status;
-		return J1939_Core_Send_TP_DT(j1939->this_address, DA, data, total_message_size, number_of_packages);
+		return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA, data, total_message_size, number_of_packages);
 	}
 }
 

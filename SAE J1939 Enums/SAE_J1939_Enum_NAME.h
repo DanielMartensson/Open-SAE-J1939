@@ -1,0 +1,17 @@
+/*
+ * SAE_J1939_Enum_NAME.h
+ *
+ *  Created on: 15 juli 2021
+ *      Author: Daniel Mårtenssons
+ */
+
+#ifndef SAE_J1939_ENUMS_SAE_J1939_ENUM_NAME_H_
+#define SAE_J1939_ENUMS_SAE_J1939_ENUM_NAME_H_
+
+typedef enum {
+	INDUSTRY_GROUP_AGRICULTURAL_AND_FORESTRY = 0x2,
+	FUNCTION_AUXILIARY_VALVES_CONTROL= 0x81
+	/* Add more here */
+}ENUM_NAME_CODES;
+
+#endif /* SAE_J1939_ENUMS_SAE_J1939_ENUM_NAME_H_ */

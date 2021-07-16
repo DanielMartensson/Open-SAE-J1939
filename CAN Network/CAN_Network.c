@@ -10,7 +10,7 @@
 #define ARDUINO 2
 #define PIC 3
 #define AVR 4
-#define PROCESSOR_CHOICE 1
+#define PROCESSOR_CHOICE 0
 
 /* Platform independent library headers for CAN */
 #if PROCESSOR_CHOICE == STM32

@@ -8,7 +8,20 @@
 #ifndef SAE_J1939_21_TRANSPORT_LAYER_SAE_J1939_21_TRANSPORT_LAYER_H_
 #define SAE_J1939_21_TRANSPORT_LAYER_SAE_J1939_21_TRANSPORT_LAYER_H_
 
+/* Layers */
+#include "../CAN Network/CAN_Network.h"
 
+/* Enums */
+#include "../SAE J1939 Enums/SAE_J1939_Enum_PGN.h"
+#include "../SAE J1939 Enums/SAE_J1939_Enum_Control_Byte.h"
+#include "../SAE J1939 Enums/SAE_J1939_Enum_Group_Function_Value.h"
+#include "../SAE J1939 Enums/SAE_J1939_Enum_DM1.h"
+#include "../SAE J1939 Enums/SAE_J1939_Enum_DM14_DM15.h"
+#include "../SAE J1939 Enums/SAE_J1939_Enum_Send_Status.h"
+#include "../SAE J1939 Enums/SAE_J1939_Enum_NAME.h"
+
+/* Structs */
+#include "../Open SAE J1939/Open_SAE_J1939_Structs.h"
 
 /* Acknowledgement */
 void SAE_J1939_Read_Acknowledgement(J1939 *j1939, uint8_t SA, uint8_t data[]);

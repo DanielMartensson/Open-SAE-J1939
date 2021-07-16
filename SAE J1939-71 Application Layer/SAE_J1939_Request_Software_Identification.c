@@ -9,8 +9,6 @@
 
 /*
  * Send request software identification to another ECU
- * *j1939: Pointer to structure J1939
- * DA: Destination ECU address between 0 to 255 (DA 255 = Broadcast to all ECU)
  * PGN: 0x00FEDA (65242)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Software_Identification(J1939 *j1939, uint8_t DA) {
@@ -19,8 +17,6 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Software_Identification(J1939 *j1
 
 /*
  * Response the request of the software identification about this ECU
- * *j1939: Pointer to structure J1939
- * DA: Destination ECU address between 0 to 255 (DA 255 = Broadcast to all ECU)
  * PGN: 0x00FEDA (65242)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Software_Identification(J1939* j1939, uint8_t DA) {
@@ -28,12 +24,12 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Software_Identification(J1939
 	uint8_t length_of_each_identification = j1939->this_software_identification.length_of_each_identification;
 	if (number_of_fields*length_of_each_identification < 9) {
 		/* If we only using 1 identification field and our identification is below 8, then we can send software identification as a normal message */
-		uint32_t ID = (0x18FEDA << 8) | j1939->this_address;
+		uint32_t ID = (0x18FEDA << 8) | j1939->this_ECU_address;
 		uint8_t data[8];
-		data[0] = j1939->this_software_identification.number_of_fields;	/* J1939 standard */
+		data[0] = j1939->this_software_identification.number_of_fields;		/* J1939 standard */
 		for(uint8_t i = 0; i < 7; i++)
 			data[i+1] = j1939->this_software_identification.identifications[i];
-		return CAN_Send_Message(ID, data, 0);							/* 0 ms delay */
+		return CAN_Send_Message(ID, data, 0);								/* 0 ms delay */
 	} else {
 		/* Multiple messages - Use Transport Protocol Connection Management BAM */
 		uint16_t total_message_size = 0;
@@ -44,18 +40,15 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Software_Identification(J1939
 
 		/* Send TP CM BAM and then TP DT data */
 		uint8_t number_of_packages = total_message_size % 8 > 1 ? total_message_size/8 + 1 : total_message_size/8; /* Rounding up */
-		ENUM_J1939_STATUS_CODES status = J1939_Core_Send_TP_CM(DA, j1939->this_address, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_SOFTWARE_IDENTIFICATION);
-		if(status != J1939_OK)
+		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_SOFTWARE_IDENTIFICATION);
+		if(status != STATUS_SEND_OK)
 			return status;
-		return J1939_Core_Send_TP_DT(DA, j1939->this_address, data, total_message_size, number_of_packages);
+		return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA, data, total_message_size, number_of_packages);
 	}
 }
 
 /*
  * Store the software identification about other ECU
- * *j1939: Pointer to structure J1939
- * SA: Source address from which ECU address the message came from
- * data[]: 8 bytes data array
  * PGN: 0x00FEDA (65242)
  */
 void SAE_J1939_Read_Response_Request_Software_Identification(J1939 *j1939, uint8_t SA, uint8_t data[]) {
