@@ -41,7 +41,6 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -99,13 +98,18 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="refreshScope"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.2145519629;cdt.managedbuild.config.gnu.mingw.exe.debug.2145519629.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.540202340;cdt.managedbuild.tool.gnu.c.compiler.input.765293919">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.280892246;cdt.managedbuild.config.gnu.mingw.exe.debug.280892246.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.339115000;cdt.managedbuild.tool.gnu.c.compiler.input.731875776">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.release.1216720148;cdt.managedbuild.config.gnu.mingw.exe.release.1216720148.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release.1353918118;cdt.managedbuild.tool.gnu.c.compiler.input.102931320">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
