@@ -31,12 +31,13 @@ static uint32_t internal_ID = 0;
 static uint8_t internal_DLC = 0;
 
 /* Internal functions */
-static void Internal_Transmit(uint32_t ID, uint8_t data[], uint8_t DLC) {
+static ENUM_J1939_STATUS_CODES Internal_Transmit(uint32_t ID, uint8_t data[], uint8_t DLC) {
 	internal_ID = ID;
 	internal_DLC = DLC;
 	for(uint8_t i = 0; i < DLC; i++)
 		internal_data[i] = data[i];
 	internal_new_message = true;
+	return STATUS_SEND_OK;
 }
 
 static void Internal_Receive(uint32_t *ID, uint8_t data[], bool *is_new_message) {
@@ -66,7 +67,7 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[], uint8_t de
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN send 8 bytes message function for the AVR platform */
 	#else
-	Internal_Transmit(ID, data, 8);								/* If no processor are used, use internal feedback for debugging */
+	status = Internal_Transmit(ID, data, 8);					/* If no processor are used, use internal feedback for debugging */
 	#endif
 	return status;
 }
@@ -93,7 +94,7 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[], uint8_t del
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN send 3 bytes message function for the AVR platform */
 	#else
-	Internal_Transmit(ID, PGN, 3);								/* If no processor are used, use internal feedback for debugging */
+	status = Internal_Transmit(ID, PGN, 3);						/* If no processor are used, use internal feedback for debugging */
 	#endif
 	return status;
 }

@@ -7,7 +7,7 @@
 
 #include "Open_SAE_J1939.h"
 
-void Open_SAE_J1939_Broadcast_Messages(uint16_t time) {
+void Open_SAE_J1939_Broadcast_Messages(J1939 *j1939, uint16_t time) {
 	switch(time){
 	case 100:
 		/* Send out these messages */

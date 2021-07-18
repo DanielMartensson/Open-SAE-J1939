@@ -19,8 +19,8 @@
 
 
 /* These functions must be called all the time */
-void Open_SAE_J1939_Listen_For_Messages(J1939* j1939);
-void Open_SAE_J1939_Broadcast_Messages(uint16_t time);
+void Open_SAE_J1939_Listen_For_Messages(J1939 *j1939);
+void Open_SAE_J1939_Broadcast_Messages(J1939 *j1939, uint16_t time);
 
 
 #endif /* OPEN_SAE_J1939_OPEN_SAE_J1939_H_ */

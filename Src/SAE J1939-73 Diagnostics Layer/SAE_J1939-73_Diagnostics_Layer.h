@@ -39,7 +39,7 @@ void SAE_J1939_Read_Response_Request_DM2(J1939 *j1939, uint8_t SA, uint8_t data[
 
 /* DM3 */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM3(J1939 *j1939, uint8_t DA);
-ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM3(J1939* j1939, uint8_t DA);
+ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM3(J1939* j1939);
 
 /* DM14 */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM14(J1939* j1939, uint8_t DA, uint16_t number_of_requested_bytes, uint8_t pointer_type, uint8_t command, uint32_t pointer, uint8_t pointer_extension, uint16_t key);
