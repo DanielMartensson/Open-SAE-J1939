@@ -5,4 +5,31 @@
  *      Author: Daniel Mårtensson
  */
 
+#include "ISO_11783_7_Implement_Messages_Application_Layer.h"
 
+/*
+ * Send a general purpose valve command to an ECU
+ * PGN: 0x00C400 (50176)
+ */
+ENUM_J1939_STATUS_CODES ISO_11783_Send_General_Purpose_Valve_Command(J1939 *j1939, uint8_t DA, uint8_t standard_flow, uint8_t fail_safe_mode, uint8_t valve_state, uint16_t extended_flow) {
+	uint32_t ID = (0x0CC4 << 16) | (DA << 8) | j1939->this_ECU_address;
+	uint8_t data[8];
+	data[0] = standard_flow;
+	data[1] = 0xFF; 												/* Reserved */
+	data[2] = (fail_safe_mode << 6) | (0b11 << 4) | valve_state; 	/* Bit 5 and 6 are reserved */
+	data[3] = extended_flow;
+	data[4] = extended_flow >> 8;
+	data[5] = data[6] = data[7] = 0xFF;								/* All reserved */
+	return CAN_Send_Message(ID, data, 0);							/* 0 ms delay */
+}
+
+/*
+ * Read a general purpose valve command from an ECU
+ * PGN: 0x00C400 (50176)
+ */
+void ISO_11783_Read_General_Purpose_Valve_Command(J1939 *j1939, uint8_t data[]) {
+	j1939->this_general_purpose_valve_command.standard_flow = data[0];
+	j1939->this_general_purpose_valve_command.fail_safe_mode = data[2] >> 6;
+	j1939->this_general_purpose_valve_command.valve_state = data[2] & 0b00001111;
+	j1939->this_general_purpose_valve_command.extended_flow = (data[4] << 8) | data[3];
+}

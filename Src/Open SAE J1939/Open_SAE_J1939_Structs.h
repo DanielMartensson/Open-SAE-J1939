@@ -10,15 +10,15 @@
 
 #include "stdint.h"
 
-/* PGN 0x00E800 - Storing the Acknowledgement from the reading process */
+/* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {
-	uint8_t control_byte;							/* This indicates the status of the requested information about PGN */
+	uint8_t control_byte;							/* This indicates the status of the requested information about PGN: */
 	uint8_t group_function_value;					/* The function code that specify cause of the control byte e.g time out or aborted */
 	uint8_t address;								/* Address from the ECU where the acknowledgement is comming from */
 	uint32_t PGN_of_requested_info;					/* Information request about the PGN */
 };
 
-/* PGN 0x00EC00 - Storing the Transport Protocol Connection Management from the reading process */
+/* PGN: 0x00EC00 - Storing the Transport Protocol Connection Management from the reading process */
 struct TP_CM {
 	uint8_t control_byte;							/* What type of message are we going to send */
 	uint16_t total_message_size;					/* Total bytes our complete message includes */
@@ -26,13 +26,13 @@ struct TP_CM {
 	uint32_t PGN_of_the_packeted_message;			/* Our message is going to activate a PGN */
 };
 
-/* PGN 0x00EB00 - Storing the Transport Protocol Data Transfer from the reading process */
+/* PGN: 0x00EB00 - Storing the Transport Protocol Data Transfer from the reading process */
 struct TP_DT {
 	uint8_t sequence_number;						/* When this sequence number is the same as number_of_packages from TP_CM, then we have our complete message */
 	uint8_t data[7][256];							/* Package data of 2D array where first index is data0 -> data6 and second index is sequence of the data */
 };
 
-/* PGN 0x00EE00 - Storing the Address claimed from the reading process */
+/* PGN: 0x00EE00 - Storing the Address claimed from the reading process */
 struct Name {
 	uint32_t identity_number;						/* Specify the ECU serial ID - 0 to 2097151 */
 	uint16_t manufacturer_code;						/* Specify the ECU manufacturer code - 0 to 2047 */
@@ -45,7 +45,7 @@ struct Name {
 	uint8_t vehicle_system_instance;				/* Specify the vehicle system number - 0 to 15 */
 };
 
-/* PGN 0x00FECA - Storing the DM1 Active diagnostic trouble codes from the reading process */
+/* PGN: 0x00FECA - Storing the DM1 Active diagnostic trouble codes from the reading process */
 struct DM1 {
 	/* These are SAE lamps can have 1 = ON and 0 = OFF */
 	uint8_t SAE_lamp_status_malfunction_indicator;
@@ -64,16 +64,16 @@ struct DM1 {
 	uint8_t occurence_count;						/* This tells how many times failure has occurred. Every time fault goes from inactive to active, the occurence_count is incremented by 1. If fault becomes active for more than 126 times the occurence_count remains 126 */
 };
 
-/* PGN 0x00D800 - Storing the DM15 response from the reading process */
+/* PGN: 0x00D800 - Storing the DM15 response from the reading process */
 struct DM15 {
 	uint16_t number_of_allowed_bytes;				/* How many bytes we are allowed to write or read to */
 	uint8_t status;									/* Status of the response */
-	uint32_t error_indicator_EDC_parameter;			/* TODO: Vad är detta */
-	uint8_t EDCP_extention;							/* TODO: Vad är detta */
-	uint16_t seed;									/* TODO: Vad är detta */
+	uint32_t EDC_parameter;							/* Status code */
+	uint8_t EDCP_extention;							/* Describe how we should interpret the EDC parameter as a status code or error code */
+	uint16_t seed;									/* Response of the key if we need more key or no key at all */
 };
 
-/* PGN 0x00D700 - Storing the DM16 binary data transfer from the reading process */
+/* PGN: 0x00D700 - Storing the DM16 binary data transfer from the reading process */
 struct DM16 {
 	uint8_t number_of_occurences;					/* How many bytes we have sent */
 	uint8_t raw_binary_data[256];					/* Here we store the bytes */
@@ -90,14 +90,14 @@ struct DM {
 	/* Add more DM here */
 };
 
-/* PGN 0x00FEDA - Storing the software identification from the reading process */
+/* PGN: 0x00FEDA - Storing the software identification from the reading process */
 struct Software_identification {
 	uint8_t length_of_each_identification;			/* The length of each identification - Not part of J1939 standard */
 	uint8_t number_of_fields;						/* How many numbers contains in the identifications array */
 	uint8_t identifications[256];					/* This can be for example ASCII */
 };
 
-/* PGN 0x00FDC5 - Storing the ECU identification from the reading process */
+/* PGN: 0x00FDC5 - Storing the ECU identification from the reading process */
 struct ECU_identification {
 	uint8_t length_of_each_field;					/* The real length of the fields - Not part of J1939 standard */
 	uint8_t ecu_part_number[256];					/* ASCII field */
@@ -108,7 +108,7 @@ struct ECU_identification {
 	uint8_t ecu_hardware_version[256];				/* ASCII field */
 };
 
-/* PGN 0x00FEEB - Storing the component identification from the reading process */
+/* PGN: 0x00FEEB - Storing the component identification from the reading process */
 struct Component_identification {
 	uint8_t length_of_each_field;					/* The real length of the fields - Not part of J1939 standard */
 	uint8_t component_product_date[256];			/* ASCII field */
@@ -124,24 +124,38 @@ struct Auxiliary_valve_command {
 	uint8_t	valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
 };
 
-
+/* PGN: 0x00FE10 (65040) to 0x00FE1F (65055) */
 struct Auxiliary_valve_estimated_flow {
 	uint8_t extend_estimated_flow_standard;			/* A measurement */
 	uint8_t retract_estimated_flow_standard;		/* A measurement */
-	uint8_t valve_state;							/* What status should we send to the valve */
+	uint8_t valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
 	uint8_t fail_safe_mode;							/* The mode if we are going to use fail safe mode or not */
 	uint8_t limit;									/* Enter a limit code */
-	uint8_t exit_code;								/* Enter an exit code */
 };
 
+/* PGN: 0x00C400 (50176) */
+struct General_purpose_valve_command {
+	uint8_t standard_flow;							/* Command flow */
+	uint8_t fail_safe_mode;							/* If the user want the valve to go to neutral */
+	uint8_t	valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
+	uint16_t extended_flow;							/* Another command flow */
+};
+
+/* PGN: 0x00C600 (50688) */
 struct General_purpose_valve_estimated_flow {
 	uint8_t extend_estimated_flow_standard;			/* A measurement */
 	uint8_t retract_estimated_flow_standard;		/* A measurement */
-	uint8_t valve_state;							/* What status should we send to the valve */
+	uint8_t valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
 	uint8_t fail_safe_mode;							/* The mode if we are going to use fail safe mode or not */
 	uint8_t limit;									/* Enter a limit code */
 	uint16_t extend_estimated_flow_extended;		/* A measurement */
 	uint16_t retract_estimated_flow_extended;		/* A measurement */
+};
+
+struct Auxiliary_valve_measured_position {
+	uint16_t measured_position_procent;				/* Procent position */
+	uint8_t valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
+	uint16_t measured_position_micrometer;			/* Micrometer position */
 };
 
 typedef struct {
@@ -159,6 +173,7 @@ typedef struct {
 	struct Component_identification component_identification[256];
 	struct Auxiliary_valve_estimated_flow auxiliary_valve_estimated_flow[256][16];
 	struct General_purpose_valve_estimated_flow general_purpose_valve_estimated_flow[256];
+	struct Auxiliary_valve_measured_position auxiliary_valve_measured_position[256][16];
 
 	/* For information about this ECU */
 	struct Name this_name;
@@ -168,8 +183,9 @@ typedef struct {
 	struct ECU_identification this_ecu_identification;
 	struct Component_identification this_component_identification;
 	struct Auxiliary_valve_command this_auxiliary_valve_command[16];
-	struct Auxiliary_valve_estimated_flow this_auxiliary_valve_estimated_flow[16];
-	struct General_purpose_valve_estimated_flow this_general_purpose_valve_estimated_flow;
+	struct General_purpose_valve_command this_general_purpose_valve_command;
+
+
 } J1939;
 
 #endif /* OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_ */

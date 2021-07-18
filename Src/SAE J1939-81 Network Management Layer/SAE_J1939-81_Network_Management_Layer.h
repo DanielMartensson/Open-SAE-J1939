@@ -29,7 +29,7 @@
 
 /* Address claimed */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Address_Claimed(J1939* j1939, uint8_t DA);
-ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Address_Claimed(J1939* j1939, uint8_t DA);
+ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Address_Claimed(J1939* j1939);
 void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, uint8_t data[]);
 
 /* Commanded address */
