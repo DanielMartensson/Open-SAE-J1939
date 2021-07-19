@@ -63,6 +63,5 @@ int main() {
 	printf("How many ECU cannot claim their address according to ECU 1? %i\n", j1939_1.all_number_of_cannot_claim_address);
 	printf("How many ECU cannot claim their address according to ECU 2? %i\n", j1939_2.all_number_of_cannot_claim_address);
 
-
 	return 0;
 }

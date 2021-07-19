@@ -159,8 +159,8 @@ typedef struct {
 	/* This store the basic information about other ECU */
 	uint8_t all_number_of_ECU;
 	uint8_t all_number_of_cannot_claim_address;
-	uint8_t all_ECU_address[254];					/* Address values between 0 and 253 only because 254 = error address, 255 = Broadcast */
-	struct Name all_name[254];
+	uint8_t all_ECU_address[255];					/* Address values between 0 and 254 only because 254 = error address, 255 = Broadcast */
+	struct Name all_name[255];
 
 	/* Temporary store the information from the reading process - SAE J1939 */
 	struct Acknowledgement from_other_ecu_acknowledgement;
