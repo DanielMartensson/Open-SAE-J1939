@@ -22,6 +22,6 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM3(J1939 *j1939, uint8_t DA) {
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM3(J1939* j1939, uint8_t DA) {
 	memset(&j1939->this_dm.dm2, 0, sizeof(j1939->this_dm.dm2)); 			/* This set all fields of dm2 to 0 */
 
-	/* Send DM2 codes to all ECU */
+	/* Send DM2 codes to the ECU who send the request */
 	return SAE_J1939_Response_Request_DM2(j1939, DA);
 }
