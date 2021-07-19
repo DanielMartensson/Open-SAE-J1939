@@ -24,17 +24,6 @@ int main() {
 	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
 	j1939_2.this_ECU_address = 0x90;
 
-	/* Set NAME for ECU 1 */
-	j1939_1.this_name.identity_number = 100; 										/* From 0 to 2097151 */
-	j1939_1.this_name.manufacturer_code = 300; 										/* From 0 to 2047 */
-	j1939_1.this_name.function_instance = 10; 										/* From 0 to 31 */
-	j1939_1.this_name.ECU_instance = 2; 											/* From 0 to 7 */
-	j1939_1.this_name.function = FUNCTION_VDC_MODULE;								/* From 0 to 255 */
-	j1939_1.this_name.vehicle_system = 100;											/* From 0 to 127 */
-	j1939_1.this_name.arbitrary_address_capable = 0;								/* From 0 to 1 */
-	j1939_1.this_name.industry_group = INDUSTRY_GROUP_CONSTRUCTION;					/* From 0 to 7 */
-	j1939_1.this_name.vehicle_system_instance = 10;									/* From 0 to 15 */
-
 	/* Set NAME for ECU 2 by using Commanded Address. Also change the ECU address from 0x90 to 0x91 */
 	SAE_J1939_Send_Commanded_Address(&j1939_1, 0x90, 0x91, 1000, 400, 20, 1, FUNCTION_AUXILIARY_VALVES_CONTROL, 50, 0, INDUSTRY_GROUP_AGRICULTURAL_AND_FORESTRY, 15);
 
