@@ -24,7 +24,7 @@ int main() {
 	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
 	j1939_2.this_ECU_address = 0x90;
 
-	/* Set the software Identification */
+	/* Set the Software Identification */
 	j1939_1.this_software_identification.number_of_fields = 15;
 	char text[15] = "SAE J1939!!!";
 	for(uint8_t i = 0; i < 15; i++)
