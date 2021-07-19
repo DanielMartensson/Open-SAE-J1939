@@ -9,7 +9,7 @@
 
 /*
  * Send request address claimed to other ECU
- * PGN 0x00EE00 (60928)
+ * PGN: 0x00EE00 (60928)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Address_Claimed(J1939 *j1939, uint8_t DA) {
 	return SAE_J1939_Send_Request(j1939, DA, PGN_ADDRESS_CLAIMED);
@@ -17,7 +17,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Address_Claimed(J1939 *j1939, uin
 
 /*
  * Response the request address claimed about this ECU to all ECU - Broadcast
- * PGN 0x00EE00 (60928)
+ * PGN: 0x00EE00 (60928)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Address_Claimed(J1939 *j1939) {
 	uint32_t ID = (0x18EEFF << 8) | j1939->this_ECU_address;
@@ -35,7 +35,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Address_Claimed(J1939 *j1939)
 
 /*
  * Store the address claimed information about other ECU
- * PGN 0x00EE00 (60928)
+ * PGN: 0x00EE00 (60928)
  */
 void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	j1939->name[SA].identity_number = ((data[2] & 0b00011111) << 16) | (data[1] << 8) | data[0];
