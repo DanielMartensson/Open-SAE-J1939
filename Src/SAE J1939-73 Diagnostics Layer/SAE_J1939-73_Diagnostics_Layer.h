@@ -11,9 +11,11 @@
 /* C standard library */
 #include "String.h"
 
+
 /* Layer */
-#include "../CAN Network/CAN_Network.h"
 #include "../SAE J1939-21 Transport Layer/SAE_J1939-21_Transport_Layer.h"
+#include "../Hardware/CAN Network/CAN_Network.h"
+#include "../Hardware/Memory/FLASH_EEPROM_RAM_Memory.h"
 
 /* Enums */
 #include "../SAE J1939 Enums/SAE_J1939_Enum_PGN.h"

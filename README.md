@@ -15,7 +15,7 @@ Learn the structure of the project, else you won't be able to understand SAE J19
 After you have got a basic understanding of the project, you are able to build on it. Keep it simple and follow the 
 SAE J1939 standard!
 
-After you have understand the structure of the project, then select processor choice in `CAN_Network.c` file.
+After you have understand the structure of the project, then select processor choice in `Processor_choice.h` file.
 Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc.
 
 # How to use the project

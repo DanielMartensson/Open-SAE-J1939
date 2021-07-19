@@ -5,8 +5,9 @@
  *      Author: Daniel Mårtensson
  */
 
+#include "../ISO 11783/ISO 11783-7 Application Layer/ISO_11783-7_Application_Layer.h"
 #include "SAE_J1939-21_Transport_Layer.h"
-#include "../ISO 11783 Tractors And Machinery For Agriculture And Forestry/ISO 11783-7 Implement Messages Application Layer/ISO_11783-7_Implement_Messages_Application_Layer.h"
+
 
 /*
  * Read a PGN request from another ECU about PGN information at this ECU. All listed PGN should be here

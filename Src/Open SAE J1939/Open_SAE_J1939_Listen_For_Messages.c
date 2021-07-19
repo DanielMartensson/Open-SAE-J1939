@@ -5,8 +5,8 @@
  *      Author: Daniel Mårtensson
  */
 
+#include "../ISO 11783/ISO 11783-7 Application Layer/ISO_11783-7_Application_Layer.h"
 #include "Open_SAE_J1939.h"
-#include "../ISO 11783 Tractors And Machinery For Agriculture And Forestry/ISO 11783-7 Implement Messages Application Layer/ISO_11783-7_Implement_Messages_Application_Layer.h"
 
 /* This function should be called all the time */
 void Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {

@@ -5,12 +5,8 @@
  *      Author: Daniel Mårtensson
  */
 
-/* Select your processor here */
-#define STM32 1
-#define ARDUINO 2
-#define PIC 3
-#define AVR 4
-#define PROCESSOR_CHOICE 0
+/* Layer */
+#include "../CAN Network/CAN_Network.h"
 
 /* Platform independent library headers for CAN */
 #if PROCESSOR_CHOICE == STM32
@@ -20,9 +16,6 @@
 #elif PROCESSOR_CHOICE == PIC
 #elif PROCESSOR_CHOICE == AVR
 #endif
-
-/* Layer */
-#include "CAN_Network.h"
 
 /* Internal fields */
 static bool internal_new_message = false;
@@ -67,7 +60,8 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[], uint8_t de
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN send 8 bytes message function for the AVR platform */
 	#else
-	status = Internal_Transmit(ID, data, 8);					/* If no processor are used, use internal feedback for debugging */
+	/* If no processor are used, use internal feedback for debugging */
+	status = Internal_Transmit(ID, data, 8);
 	#endif
 	return status;
 }
@@ -94,7 +88,8 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[], uint8_t del
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN send 3 bytes message function for the AVR platform */
 	#else
-	status = Internal_Transmit(ID, PGN, 3);						/* If no processor are used, use internal feedback for debugging */
+	/* If no processor are used, use internal feedback for debugging */
+	status = Internal_Transmit(ID, PGN, 3);
 	#endif
 	return status;
 }
@@ -111,7 +106,8 @@ bool CAN_Read_Message(uint32_t *ID, uint8_t data[]) {
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN function to get ID, data[] and the flag is_new_message here for the AVR platform */
 	#else
-	Internal_Receive(ID, data, &is_new_message);				/* If no processor are used, use internal feedback for debugging */
+	/* If no processor are used, use internal feedback for debugging */
+	Internal_Receive(ID, data, &is_new_message);
 	#endif
 	return is_new_message;
 }
