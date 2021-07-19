@@ -24,49 +24,14 @@ int main() {
 	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
 	j1939_2.this_ECU_address = 0x90;
 
-	/* Set NAME for ECU 1 */
-	j1939_1.this_name.identity_number = 100; 										/* From 0 to 2097151 */
-	j1939_1.this_name.manufacturer_code = 300; 										/* From 0 to 2047 */
-	j1939_1.this_name.function_instance = 10; 										/* From 0 to 31 */
-	j1939_1.this_name.ECU_instance = 2; 											/* From 0 to 7 */
-	j1939_1.this_name.function = FUNCTION_VDC_MODULE;								/* From 0 to 255 */
-	j1939_1.this_name.vehicle_system = 100;											/* From 0 to 127 */
-	j1939_1.this_name.arbitrary_address_capable = 0;								/* From 0 to 1 */
-	j1939_1.this_name.industry_group = INDUSTRY_GROUP_CONSTRUCTION;					/* From 0 to 7 */
-	j1939_1.this_name.vehicle_system_instance = 10;									/* From 0 to 15 */
+	/* Send an acknowledgement from ECU 1 to ECU 2 where we say that the PGN function is busy because of time out */
+	SAE_J1939_Send_Acknowledgement(&j1939_1, 0x90, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_BUSY, GROUP_FUNCTION_VALUE_ABORT_TIME_OUT, PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_0);
 
-	/* Set NAME for ECU 2 */
-	j1939_2.this_name.identity_number = 1000; 										/* From 0 to 2097151 */
-	j1939_2.this_name.manufacturer_code = 400; 										/* From 0 to 2047 */
-	j1939_2.this_name.function_instance = 20; 										/* From 0 to 31 */
-	j1939_2.this_name.ECU_instance = 1; 											/* From 0 to 7 */
-	j1939_2.this_name.function = FUNCTION_AUXILIARY_VALVES_CONTROL;					/* From 0 to 255 */
-	j1939_2.this_name.vehicle_system = 50;											/* From 0 to 127 */
-	j1939_2.this_name.arbitrary_address_capable = 0;								/* From 0 to 1 */
-	j1939_2.this_name.industry_group = INDUSTRY_GROUP_AGRICULTURAL_AND_FORESTRY;	/* From 0 to 7 */
-	j1939_2.this_name.vehicle_system_instance = 15;									/* From 0 to 15 */
-
-	/* Broadcast request NAME from ECU 1 to all ECU */
-	SAE_J1939_Send_Request_Address_Claimed(&j1939_1, 0xFF);							/* 0xFF means broadcast to all ECU */
-
-	/* Listen for NAME request for ECU 2 from ECU 1 */
+	/* Read the acknowledgement at ECU 2 */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
-	/* Listen for NAME response request from ECU 2 to ECU 1 */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
-
-	/* Send request NAME from ECU 2 to ECU 1 */
-	SAE_J1939_Send_Request_Address_Claimed(&j1939_2, 0x80);
-
-	/* Listen for NAME request for ECU 1 from ECU 2 */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
-
-	/* Listen for NAME response request from ECU 1 to ECU 2 */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
-
-	/* Print information */
-	printf("How many external ECU are connected according to ECU 1? %i\n", j1939_1.number_of_ECU);
-	printf("How many external ECU are connected according to ECU 2? %i\n", j1939_2.number_of_ECU);
+	/* Check what acknowledgement we have */
+	printf("Control byte = %i\nGroup function value = %i\nPGN of requested info = %i\nAddress(from where the acknowledgement came from) = %i", j1939_2.from_other_ecu_acknowledgement.control_byte, j1939_2.from_other_ecu_acknowledgement.group_function_value, j1939_2.from_other_ecu_acknowledgement.PGN_of_requested_info, j1939_2.from_other_ecu_acknowledgement.address);
 
 	return 0;
 }

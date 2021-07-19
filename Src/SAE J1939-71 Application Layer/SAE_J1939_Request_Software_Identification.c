@@ -50,7 +50,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Software_Identification(J1939
  * PGN: 0x00FEDA (65242)
  */
 void SAE_J1939_Read_Response_Request_Software_Identification(J1939 *j1939, uint8_t data[]) {
-	j1939->software_identification.number_of_fields = data[0];			/* How many fields we have */
+	j1939->from_other_ecu_software_identification.number_of_fields = data[0];			/* How many fields we have */
 	for(uint8_t i = 0; i < data[0]; i++)
-		j1939->software_identification.identifications[i] = data[i+1];	/* 1 for the number of fields */
+		j1939->from_other_ecu_software_identification.identifications[i] = data[i+1];	/* 1 for the number of fields */
 }

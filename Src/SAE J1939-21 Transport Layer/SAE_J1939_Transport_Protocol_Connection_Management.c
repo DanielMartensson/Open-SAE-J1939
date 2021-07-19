@@ -12,14 +12,14 @@
  * PGN: 0x00EC00 (60416)
  */
 void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8_t SA, uint8_t data[]) {
-	j1939->tp_cm.control_byte = data[0];
-	j1939->tp_cm.total_message_size = (data[2] << 8) | data[1];
-	j1939->tp_cm.number_of_packages = data[3];
-	j1939->tp_cm.PGN_of_the_packeted_message = (data[7] << 16) | (data[6] << 8) | data[5];
+	j1939->from_other_ecu_tp_cm.control_byte = data[0];
+	j1939->from_other_ecu_tp_cm.total_message_size = (data[2] << 8) | data[1];
+	j1939->from_other_ecu_tp_cm.number_of_packages = data[3];
+	j1939->from_other_ecu_tp_cm.PGN_of_the_packeted_message = (data[7] << 16) | (data[6] << 8) | data[5];
 
 	/* Check if we got the Request To Send control byte - We need to answer with CTS - Clear To Send */
-	if(j1939->tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS)
-		SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA, CONTROL_BYTE_TP_CM_CTS, j1939->tp_cm.total_message_size, j1939->tp_cm.number_of_packages, j1939->tp_cm.PGN_of_the_packeted_message);
+	if(j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS)
+		SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA, CONTROL_BYTE_TP_CM_CTS, j1939->from_other_ecu_tp_cm.total_message_size, j1939->from_other_ecu_tp_cm.number_of_packages, j1939->from_other_ecu_tp_cm.PGN_of_the_packeted_message);
 
 }
 

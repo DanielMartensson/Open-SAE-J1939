@@ -162,19 +162,19 @@ typedef struct {
 	uint8_t ECU_address[255];
 	struct Name name[255];
 
-	/* Temporary store the information */
-	struct Acknowledgement acknowledgement;
-	struct TP_CM tp_cm;
-	struct TP_DT tp_dt;
-	struct DM dm;
-	struct Software_identification software_identification;
-	struct ECU_identification ecu_identification;
-	struct Component_identification component_identification;
+	/* Temporary store the information from the reading process - SAE J1939 */
+	struct Acknowledgement from_other_ecu_acknowledgement;
+	struct TP_CM from_other_ecu_tp_cm;
+	struct TP_DT from_other_ecu_tp_dt;
+	struct DM from_other_ecu_dm;
+	struct Software_identification from_other_ecu_software_identification;
+	struct ECU_identification from_other_ecu_ecu_identification;
+	struct Component_identification from_other_ecu_component_identification;
 
-	/* Temporary store the valve information from other ECU - ISO 11783-7 */
-	struct Auxiliary_valve_estimated_flow auxiliary_valve_estimated_flow[16];
-	struct Auxiliary_valve_measured_position auxiliary_valve_measured_position[16];
-	struct General_purpose_valve_estimated_flow general_purpose_valve_estimated_flow;
+	/* Temporary store the valve information from the reading process - ISO 11783-7 */
+	struct Auxiliary_valve_estimated_flow from_other_ecu_auxiliary_valve_estimated_flow[16];
+	struct Auxiliary_valve_measured_position from_other_ecu_auxiliary_valve_measured_position[16];
+	struct General_purpose_valve_estimated_flow from_other_ecu_general_purpose_valve_estimated_flow;
 
 
 	/* For ID information about this ECU - SAE J1939 */

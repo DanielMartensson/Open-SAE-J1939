@@ -12,10 +12,10 @@
  * PGN: 0x00E800 (59392)
  */
 void SAE_J1939_Read_Acknowledgement(J1939 *j1939, uint8_t data[]) {
-	j1939->acknowledgement.control_byte = data[0];
-	j1939->acknowledgement.group_function_value = data[1];				/* The cause of the control byte */
-	j1939->acknowledgement.address = data[4]; 							/* The source address from the ECU */
-	j1939->acknowledgement.PGN_of_requested_info = (data[7] << 16) | (data[6] << 8) | data[5];
+	j1939->from_other_ecu_acknowledgement.control_byte = data[0];
+	j1939->from_other_ecu_acknowledgement.group_function_value = data[1];				/* The cause of the control byte */
+	j1939->from_other_ecu_acknowledgement.address = data[4]; 							/* The source address from the ECU */
+	j1939->from_other_ecu_acknowledgement.PGN_of_requested_info = (data[7] << 16) | (data[6] << 8) | data[5];
 }
 
 /*

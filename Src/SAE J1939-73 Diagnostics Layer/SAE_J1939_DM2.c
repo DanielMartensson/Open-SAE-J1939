@@ -58,22 +58,22 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM2(J1939 *j1939, uint8_t DA)
  * PGN: 0x00FECB (65227)
  */
 void SAE_J1939_Read_Response_Request_DM2(J1939 *j1939, uint8_t data[], uint8_t errors_dm2_active) {
-	j1939->dm.dm2.SAE_lamp_status_malfunction_indicator = data[0] >> 6;
-	j1939->dm.dm2.SAE_lamp_status_red_stop = (data[0] >> 4) & 0b00000011;
-	j1939->dm.dm2.SAE_lamp_status_amber_warning = (data[0] >> 2) & 0b00000011;
-	j1939->dm.dm2.SAE_lamp_status_protect_lamp = data[0] & 0b00000011;
-	j1939->dm.dm2.SAE_flash_lamp_malfunction_indicator = data[1] >> 6;
-	j1939->dm.dm2.SAE_flash_lamp_red_stop = (data[1] >> 4) & 0b00000011;
-	j1939->dm.dm2.SAE_flash_lamp_amber_warning = (data[1] >> 2) & 0b00000011;
-	j1939->dm.dm2.SAE_flash_lamp_protect_lamp = data[1] & 0b00000011;
-	j1939->dm.dm2.SPN = ((data[4] & 0b11100000) << 11) | (data[3] << 8) | data[2];
-	j1939->dm.dm2.FMI = data[4] & 0b00011111;
-	j1939->dm.dm2.SPN_conversion_method = data[5] >> 7;
-	j1939->dm.dm2.occurence_count = data[5] & 0b01111111;
+	j1939->from_other_ecu_dm.dm2.SAE_lamp_status_malfunction_indicator = data[0] >> 6;
+	j1939->from_other_ecu_dm.dm2.SAE_lamp_status_red_stop = (data[0] >> 4) & 0b00000011;
+	j1939->from_other_ecu_dm.dm2.SAE_lamp_status_amber_warning = (data[0] >> 2) & 0b00000011;
+	j1939->from_other_ecu_dm.dm2.SAE_lamp_status_protect_lamp = data[0] & 0b00000011;
+	j1939->from_other_ecu_dm.dm2.SAE_flash_lamp_malfunction_indicator = data[1] >> 6;
+	j1939->from_other_ecu_dm.dm2.SAE_flash_lamp_red_stop = (data[1] >> 4) & 0b00000011;
+	j1939->from_other_ecu_dm.dm2.SAE_flash_lamp_amber_warning = (data[1] >> 2) & 0b00000011;
+	j1939->from_other_ecu_dm.dm2.SAE_flash_lamp_protect_lamp = data[1] & 0b00000011;
+	j1939->from_other_ecu_dm.dm2.SPN = ((data[4] & 0b11100000) << 11) | (data[3] << 8) | data[2];
+	j1939->from_other_ecu_dm.dm2.FMI = data[4] & 0b00011111;
+	j1939->from_other_ecu_dm.dm2.SPN_conversion_method = data[5] >> 7;
+	j1939->from_other_ecu_dm.dm2.occurence_count = data[5] & 0b01111111;
 
 	/* Check if we have no fault cause */
-	if(j1939->dm.dm2.FMI == DM1_FMI_NOT_AVAILABLE)
-		j1939->dm.errors_dm2_active = 0;
+	if(j1939->from_other_ecu_dm.dm2.FMI == DM1_FMI_NOT_AVAILABLE)
+		j1939->from_other_ecu_dm.errors_dm2_active = 0;
 	else
-		j1939->dm.errors_dm2_active = errors_dm2_active;
+		j1939->from_other_ecu_dm.errors_dm2_active = errors_dm2_active;
 }
