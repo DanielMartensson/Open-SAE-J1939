@@ -15,31 +15,38 @@
 #elif PROCESSOR_CHOICE == ARDUINO
 #elif PROCESSOR_CHOICE == PIC
 #elif PROCESSOR_CHOICE == AVR
-#endif
-
+#else
 /* Internal fields */
-static bool internal_new_message = false;
-static uint8_t internal_data[8];
-static uint32_t internal_ID = 0;
-static uint8_t internal_DLC = 0;
+static bool internal_new_message[255] = {false};
+static uint8_t internal_data[255*8] = {0};
+static uint8_t internal_DLC[255] = {0};
+static uint32_t internal_ID[255] = {0};
+static uint8_t buffer_index = 0;
 
 /* Internal functions */
 static ENUM_J1939_STATUS_CODES Internal_Transmit(uint32_t ID, uint8_t data[], uint8_t DLC) {
-	internal_ID = ID;
-	internal_DLC = DLC;
-	for(uint8_t i = 0; i < DLC; i++)
-		internal_data[i] = data[i];
-	internal_new_message = true;
+	internal_ID[buffer_index] = ID;
+	internal_DLC[buffer_index] = DLC;
+	for(uint8_t i = 0; i < 8; i++)
+		if(i < DLC)
+			internal_data[buffer_index*8 + i] = data[i];
+		else
+			internal_data[buffer_index*8 + i] = 0x0;
+	internal_new_message[buffer_index] = true;
+	buffer_index++;
 	return STATUS_SEND_OK;
 }
 
 static void Internal_Receive(uint32_t *ID, uint8_t data[], bool *is_new_message) {
-	*ID = internal_ID;
-	for(uint8_t i = 0; i < internal_DLC; i++)
-		data[i] = internal_data[i];
-	*is_new_message = internal_new_message;
-	internal_new_message = false;
+	buffer_index--;
+	*ID = internal_ID[buffer_index];
+	for(uint8_t i = 0; i < 8; i++)
+		if(i < internal_DLC[buffer_index])
+			data[i] = internal_data[buffer_index*8 + i];
+	*is_new_message = internal_new_message[buffer_index];
+	internal_new_message[buffer_index] = false;
 }
+#endif
 
 ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[], uint8_t delay) {
 	ENUM_J1939_STATUS_CODES status;
