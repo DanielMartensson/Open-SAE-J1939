@@ -52,8 +52,6 @@ void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, u
 	for (uint8_t i = 0; i < 256; i++)
 		if (j1939->ECU_address[i] == SA)
 			exist = true;
-	if (!exist) {
-		j1939->ECU_address[j1939->number_of_ECU] = SA;
-		j1939->number_of_ECU++;
-	}
+	if (!exist)
+		j1939->ECU_address[j1939->number_of_ECU++] = SA;			/* For every new ECU address, count how many ECU */
 }
