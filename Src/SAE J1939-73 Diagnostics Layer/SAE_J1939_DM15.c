@@ -26,7 +26,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Response_DM15(J1939 *j1939, uint8_t DA, u
 }
 
 /*
- * Store the DM15 information about other ECU (This is actually a DM14 response according to the J1939 standard)
+ * Store the DM15 information about other ECU (This is actually the response after DM14 request according to J1939 standard)
  * PGN: 0x00D800 (55296)
  */
 void SAE_J1939_Read_Response_DM15(J1939 *j1939, uint8_t data[]) {
