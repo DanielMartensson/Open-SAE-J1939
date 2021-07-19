@@ -20,49 +20,50 @@ int main() {
 	J1939 j1939_1 = {0};
 	J1939 j1939_2 = {0};
 
-	/* Set the ECU address - Notice that they are the same address! */
+	/* Set the ECU address */
 	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
-	j1939_2.this_ECU_address = 0x80;
+	j1939_2.this_ECU_address = 0x90;
 
-	/* Set NAME for ECU 1 */
-	j1939_1.this_name.identity_number = 100; 										/* From 0 to 2097151 */
-	j1939_1.this_name.manufacturer_code = 300; 										/* From 0 to 2047 */
-	j1939_1.this_name.function_instance = 10; 										/* From 0 to 31 */
-	j1939_1.this_name.ECU_instance = 2; 											/* From 0 to 7 */
-	j1939_1.this_name.function = FUNCTION_VDC_MODULE;								/* From 0 to 255 */
-	j1939_1.this_name.vehicle_system = 100;											/* From 0 to 127 */
-	j1939_1.this_name.arbitrary_address_capable = 0;								/* From 0 to 1 */
-	j1939_1.this_name.industry_group = INDUSTRY_GROUP_CONSTRUCTION;					/* From 0 to 7 */
-	j1939_1.this_name.vehicle_system_instance = 10;									/* From 0 to 15 */
+	/* Set the DM1 error message - You can have multiple error messages, but only send one at the time */
+	j1939_1.this_dm.dm1.SAE_lamp_status_malfunction_indicator = 1;
+	j1939_1.this_dm.dm1.SAE_lamp_status_red_stop = 0;
+	j1939_1.this_dm.dm1.SAE_lamp_status_amber_warning = 1;
+	j1939_1.this_dm.dm1.SAE_lamp_status_protect_lamp = 0;
+	j1939_1.this_dm.dm1.SAE_flash_lamp_malfunction_indicator = 0;
+	j1939_1.this_dm.dm1.SAE_flash_lamp_red_stop = 1;
+	j1939_1.this_dm.dm1.SAE_flash_lamp_amber_warning = 0;
+	j1939_1.this_dm.dm1.SAE_flash_lamp_protect_lamp = 1;
+	j1939_1.this_dm.dm1.FMI = FMI_CURRENT_ABOVE_NORMAL;								/* If FMI_NOT_AVAILABLE, then errors_dm1_active will become 0 */
+	j1939_1.this_dm.dm1.SPN = SPN_5_VOLTS_DC_SUPPLY;
+	j1939_1.this_dm.dm1.SPN_conversion_method = 1;
+	j1939_1.this_dm.dm1.occurrence_count = 50;
+	j1939_1.this_dm.errors_dm1_active = 10;											/* If this is above 1, then this is going to be send as multi-packet */
 
-	/* Set NAME for ECU 2 */
-	j1939_2.this_name.identity_number = 1000; 										/* From 0 to 2097151 */
-	j1939_2.this_name.manufacturer_code = 400; 										/* From 0 to 2047 */
-	j1939_2.this_name.function_instance = 20; 										/* From 0 to 31 */
-	j1939_2.this_name.ECU_instance = 1; 											/* From 0 to 7 */
-	j1939_2.this_name.function = FUNCTION_AUXILIARY_VALVES_CONTROL;					/* From 0 to 255 */
-	j1939_2.this_name.vehicle_system = 50;											/* From 0 to 127 */
-	j1939_2.this_name.arbitrary_address_capable = 0;								/* From 0 to 1 */
-	j1939_2.this_name.industry_group = INDUSTRY_GROUP_AGRICULTURAL_AND_FORESTRY;	/* From 0 to 7 */
-	j1939_2.this_name.vehicle_system_instance = 15;									/* From 0 to 15 */
+	/* Request DM1 codes from ECU 2 to ECU 1 */
+	SAE_J1939_Send_Request(&j1939_2, 0x80, PGN_DM1);
 
-	/* Broadcast NAME from ECU 1 to all ECU */
-	SAE_J1939_Response_Request_Address_Claimed(&j1939_1);
-
-	/* Listen for NAME request for ECU 2 from ECU 1 - What going to happen: ECU 2 is going to send Address Not Claimed to all ECU because it's conflicts with the ECU 1 address */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
-
-	/* To see that Address Not Claimed, ECU 1 need to read that message */
+	/* Response request from ECU 1 perspective */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
-	/* Print information */
-	printf("How many external ECU are connected according to ECU 1? %i\n", j1939_1.all_number_of_ECU);
-	printf("How many external ECU are connected according to ECU 2? %i\n", j1939_2.all_number_of_ECU);
+	/* Read response request from ECU 1 to ECU 2 */
+	for(uint8_t i = 0; i < 15; i++)
+		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
-	/* Print information about who cannot claim their own address */
-	printf("How many ECU cannot claim their address according to ECU 1? %i\n", j1939_1.all_number_of_cannot_claim_address);
-	printf("How many ECU cannot claim their address according to ECU 2? %i\n", j1939_2.all_number_of_cannot_claim_address);
-
+	/* Display what ECU 2 got */
+	printf("SAE lamp status malfunction indicator = %i\nSAE lamp status red stop = %i\nSAE lamp status amber warning = %i\nSAE lamp status protect lamp = %i\nSAE flash lamp malfunction indicator = %i\nSAE flash lamp_red stop = %i\nSAE flash lamp amber warning = %i\nSAE flash lamp protect lamp = %i\nFMI = %i\nSPN = %i\nSPN conversion method = %i\nOccurrence_count = %i\nErrors dm1 active = %i\n"
+			,j1939_2.from_other_ecu_dm.dm1.SAE_lamp_status_malfunction_indicator
+			,j1939_2.from_other_ecu_dm.dm1.SAE_lamp_status_red_stop
+			,j1939_2.from_other_ecu_dm.dm1.SAE_lamp_status_amber_warning
+			,j1939_2.from_other_ecu_dm.dm1.SAE_lamp_status_protect_lamp
+			,j1939_2.from_other_ecu_dm.dm1.SAE_flash_lamp_malfunction_indicator
+			,j1939_2.from_other_ecu_dm.dm1.SAE_flash_lamp_red_stop
+			,j1939_2.from_other_ecu_dm.dm1.SAE_flash_lamp_amber_warning
+			,j1939_2.from_other_ecu_dm.dm1.SAE_flash_lamp_protect_lamp
+			,j1939_2.from_other_ecu_dm.dm1.FMI
+			,j1939_2.from_other_ecu_dm.dm1.SPN
+			,j1939_2.from_other_ecu_dm.dm1.SPN_conversion_method
+			,j1939_2.from_other_ecu_dm.dm1.occurrence_count
+			,j1939_2.from_other_ecu_dm.errors_dm1_active);
 
 	return 0;
 }

@@ -28,7 +28,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM1(J1939* j1939, uint8_t DA)
 		data[2] = j1939->this_dm.dm1.SPN;
 		data[3] = j1939->this_dm.dm1.SPN >> 8;
 		data[4] = ((j1939->this_dm.dm1.SPN >> 11) & 0b11100000) | j1939->this_dm.dm1.FMI;
-		data[5] = (j1939->this_dm.dm1.SPN_conversion_method << 7) | j1939->this_dm.dm1.occurence_count;
+		data[5] = (j1939->this_dm.dm1.SPN_conversion_method << 7) | j1939->this_dm.dm1.occurrence_count;
 		data[6] = 0xFF;													/* Reserved */
 		data[7] = 0xFF;													/* Reserved */
 		return CAN_Send_Message(ID, data, 0);							/* 0 ms delay */
@@ -42,7 +42,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM1(J1939* j1939, uint8_t DA)
 		data[2] = j1939->this_dm.dm1.SPN;
 		data[3] = j1939->this_dm.dm1.SPN >> 8;
 		data[4] = ((j1939->this_dm.dm1.SPN >> 11) & 0b11100000) | j1939->this_dm.dm1.FMI;
-		data[5] = (j1939->this_dm.dm1.SPN_conversion_method << 7) | j1939->this_dm.dm1.occurence_count;
+		data[5] = (j1939->this_dm.dm1.SPN_conversion_method << 7) | j1939->this_dm.dm1.occurrence_count;
 		data[6] = 0xFF;							/* Reserved */
 		data[7] = 0xFF;							/* Reserved */
 		data[8] = j1939->this_dm.errors_dm1_active;
@@ -69,10 +69,10 @@ void SAE_J1939_Read_Response_Request_DM1(J1939 *j1939, uint8_t data[], uint8_t e
 	j1939->from_other_ecu_dm.dm1.SPN = ((data[4] & 0b11100000) << 11) | (data[3] << 8) | data[2];
 	j1939->from_other_ecu_dm.dm1.FMI = data[4] & 0b00011111;
 	j1939->from_other_ecu_dm.dm1.SPN_conversion_method = data[5] >> 7;
-	j1939->from_other_ecu_dm.dm1.occurence_count = data[5] & 0b01111111;
+	j1939->from_other_ecu_dm.dm1.occurrence_count = data[5] & 0b01111111;
 
 	/* Check if we have no fault cause */
-	if(j1939->from_other_ecu_dm.dm1.FMI == DM1_FMI_NOT_AVAILABLE)
+	if(j1939->from_other_ecu_dm.dm1.FMI == FMI_NOT_AVAILABLE)
 		j1939->from_other_ecu_dm.errors_dm1_active = 0;
 	else
 		j1939->from_other_ecu_dm.errors_dm1_active = errors_dm1_active;

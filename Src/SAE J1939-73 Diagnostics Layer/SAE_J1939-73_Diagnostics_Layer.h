@@ -21,13 +21,13 @@
 #include "../SAE J1939 Enums/SAE_J1939_Enum_PGN.h"
 #include "../SAE J1939 Enums/SAE_J1939_Enum_Control_Byte.h"
 #include "../SAE J1939 Enums/SAE_J1939_Enum_Group_Function_Value.h"
-#include "../SAE J1939 Enums/SAE_J1939_Enum_DM1.h"
 #include "../SAE J1939 Enums/SAE_J1939_Enum_DM14_DM15.h"
 #include "../SAE J1939 Enums/SAE_J1939_Enum_Send_Status.h"
 #include "../SAE J1939 Enums/SAE_J1939_Enum_NAME.h"
 
 /* Structs */
 #include "../Open SAE J1939/Open_SAE_J1939_Structs.h"
+#include "../SAE J1939 Enums/SAE_J1939_Enum_DM1_DM2.h"
 
 /* DM1 */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM1(J1939 *j1939, uint8_t DA);
