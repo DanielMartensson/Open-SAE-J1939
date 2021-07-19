@@ -65,7 +65,7 @@ void Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 
 		/* Other */
 		else if (id0 == 0x18 && id1 == 0xEE && DA == 0xFF && SA == 0xFE)
-			j1939->number_of_cannot_claim_address++;
+			j1939->all_number_of_cannot_claim_address++;
 
 		/* Add more else if statement here */
 	}

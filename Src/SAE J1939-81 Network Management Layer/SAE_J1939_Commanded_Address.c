@@ -31,8 +31,8 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Commanded_Address(J1939 *j1939, uint8_t D
 	status = SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA, data, total_message_size, number_of_packages);
 	if(status == STATUS_SEND_OK){
 		/* Delete old name and old destination address */
-		memset(&j1939->name[DA], 0, sizeof(j1939->name[DA]));
-		j1939->ECU_address[DA] = 0;
+		memset(&j1939->all_name[DA], 0, sizeof(j1939->all_name[DA]));
+		j1939->all_ECU_address[DA] = 0;
 		// TODO: Find a PGN request that can delete a ECU from a network
 		/* According to J1939 standard, request for Address Claimed (broadcast) must be sent after a Commanded Address so we can get back the new name and address */
 		SAE_J1939_Send_Request(j1939, new_ECU_address, PGN_ADDRESS_CLAIMED);
