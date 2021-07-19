@@ -159,8 +159,8 @@ typedef struct {
 	/* This store the basic information about other ECU */
 	uint8_t number_of_ECU;
 	uint8_t number_of_cannot_claim_address;
-	uint8_t ECU_address[256];
-	struct Name name[256];
+	uint8_t ECU_address[255];
+	struct Name name[255];
 
 	/* Temporary store the information */
 	struct Acknowledgement acknowledgement;
