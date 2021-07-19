@@ -11,7 +11,7 @@
  * Request DM14 from another ECU
  * PGN: 0x00D900 (55552)
  */
-ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM14(J1939* j1939, uint8_t DA, uint16_t number_of_requested_bytes, uint8_t pointer_type, uint8_t command, uint32_t pointer, uint8_t pointer_extension, uint16_t key) {
+ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM14(J1939 *j1939, uint8_t DA, uint16_t number_of_requested_bytes, uint8_t pointer_type, uint8_t command, uint32_t pointer, uint8_t pointer_extension, uint16_t key) {
 	uint32_t ID = (0x18D9 << 16) | (DA << 8) | j1939->this_ECU_address;
 	uint8_t data[8];
 	data[0] = number_of_requested_bytes;

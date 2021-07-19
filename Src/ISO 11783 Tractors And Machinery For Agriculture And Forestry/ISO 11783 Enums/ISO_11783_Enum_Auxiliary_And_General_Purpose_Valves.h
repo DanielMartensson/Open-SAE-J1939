@@ -22,7 +22,8 @@ typedef enum {
 }ENUM_EXIT_CODE_CODES;
 
 typedef enum {
-	FAIL_SAFE_MODE_BLOCKED = 0x0
+	FAIL_SAFE_MODE_BLOCKED = 0x0,
+	FAIL_SAFE_MODE_ACTIVATED = 0x1
 }ENUM_FAIL_SAFE_MODE_CODES;
 
 typedef enum {

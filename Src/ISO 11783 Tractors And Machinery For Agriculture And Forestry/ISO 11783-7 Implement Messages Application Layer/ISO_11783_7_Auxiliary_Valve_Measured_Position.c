@@ -11,14 +11,14 @@
  * Send an auxiliary valve measured position to all ECU
  * PGN: 0x00FF20 (65312) to 0x00FF2F (65327)
  */
-ENUM_J1939_STATUS_CODES ISO_11783_Send_Auxiliary_Valve_Measured_Position_To_All_ECU(J1939 *j1939, uint8_t valve_number, uint16_t measured_position_procet, uint8_t valve_state, uint16_t measured_position_micrometer) {
+ENUM_J1939_STATUS_CODES ISO_11783_Send_Auxiliary_Valve_Measured_Position_To_All_ECU(J1939 *j1939, uint8_t valve_number) {
 	uint32_t ID = (0x0CFF << 16) | ((0x20 + valve_number) << 8) | j1939->this_ECU_address;
 	uint8_t data[8];
-	data[0] = measured_position_procet;
-	data[1] = measured_position_procet >> 8;
-	data[2] = valve_state;
-	data[3] = measured_position_micrometer;
-	data[4] = measured_position_micrometer >> 8;
+	data[0] = j1939->this_auxiliary_valve_measured_position[valve_number].measured_position_procent;
+	data[1] = j1939->this_auxiliary_valve_measured_position[valve_number].measured_position_procent >> 8;
+	data[2] = j1939->this_auxiliary_valve_measured_position[valve_number].valve_state;
+	data[3] = j1939->this_auxiliary_valve_measured_position[valve_number].measured_position_micrometer;
+	data[4] = j1939->this_auxiliary_valve_measured_position[valve_number].measured_position_micrometer >> 8;
 	data[5] = data[6] = data[7] = 0xFF;								/* All reserved */
 	return CAN_Send_Message(ID, data, 0);							/* 0 ms delay */
 }
@@ -27,8 +27,8 @@ ENUM_J1939_STATUS_CODES ISO_11783_Send_Auxiliary_Valve_Measured_Position_To_All_
  * Read an auxiliary valve measured position from any ECU - Broadcast in other words
  * PGN: 0x00FF20 (65312) to 0x00FF2F (65327)
  */
-void ISO_11783_Read_Auxiliary_Valve_Measured_Position(J1939 *j1939, uint8_t SA, uint8_t valve_number, uint8_t data[]) {
-	j1939->auxiliary_valve_measured_position[SA][valve_number].measured_position_procent = (data[1] << 8) | data[0];
-	j1939->auxiliary_valve_measured_position[SA][valve_number].valve_state = data[2];
-	j1939->auxiliary_valve_measured_position[SA][valve_number].measured_position_micrometer = (data[4] << 8) | data[3];
+void ISO_11783_Read_Auxiliary_Valve_Measured_Position(J1939 *j1939, uint8_t valve_number, uint8_t data[]) {
+	j1939->auxiliary_valve_measured_position[valve_number].measured_position_procent = (data[1] << 8) | data[0];
+	j1939->auxiliary_valve_measured_position[valve_number].valve_state = data[2];
+	j1939->auxiliary_valve_measured_position[valve_number].measured_position_micrometer = (data[4] << 8) | data[3];
 }

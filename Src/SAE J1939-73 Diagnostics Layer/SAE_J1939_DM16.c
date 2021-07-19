@@ -20,8 +20,8 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, u
 		return CAN_Send_Message(ID, data, 0);								/* 0 ms delay */
 	}else{
 		/* Multiple messages - Use Transport Protocol Connection Management BAM */
-		uint8_t data[number_of_occurences + 1];
-		uint16_t total_message_size = 0;									/* This can be maximum 256 */
+		uint8_t data[number_of_occurences + 1];								/* If number_of_occurences = 255, then data have 256 elements */
+		uint16_t total_message_size = 0;
 		data[total_message_size++] = number_of_occurences;
 		for(uint8_t i = 0; i < number_of_occurences; i++)
 			data[total_message_size++] = raw_binary_data[i];				/* When i = 0, then total_message_size = 1 */
@@ -40,12 +40,12 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, u
  * Read binary data transfer
  * PGN 0x00D700 (55040)
  */
-void SAE_J1939_Read_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t SA, uint8_t data[]) {
-	j1939->dm[SA].dm16.number_of_occurences = data[0];
+void SAE_J1939_Read_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t data[]) {
+	j1939->dm.dm16.number_of_occurences = data[0];
 	for(uint8_t i = 0; i < 256; i++)
 		if(i < data[0])
-			j1939->dm[SA].dm16.raw_binary_data[i] = data[i+1];
+			j1939->dm.dm16.raw_binary_data[i] = data[i+1];
 		else
-			j1939->dm[SA].dm16.raw_binary_data[i] = 0xFF;					/* No data */
+			j1939->dm.dm16.raw_binary_data[i] = 0xFF;					/* No data */
 }
 

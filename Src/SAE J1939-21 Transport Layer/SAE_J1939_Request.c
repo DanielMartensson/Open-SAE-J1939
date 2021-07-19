@@ -6,52 +6,56 @@
  */
 
 #include "SAE_J1939-21_Transport_Layer.h"
+#include "../ISO 11783 Tractors And Machinery For Agriculture And Forestry/ISO 11783-7 Implement Messages Application Layer/ISO_11783_7_Implement_Messages_Application_Layer.h"
 
 /*
- * Read a PGN request from another ECU about PGN information at this ECU
+ * Read a PGN request from another ECU about PGN information at this ECU. All listed PGN should be here
  * PGN: 0x00EA00 (59904)
  */
 void SAE_J1939_Read_Request(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	uint32_t PGN = (data[2] << 16) | (data[1] << 8) | data[0];
 	if (PGN == PGN_ACKNOWLEDGEMENT) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_ADDRESS_CLAIMED){
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
 		SAE_J1939_Response_Request_Address_Claimed(j1939);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_COMMANDED_ADDRESS) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_DM1) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
 		SAE_J1939_Response_Request_DM1(j1939, SA);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_DM2) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
 		SAE_J1939_Response_Request_DM2(j1939, SA);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_DM3) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
-		SAE_J1939_Response_Request_DM3(j1939);
+		SAE_J1939_Response_Request_DM3(j1939, SA);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_REQUEST) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
-	} else if (PGN == PGN_TP_CM_BAM) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
+	} else if (PGN == PGN_TP_CM) {
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_TP_DT) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN >= PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_0 && PGN <= PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_15) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
-		//SAE_J1939_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		ISO_11783_Send_Auxiliary_Valve_Estimated_Flow_To_All_ECU(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_GENERAL_PURPOSE_VALVE_ESTIMATED_FLOW){
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
-		//SAE_J1939_Response_Request_General_Purpose_Valve_Estimated_Flow(j1939, SA);
+		ISO_11783_Send_General_Purpose_Valve_Estimated_Flow(j1939, SA);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
+	} else if (PGN >= PGN_AUXILIARY_VALVE_MEASURED_POSITION_0 && PGN <= PGN_AUXILIARY_VALVE_MEASURED_POSITION_15) {
+		ISO_11783_Send_Auxiliary_Valve_Measured_Position_To_All_ECU(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_SOFTWARE_IDENTIFICATION) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
 		SAE_J1939_Response_Request_Software_Identification(j1939, SA);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_ECU_IDENTIFICATION) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
 		SAE_J1939_Response_Request_ECU_Identification(j1939, SA);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else if (PGN == PGN_COMPONENT_IDENTIFICATION) {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, j1939->this_name.function, j1939->this_ECU_address, PGN);
 		SAE_J1939_Response_Request_Component_Identification(j1939, SA);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
 	} else {
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_NOT_SUPPORTED, 0xFF, j1939->this_ECU_address, PGN);
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_NOT_SUPPORTED, GROUP_FUNCTION_VALUE_NO_CAUSE, PGN);
 	}
 	/* Add more else if statements here */
 }

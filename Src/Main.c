@@ -35,10 +35,10 @@ int main() {
 	j1939_1.this_name.manufacturer_code = 300; 										/* From 0 to 2047 */
 	j1939_1.this_name.function_instance = 10; 										/* From 0 to 31 */
 	j1939_1.this_name.ECU_instance = 2; 											/* From 0 to 7 */
-	j1939_1.this_name.function = FUNCTION_AUXILIARY_VALVES_CONTROL;					/* From 0 to 255 */
+	j1939_1.this_name.function = FUNCTION_VDC_MODULE;								/* From 0 to 255 */
 	j1939_1.this_name.vehicle_system = 100;											/* From 0 to 127 */
 	j1939_1.this_name.arbitrary_address_capable = 0;								/* From 0 to 1 */
-	j1939_1.this_name.industry_group = INDUSTRY_GROUP_AGRICULTURAL_AND_FORESTRY;	/* From 0 to 7 */
+	j1939_1.this_name.industry_group = INDUSTRY_GROUP_CONSTRUCTION;					/* From 0 to 7 */
 	j1939_1.this_name.vehicle_system_instance = 10;									/* From 0 to 15 */
 
 	/* Set NAME for ECU 2 */
@@ -53,13 +53,13 @@ int main() {
 	j1939_2.this_name.vehicle_system_instance = 15;									/* From 0 to 15 */
 
 	/* Broadcast NAME from ECU 1 */
-	SAE_J1939_Send_Request_Address_Claimed(&j1939_1, 0xFF); 						/* Broadcast */
+	SAE_J1939_Send_Request_Address_Claimed(&j1939_1, 0x90); 						/* Request ECU NAME from ECU 2 */
 
 	/* Listen for messages at ECU 2 */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Send NAME from ECU 2 to ECU 1 */
-	SAE_J1939_Send_Request_Address_Claimed(&j1939_2, 0x80); 						/* Transmit to ECU address 0x80, which is ECU 1 */
+	SAE_J1939_Send_Request_Address_Claimed(&j1939_2, 0x80); 						/* Request ECU NAME from ECU 1 */
 
 	/* Listen for messages at ECU 1 */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);

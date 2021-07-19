@@ -14,22 +14,22 @@
 struct Acknowledgement {
 	uint8_t control_byte;							/* This indicates the status of the requested information about PGN: */
 	uint8_t group_function_value;					/* The function code that specify cause of the control byte e.g time out or aborted */
-	uint8_t address;								/* Address from the ECU where the acknowledgement is comming from */
+	uint8_t address;								/* Address from the ECU where the acknowledgement came from */
 	uint32_t PGN_of_requested_info;					/* Information request about the PGN */
 };
 
 /* PGN: 0x00EC00 - Storing the Transport Protocol Connection Management from the reading process */
 struct TP_CM {
 	uint8_t control_byte;							/* What type of message are we going to send */
-	uint16_t total_message_size;					/* Total bytes our complete message includes */
-	uint8_t number_of_packages;						/* How many times we are going to send packages via TP_DT */
+	uint16_t total_message_size;					/* Total bytes our complete message includes - 9 to 1785 */
+	uint8_t number_of_packages;						/* How many times we are going to send packages via TP_DT - 2 to 224 */
 	uint32_t PGN_of_the_packeted_message;			/* Our message is going to activate a PGN */
 };
 
 /* PGN: 0x00EB00 - Storing the Transport Protocol Data Transfer from the reading process */
 struct TP_DT {
 	uint8_t sequence_number;						/* When this sequence number is the same as number_of_packages from TP_CM, then we have our complete message */
-	uint8_t data[7][256];							/* Package data of 2D array where first index is data0 -> data6 and second index is sequence of the data */
+	uint8_t data[7][224];							/* Package data of 2D array where first index is data0 -> data6 and second index is sequence of the data. Notice that total_message_size = 1785 divided by 8 and rounded up to 224 */
 };
 
 /* PGN: 0x00EE00 - Storing the Address claimed from the reading process */
@@ -66,7 +66,7 @@ struct DM1 {
 
 /* PGN: 0x00D800 - Storing the DM15 response from the reading process */
 struct DM15 {
-	uint16_t number_of_allowed_bytes;				/* How many bytes we are allowed to write or read to */
+	uint16_t number_of_allowed_bytes;				/* How many bytes we are allowed to write or read to - 0 to 255 */
 	uint8_t status;									/* Status of the response */
 	uint32_t EDC_parameter;							/* Status code */
 	uint8_t EDCP_extention;							/* Describe how we should interpret the EDC parameter as a status code or error code */
@@ -76,15 +76,15 @@ struct DM15 {
 /* PGN: 0x00D700 - Storing the DM16 binary data transfer from the reading process */
 struct DM16 {
 	uint8_t number_of_occurences;					/* How many bytes we have sent */
-	uint8_t raw_binary_data[256];					/* Here we store the bytes */
+	uint8_t raw_binary_data[255];					/* Here we store the bytes */
 };
 
 /* Storing the error codes from the reading process */
 struct DM {
 	uint8_t errors_dm1_active;						/* How many errors of DM1 we have right now */
 	uint8_t errors_dm2_active;						/* How many errors of DM2 is active */
-	struct DM1 dm1[256];							/* dm1 can contains multiple error messages */
-	struct DM1 dm2[256];							/* dm2 contains previously active errors from dm1 */
+	struct DM1 dm1;									/* dm1 can only hold 1 error message at the time, but we know how many errors exists */
+	struct DM1 dm2;									/* dm2 contains previously active error from dm1 */
 	struct DM15 dm15;								/* dm15 is the memory access response from DM14 memory request */
 	struct DM16 dm16;								/* dm16 is the binary data transfer after DM15 memory response (if it was proceeded) */
 	/* Add more DM here */
@@ -92,29 +92,26 @@ struct DM {
 
 /* PGN: 0x00FEDA - Storing the software identification from the reading process */
 struct Software_identification {
-	uint8_t length_of_each_identification;			/* The length of each identification - Not part of J1939 standard */
 	uint8_t number_of_fields;						/* How many numbers contains in the identifications array */
-	uint8_t identifications[256];					/* This can be for example ASCII */
+	uint8_t identifications[30];					/* This can be for example ASCII */
 };
 
 /* PGN: 0x00FDC5 - Storing the ECU identification from the reading process */
 struct ECU_identification {
-	uint8_t length_of_each_field;					/* The real length of the fields - Not part of J1939 standard */
-	uint8_t ecu_part_number[256];					/* ASCII field */
-	uint8_t ecu_serial_number[256];					/* ASCII field */
-	uint8_t ecu_location[256];						/* ASCII field */
-	uint8_t ecu_type[256];							/* ASCII field */
-	uint8_t ecu_manufacturer[256];					/* ASCII field */
-	uint8_t ecu_hardware_version[256];				/* ASCII field */
+	uint8_t length_of_each_field;					/* The real length of the fields - Not part of J1939 standard, only for the user */
+	uint8_t ecu_part_number[30];					/* ASCII field */
+	uint8_t ecu_serial_number[30];					/* ASCII field */
+	uint8_t ecu_location[30];						/* ASCII field */
+	uint8_t ecu_type[30];							/* ASCII field */
 };
 
 /* PGN: 0x00FEEB - Storing the component identification from the reading process */
 struct Component_identification {
-	uint8_t length_of_each_field;					/* The real length of the fields - Not part of J1939 standard */
-	uint8_t component_product_date[256];			/* ASCII field */
-	uint8_t component_model_name[256];				/* ASCII field */
-	uint8_t component_serial_number[256];			/* ASCII field */
-	uint8_t component_unit_name[256];				/* ASCII field */
+	uint8_t length_of_each_field;					/* The real length of the fields - Not part of J1939 standard, only for the user  */
+	uint8_t component_product_date[30];				/* ASCII field */
+	uint8_t component_model_name[30];				/* ASCII field */
+	uint8_t component_serial_number[30];			/* ASCII field */
+	uint8_t component_unit_name[30];				/* ASCII field */
 };
 
 /* PGN: 0x00FE30 (65072) to 0x00FE3F (65087) */
@@ -159,31 +156,41 @@ struct Auxiliary_valve_measured_position {
 };
 
 typedef struct {
-	/* For information about other ECU */
+	/* This store the basic information about other ECU */
 	uint8_t number_of_ECU;
 	uint8_t number_of_cannot_claim_address;
 	uint8_t ECU_address[256];
-	struct Acknowledgement acknowledgement[256];
-	struct TP_CM tp_cm[256];
-	struct TP_DT tp_dt[256];
 	struct Name name[256];
-	struct DM dm[256];
-	struct Software_identification software_identification[256];
-	struct ECU_identification ecu_identification[256];
-	struct Component_identification component_identification[256];
-	struct Auxiliary_valve_estimated_flow auxiliary_valve_estimated_flow[256][16];
-	struct General_purpose_valve_estimated_flow general_purpose_valve_estimated_flow[256];
-	struct Auxiliary_valve_measured_position auxiliary_valve_measured_position[256][16];
 
-	/* For information about this ECU */
+	/* Temporary store the information */
+	struct Acknowledgement acknowledgement;
+	struct TP_CM tp_cm;
+	struct TP_DT tp_dt;
+	struct DM dm;
+	struct Software_identification software_identification;
+	struct ECU_identification ecu_identification;
+	struct Component_identification component_identification;
+
+	/* Temporary store the valve information from other ECU - ISO 11783-7 */
+	struct Auxiliary_valve_estimated_flow auxiliary_valve_estimated_flow[16];
+	struct Auxiliary_valve_measured_position auxiliary_valve_measured_position[16];
+	struct General_purpose_valve_estimated_flow general_purpose_valve_estimated_flow;
+
+
+	/* For ID information about this ECU - SAE J1939 */
 	struct Name this_name;
 	uint8_t this_ECU_address;
 	struct DM this_dm;
 	struct Software_identification this_software_identification;
 	struct ECU_identification this_ecu_identification;
 	struct Component_identification this_component_identification;
+
+	/* For valve information about this ECU - ISO 11783-7 */
 	struct Auxiliary_valve_command this_auxiliary_valve_command[16];
+	struct Auxiliary_valve_estimated_flow this_auxiliary_valve_estimated_flow[16];
+	struct Auxiliary_valve_measured_position this_auxiliary_valve_measured_position[16];
 	struct General_purpose_valve_command this_general_purpose_valve_command;
+	struct General_purpose_valve_estimated_flow this_general_purpose_valve_estimated_flow;
 
 
 } J1939;
