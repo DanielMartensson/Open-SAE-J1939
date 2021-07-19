@@ -17,34 +17,43 @@
 #elif PROCESSOR_CHOICE == AVR
 #else
 /* Internal fields */
-static bool internal_new_message[255] = {false};
-static uint8_t internal_data[255*8] = {0};
-static uint8_t internal_DLC[255] = {0};
-static uint32_t internal_ID[255] = {0};
-static uint8_t buffer_index = 0;
+static bool internal_new_message[256] = {false};
+static uint8_t internal_data[256*8] = {0};
+static uint8_t internal_DLC[256] = {0};
+static uint32_t internal_ID[256] = {0};
+static uint8_t buffer_index_transmit = 0;
+static uint8_t buffer_index_receive = 0;
 
 /* Internal functions */
 static ENUM_J1939_STATUS_CODES Internal_Transmit(uint32_t ID, uint8_t data[], uint8_t DLC) {
-	internal_ID[buffer_index] = ID;
-	internal_DLC[buffer_index] = DLC;
+	internal_ID[buffer_index_transmit] = ID;
+	internal_DLC[buffer_index_transmit] = DLC;
 	for(uint8_t i = 0; i < 8; i++)
 		if(i < DLC)
-			internal_data[buffer_index*8 + i] = data[i];
+			internal_data[buffer_index_transmit*8 + i] = data[i];
 		else
-			internal_data[buffer_index*8 + i] = 0x0;
-	internal_new_message[buffer_index] = true;
-	buffer_index++;
+			internal_data[buffer_index_transmit*8 + i] = 0x0;
+	internal_new_message[buffer_index_transmit] = true;
+	buffer_index_transmit++;									/* When this is 256, then it will be come 0 again */
 	return STATUS_SEND_OK;
 }
 
 static void Internal_Receive(uint32_t *ID, uint8_t data[], bool *is_new_message) {
-	buffer_index--;
-	*ID = internal_ID[buffer_index];
+	/* Do a quick check if we are going to read message that have no data */
+	if(internal_new_message[buffer_index_receive] == false){
+		*is_new_message = false;
+		return;
+	}
+
+	*ID = internal_ID[buffer_index_receive];
 	for(uint8_t i = 0; i < 8; i++)
-		if(i < internal_DLC[buffer_index])
-			data[i] = internal_data[buffer_index*8 + i];
-	*is_new_message = internal_new_message[buffer_index];
-	internal_new_message[buffer_index] = false;
+		if(i < internal_DLC[buffer_index_receive])
+			data[i] = internal_data[buffer_index_receive*8 + i];
+	*is_new_message = internal_new_message[buffer_index_receive];
+	/* Reset */
+	internal_new_message[buffer_index_receive] = false;
+	internal_DLC[buffer_index_receive] = 0;
+	buffer_index_receive++;										/* When this is 256, then it will be come 0 again */
 }
 #endif
 

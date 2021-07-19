@@ -15,20 +15,21 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	/* Save the sequence data */
 	j1939->from_other_ecu_tp_dt.sequence_number = data[0];
 	uint8_t index = data[0] - 1;
-	for (uint8_t i = 1; i < 7; i++)
-		j1939->from_other_ecu_tp_dt.data[i][index] = data[i];
+	for (uint8_t i = 1; i < 8; i++)
+		j1939->from_other_ecu_tp_dt.data[i-1][index] = data[i];
 
 	/* Check if we have completed our message - Return = Not completed */
-	if (j1939->from_other_ecu_tp_cm.number_of_packages != j1939->from_other_ecu_tp_dt.sequence_number && j1939->from_other_ecu_tp_cm.number_of_packages < 2)
+	if (j1939->from_other_ecu_tp_cm.number_of_packages != j1939->from_other_ecu_tp_dt.sequence_number || j1939->from_other_ecu_tp_cm.number_of_packages == 0)
 		return;
 
 	/* Our message are complete - Build it and call it complete_data[total_message_size] */
 	uint32_t PGN = j1939->from_other_ecu_tp_cm.PGN_of_the_packeted_message;
-	uint8_t complete_data[j1939->from_other_ecu_tp_cm.total_message_size];
+	uint16_t total_message_size = j1939->from_other_ecu_tp_cm.total_message_size;
+	uint8_t complete_data[14];
 	uint16_t inserted_bytes = 0;
 	for (uint8_t i = 0; i < j1939->from_other_ecu_tp_dt.sequence_number; i++)
-		for (uint8_t j = 0; j < 7; i++)
-			if (inserted_bytes < j1939->from_other_ecu_tp_cm.total_message_size)
+		for (uint8_t j = 0; j < 7; j++)
+			if (inserted_bytes < total_message_size)
 				complete_data[inserted_bytes++] = j1939->from_other_ecu_tp_dt.data[j][i];
 
 	/* Send an end of message ACK back */

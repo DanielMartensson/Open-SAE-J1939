@@ -49,7 +49,7 @@ void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, u
 	j1939->all_name[SA].vehicle_system_instance = data[7] & 0b00001111;
 	/* Remember the source address of the ECU */
 	bool exist = false;
-	for (uint8_t i = 0; i < 255; i++)
+	for (uint8_t i = 0; i < 254; i++)
 		if (j1939->all_ECU_address[i] == SA)
 			exist = true;
 	if (!exist)
