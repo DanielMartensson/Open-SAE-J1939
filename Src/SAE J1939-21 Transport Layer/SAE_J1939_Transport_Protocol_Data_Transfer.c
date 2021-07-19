@@ -52,10 +52,10 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 		j1939->this_ECU_address = complete_data[8]; 							/* New address of this ECU */
 		break;
 	case PGN_DM1:
-		SAE_J1939_Read_Response_Request_DM1(j1939, complete_data, j1939->from_other_ecu_tp_dt.sequence_number); /* Sequence number is the amount of errors */
+		SAE_J1939_Read_Response_Request_DM1(j1939, complete_data, complete_data[8]); /* Sequence number is the last index */
 		break;
 	case PGN_DM2:
-		SAE_J1939_Read_Response_Request_DM2(j1939, complete_data, j1939->from_other_ecu_tp_dt.sequence_number); /* Sequence number is the amount of errors */
+		SAE_J1939_Read_Response_Request_DM2(j1939, complete_data, complete_data[8]); /* Sequence number is the last index */
 		break;
 	case PGN_DM16:
 		SAE_J1939_Read_Binary_Data_Transfer_DM16(j1939, complete_data);
