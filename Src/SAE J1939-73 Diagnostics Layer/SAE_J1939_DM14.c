@@ -38,7 +38,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Read_Request_DM14(J1939 *j1939, uint8_t DA, ui
 	uint8_t pointer_extension = data[5];
 	uint16_t key = (data[7] << 8) | data[6];
 
-	/* Here you should preform a memory read,write etc */
+	/* Here you should perform a memory read,write etc */
 
 	/* Prepare a DM15 PGN: 0x00D800 response back to DA */
 	uint16_t number_of_allowed_bytes = 0;
