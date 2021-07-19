@@ -14,8 +14,6 @@
 #include "SAE J1939-73 Diagnostics Layer/SAE_J1939-73_Diagnostics_Layer.h"
 #include "SAE J1939-81 Network Management Layer/SAE_J1939-81_Network_Management_Layer.h"
 
-
-
 int main() {
 
 	/* Create our J1939 structure with two ECU */
@@ -48,22 +46,22 @@ int main() {
 	j1939_2.this_name.industry_group = INDUSTRY_GROUP_AGRICULTURAL_AND_FORESTRY;	/* From 0 to 7 */
 	j1939_2.this_name.vehicle_system_instance = 15;									/* From 0 to 15 */
 
-	/* Broadcast request NAME from ECU 1 to ECU 2 */
-	SAE_J1939_Send_Request_Address_Claimed(&j1939_1, 0x90);
+	/* Broadcast request NAME from ECU 1 to all ECU */
+	SAE_J1939_Send_Request_Address_Claimed(&j1939_1, 0xFF);							/* 0xFF means broadcast to all ECU */
 
-	/* Listen for request for ECU 2 from ECU 1 */
+	/* Listen for NAME request for ECU 2 from ECU 1 */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
-	/* Listen for response request from ECU 2 to ECU 1 */
+	/* Listen for NAME response request from ECU 2 to ECU 1 */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
-	/* Broadcast request NAME from ECU 2 to ECU 1 */
+	/* Send request NAME from ECU 2 to ECU 1 */
 	SAE_J1939_Send_Request_Address_Claimed(&j1939_2, 0x80);
 
-	/* Listen for request for ECU 1 from ECU 2 */
+	/* Listen for NAME request for ECU 1 from ECU 2 */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
-	/* Listen for response request from ECU 1 to ECU 2 */
+	/* Listen for NAME response request from ECU 1 to ECU 2 */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Print information */
@@ -72,4 +70,3 @@ int main() {
 
 	return 0;
 }
-

@@ -19,7 +19,7 @@ void Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 		uint8_t SA = ID; 		/* Source address of the ECU that we got the message from */
 
 		/* Read request from other ECU */
-		if (id0 == 0x18 && id1 == 0xEA && DA == j1939->this_ECU_address)
+		if (id0 == 0x18 && id1 == 0xEA && (DA == j1939->this_ECU_address || DA == 0xFF))
 			SAE_J1939_Read_Request(j1939, SA, data);
 		else if (id0 == 0x18 && id1 == 0xD9 && DA == j1939->this_ECU_address)
 			SAE_J1939_Read_Request_DM14(j1939, SA, data);
