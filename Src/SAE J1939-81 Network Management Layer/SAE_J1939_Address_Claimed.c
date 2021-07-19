@@ -16,7 +16,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Address_Claimed(J1939 *j1939, uin
 }
 
 /*
- * Response the request address claimed about this ECU to all ECU - Broadcast
+ * Response the request address claimed about this ECU to all ECU - Broadcast. This function must be called at the ECU start up according to J1939 standard
  * PGN: 0x00EE00 (60928)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Address_Claimed(J1939 *j1939) {
