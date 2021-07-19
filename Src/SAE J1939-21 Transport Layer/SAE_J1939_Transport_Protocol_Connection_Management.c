@@ -2,7 +2,7 @@
  * SAE_J1939_Read_j1939_Transport_Protocol_Connection_Management.c
  *
  *  Created on: 14 juli 2021
- *      Author: danie
+ *      Author: Daniel Mårtensson
  */
 
 #include "SAE_J1939-21_Transport_Layer.h"
