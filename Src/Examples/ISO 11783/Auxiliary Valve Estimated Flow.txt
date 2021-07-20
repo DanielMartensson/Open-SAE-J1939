@@ -36,7 +36,7 @@ int main() {
 	/* Send a request from ECU 1 to ECU 2 */
 	ISO_11783_Send_Request_Auxiliary_Valve_Estimated_Flow(&j1939_1, 0x90, valve_number);
 
-	/* Read the request request for ECU 2*/
+	/* Read the request for ECU 2*/
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Read the response request for ECU 1 */
