@@ -1,0 +1,55 @@
+/*
+ * Main.c
+ *
+ *  Created on: 16 juli 2021
+ *      Author: Daniel Mårtensson
+ */
+
+#include "stdlib.h"
+#include "stdio.h"
+
+#include "ISO 11783/ISO 11783-7 Application Layer/Application_Layer.h"
+#include "Open SAE J1939/Open_SAE_J1939.h"
+#include "SAE J1939/SAE J1939-71 Application Layer/Application_Layer.h"
+#include "SAE J1939/SAE J1939-73 Diagnostics Layer/Diagnostics_Layer.h"
+#include "SAE J1939/SAE J1939-81 Network Management Layer/Network_Management_Layer.h"
+
+
+int main() {
+
+	/* Create our J1939 structure with two ECU */
+	J1939 j1939_1 = {0};
+	J1939 j1939_2 = {0};
+
+	/* Set the ECU address */
+	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.this_ECU_address = 0x90;
+
+	/* Set the information about valve 1 for ECU 2 */
+	uint8_t valve_number = 1;
+	j1939_2.this_auxiliary_valve_estimated_flow[valve_number].extend_estimated_flow_standard = 100;
+	j1939_2.this_auxiliary_valve_estimated_flow[valve_number].fail_safe_mode = FAIL_SAFE_MODE_BLOCKED;	/* No fail safe mode */
+	j1939_2.this_auxiliary_valve_estimated_flow[valve_number].limit = LIMIT_NOT_USED;
+	j1939_2.this_auxiliary_valve_estimated_flow[valve_number].retract_estimated_flow_standard = 50;
+	j1939_2.this_auxiliary_valve_estimated_flow[valve_number].valve_state = VALVE_STATE_EXTEND;
+
+	/* Send a request from ECU 1 to ECU 2 */
+	ISO_11783_Send_Request_Auxiliary_Valve_Estimated_Flow(&j1939_1, 0x90, valve_number);
+
+	/* Read the request request for ECU 2*/
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+
+	/* Read the response request for ECU 1 */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+
+	/* Display what we got */
+	printf("Extend estimated flow standard = %i\nFail safe mode = %i\nLimit = %i\nRetract estimated flow standard = %i\nValve state = %i\nFrom ECU address = 0x%x"
+			,j1939_1.from_other_ecu_auxiliary_valve_estimated_flow[valve_number].extend_estimated_flow_standard
+			,j1939_1.from_other_ecu_auxiliary_valve_estimated_flow[valve_number].fail_safe_mode
+			,j1939_1.from_other_ecu_auxiliary_valve_estimated_flow[valve_number].limit
+			,j1939_1.from_other_ecu_auxiliary_valve_estimated_flow[valve_number].retract_estimated_flow_standard
+			,j1939_1.from_other_ecu_auxiliary_valve_estimated_flow[valve_number].valve_state
+			,j1939_1.from_other_ecu_auxiliary_valve_estimated_flow[valve_number].from_ecu_address);
+
+	return 0;
+}
