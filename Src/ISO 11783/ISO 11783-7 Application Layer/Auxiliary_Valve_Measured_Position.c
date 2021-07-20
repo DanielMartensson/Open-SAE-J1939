@@ -11,7 +11,7 @@
  * Request auxiliary valve measured position to all ECU
  * PGN: 0x00FF20 (65312) to 0x00FF2F (65327)
  */
-ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Auxiliary_Valve_Measured_Position(J1939 *j1939, uint8_t DA, uint8_t valve_number) {
+ENUM_J1939_STATUS_CODES ISO_11783_Send_Request_Auxiliary_Valve_Measured_Position(J1939 *j1939, uint8_t DA, uint8_t valve_number) {
 	return SAE_J1939_Send_Request(j1939, DA, PGN_AUXILIARY_VALVE_MEASURED_POSITION_0 + valve_number); /* valve_number can be 0 to 15 */
 }
 
