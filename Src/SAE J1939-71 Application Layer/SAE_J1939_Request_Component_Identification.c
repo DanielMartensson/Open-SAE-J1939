@@ -40,12 +40,12 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Component_Identification(J193
 		uint16_t total_message_size = 0;
 		uint8_t data[length_of_each_field*4];							/* Total 4 fields */
 		for(uint8_t i = 0; i < length_of_each_field; i++) {
-			data[total_message_size++] = j1939->this_component_identification.component_product_date[i];
-			data[total_message_size++] = j1939->this_component_identification.component_model_name[i + length_of_each_field];
-			data[total_message_size++] = j1939->this_component_identification.component_serial_number[i + length_of_each_field*2];
-			data[total_message_size++] = j1939->this_component_identification.component_unit_name[i + length_of_each_field*3];
+			data[i] = j1939->this_component_identification.component_product_date[i];
+			data[length_of_each_field + i] = j1939->this_component_identification.component_model_name[i];
+			data[length_of_each_field*2 + i] = j1939->this_component_identification.component_serial_number[i];
+			data[length_of_each_field*3 + i] = j1939->this_component_identification.component_unit_name[i];
+			total_message_size += 4;
 		}
-
 		/* Send TP CM BAM and then TP DT data */
 		uint8_t number_of_packages = total_message_size % 8 > 1 ? total_message_size/8 + 1 : total_message_size/8; /* Rounding up */
 		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_COMPONENT_IDENTIFICATION);
