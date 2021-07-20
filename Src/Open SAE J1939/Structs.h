@@ -189,6 +189,8 @@ typedef struct {
 	struct Auxiliary_valve_estimated_flow from_other_ecu_auxiliary_valve_estimated_flow[16];
 	struct Auxiliary_valve_measured_position from_other_ecu_auxiliary_valve_measured_position[16];
 	struct General_purpose_valve_estimated_flow from_other_ecu_general_purpose_valve_estimated_flow;
+	struct Auxiliary_valve_command from_other_ecu_auxiliary_valve_command[16];
+	struct General_purpose_valve_command from_other_ecu_general_purpose_valve_command;
 
 	/* For ID information about this ECU - SAE J1939 */
 	struct Name this_name;
@@ -197,10 +199,6 @@ typedef struct {
 	struct Software_identification this_software_identification;
 	struct ECU_identification this_ecu_identification;
 	struct Component_identification this_component_identification;
-
-	/* This struct holds valve command from other ECU about this ECU */
-	struct Auxiliary_valve_command this_auxiliary_valve_command[16];
-	struct General_purpose_valve_command this_general_purpose_valve_command;
 
 	/* For valve information about this ECU - ISO 11783-7 */
 	struct Auxiliary_valve_estimated_flow this_auxiliary_valve_estimated_flow[16];

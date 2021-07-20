@@ -28,9 +28,9 @@ ENUM_J1939_STATUS_CODES ISO_11783_Send_General_Purpose_Valve_Command(J1939 *j193
  * PGN: 0x00C400 (50176)
  */
 void ISO_11783_Read_General_Purpose_Valve_Command(J1939 *j1939, uint8_t SA, uint8_t data[]) {
-	j1939->this_general_purpose_valve_command.standard_flow = data[0];
-	j1939->this_general_purpose_valve_command.fail_safe_mode = data[2] >> 6;
-	j1939->this_general_purpose_valve_command.valve_state = data[2] & 0b00001111;
-	j1939->this_general_purpose_valve_command.extended_flow = (data[4] << 8) | data[3];
-	j1939->this_general_purpose_valve_command.from_ecu_address = SA;
+	j1939->from_other_ecu_general_purpose_valve_command.standard_flow = data[0];
+	j1939->from_other_ecu_general_purpose_valve_command.fail_safe_mode = data[2] >> 6;
+	j1939->from_other_ecu_general_purpose_valve_command.valve_state = data[2] & 0b00001111;
+	j1939->from_other_ecu_general_purpose_valve_command.extended_flow = (data[4] << 8) | data[3];
+	j1939->from_other_ecu_general_purpose_valve_command.from_ecu_address = SA;
 }
