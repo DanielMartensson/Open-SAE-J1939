@@ -1,0 +1,43 @@
+/*
+ * Main.c
+ *
+ *  Created on: 16 juli 2021
+ *      Author: Daniel Mårtensson
+ */
+
+#include "stdlib.h"
+#include "stdio.h"
+
+#include "ISO 11783/ISO 11783-7 Application Layer/Application_Layer.h"
+#include "Open SAE J1939/Open_SAE_J1939.h"
+#include "SAE J1939/SAE J1939-71 Application Layer/Application_Layer.h"
+#include "SAE J1939/SAE J1939-73 Diagnostics Layer/Diagnostics_Layer.h"
+#include "SAE J1939/SAE J1939-81 Network Management Layer/Network_Management_Layer.h"
+
+
+int main() {
+
+	/* Create our J1939 structure with two ECU */
+	J1939 j1939_1 = {0};
+	J1939 j1939_2 = {0};
+
+	/* Set the ECU address */
+	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.this_ECU_address = 0xFD;
+
+	/* Send a command from ECU 1 to ECU 2 */
+	ISO_11783_Send_General_Purpose_Valve_Command(&j1939_1, 0xFD, 100, FAIL_SAFE_MODE_ACTIVATED, VALVE_STATE_INITIALISATION, 60000);
+
+	/* Read the command for ECU 2 */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+
+	/* Display what we got */
+	printf("Standard flow = %i\nValve state = %i\nFail safe mode = %i\nExtended flow = %i\nFrom ECU address = 0x%x"
+			,j1939_2.this_general_purpose_valve_command.standard_flow
+			,j1939_2.this_general_purpose_valve_command.valve_state
+			,j1939_2.this_general_purpose_valve_command.fail_safe_mode
+			,j1939_2.this_general_purpose_valve_command.extended_flow
+			,j1939_2.this_general_purpose_valve_command.from_ecu_address);
+
+	return 0;
+}
