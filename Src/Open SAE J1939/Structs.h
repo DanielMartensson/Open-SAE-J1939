@@ -198,11 +198,13 @@ typedef struct {
 	struct ECU_identification this_ecu_identification;
 	struct Component_identification this_component_identification;
 
-	/* For valve information about this ECU - ISO 11783-7 */
+	/* This struct holds valve command from other ECU about this ECU */
 	struct Auxiliary_valve_command this_auxiliary_valve_command[16];
+	struct General_purpose_valve_command this_general_purpose_valve_command;
+
+	/* For valve information about this ECU - ISO 11783-7 */
 	struct Auxiliary_valve_estimated_flow this_auxiliary_valve_estimated_flow[16];
 	struct Auxiliary_valve_measured_position this_auxiliary_valve_measured_position[16];
-	struct General_purpose_valve_command this_general_purpose_valve_command;
 	struct General_purpose_valve_estimated_flow this_general_purpose_valve_estimated_flow;
 
 
