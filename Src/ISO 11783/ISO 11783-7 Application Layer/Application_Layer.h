@@ -14,6 +14,7 @@
 
 /* Enums */
 #include "../../SAE J1939/SAE J1939 Enums/Enum_PGN.h"
+#include "../ISO 11783 Enums/Enum_Auxiliary_And_General_Purpose_Valves.h"
 
 /* Structs */
 #include "../../Open SAE J1939/Structs.h"
@@ -23,12 +24,12 @@ ENUM_J1939_STATUS_CODES ISO_11783_Send_Auxiliary_Valve_Command_To_All_ECU(J1939 
 void ISO_11783_Read_Auxiliary_Valve_Command(J1939 *j1939, uint8_t SA, uint8_t valve_number, uint8_t data[]);
 
 /* Auxiliary Valve Estimated Flow */
-ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Auxiliary_Valve_Estimated_Flow(J1939 *j1939, uint8_t DA, uint8_t valve_number);
+ENUM_J1939_STATUS_CODES ISO_11783_Send_Request_Auxiliary_Valve_Estimated_Flow(J1939 *j1939, uint8_t DA, uint8_t valve_number);
 ENUM_J1939_STATUS_CODES ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(J1939 *j1939, uint8_t valve_number);
 void ISO_11783_Read_Response_Request_Auxiliary_Estimated_Flow(J1939 *j1939, uint8_t SA, uint8_t valve_number, uint8_t data[]);
 
 /* Auxiliary Valve Measured Position */
-ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Auxiliary_Valve_Measured_Position(J1939 *j1939, uint8_t DA, uint8_t valve_number);
+ENUM_J1939_STATUS_CODES ISO_11783_Send_Request_Auxiliary_Valve_Measured_Position(J1939 *j1939, uint8_t DA, uint8_t valve_number);
 ENUM_J1939_STATUS_CODES ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(J1939 *j1939, uint8_t valve_number);
 void ISO_11783_Read_Response_Request_Auxiliary_Valve_Measured_Position(J1939 *j1939, uint8_t SA, uint8_t valve_number, uint8_t data[]);
 
@@ -37,7 +38,7 @@ ENUM_J1939_STATUS_CODES ISO_11783_Send_General_Purpose_Valve_Command(J1939 *j193
 void ISO_11783_Read_General_Purpose_Valve_Command(J1939 *j1939, uint8_t SA, uint8_t data[]);
 
 /* General Purpose Valve Estimated Flow */
-ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_General_Purpose_Valve_Estimated_Flow(J1939 *j1939, uint8_t DA);
+ENUM_J1939_STATUS_CODES ISO_11783_Send_Request_General_Purpose_Valve_Estimated_Flow(J1939 *j1939, uint8_t DA);
 ENUM_J1939_STATUS_CODES ISO_11783_Response_Request_General_Purpose_Valve_Estimated_Flow(J1939 *j1939, uint8_t DA);
 void ISO_11783_Read_Response_Request_General_Purpose_Valve_Estimated_Flow(J1939 *j1939, uint8_t SA, uint8_t data[]);
 
