@@ -51,5 +51,6 @@ int main() {
 	/* Pick up the message */
 	printf("Message length: %i\n", j1939_2.from_other_ecu_dm.dm16.number_of_occurences);
 	printf("Message text: %s\n", (char*) j1939_2.from_other_ecu_dm.dm16.raw_binary_data);
+	printf("From ECU address: 0x%x", j1939_2.from_other_ecu_dm.dm16.from_ecu_address);
 	return 0;
 }

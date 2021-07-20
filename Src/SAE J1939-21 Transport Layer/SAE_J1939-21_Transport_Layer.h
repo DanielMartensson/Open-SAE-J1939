@@ -27,7 +27,7 @@
 #include "../SAE J1939 Enums/SAE_J1939_Enum_DM1_DM2.h"
 
 /* Acknowledgement */
-void SAE_J1939_Read_Acknowledgement(J1939 *j1939, uint8_t data[]);
+void SAE_J1939_Read_Acknowledgement(J1939 *j1939, uint8_t SA, uint8_t data[]);
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Acknowledgement(J1939 *j1939, uint8_t DA, uint8_t control_byte, uint8_t group_function_value, uint32_t PGN_of_requested_info);
 
 /* Request */

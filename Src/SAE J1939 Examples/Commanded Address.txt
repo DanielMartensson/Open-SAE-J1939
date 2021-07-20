@@ -32,7 +32,7 @@ int main() {
 		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Print information */
-	printf("Identity number = %i\nManufacturer code = %i\nFunction instance = %i\nECU instance = %i\nFunction = %i\nVehicle system = %i\nArbitrary address capable = %i\nIndustry group = %i\nVehicle system instance = %i\nNew ECU address = %i"
+	printf("Identity number = %i\nManufacturer code = %i\nFunction instance = %i\nECU instance = %i\nFunction = %i\nVehicle system = %i\nArbitrary address capable = %i\nIndustry group = %i\nVehicle system instance = %i\nNew ECU address = 0x%x"
 			,j1939_2.this_name.identity_number
 			,j1939_2.this_name.manufacturer_code
 			,j1939_2.this_name.function_instance

@@ -51,12 +51,13 @@ int main() {
 		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Display what ECU 2 got */
-	printf("Length of each field = %i\nComponent product date = %s\nComponent model name = %s\nComponent serial number = %s\nComponent unit name = %s\n"
+	printf("Length of each field = %i\nComponent product date = %s\nComponent model name = %s\nComponent serial number = %s\nComponent unit name = %s\nFrom ECU address = 0x%x"
 			,j1939_2.from_other_ecu_component_identification.length_of_each_field
 			,j1939_2.from_other_ecu_component_identification.component_product_date
 			,j1939_2.from_other_ecu_component_identification.component_model_name
 			,j1939_2.from_other_ecu_component_identification.component_serial_number
-			,j1939_2.from_other_ecu_component_identification.component_unit_name);
+			,j1939_2.from_other_ecu_component_identification.component_unit_name
+			,j1939_2.from_other_ecu_component_identification.from_ecu_address);
 
 	return 0;
 }

@@ -65,8 +65,8 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Print information */
-	printf("How many external ECU are connected according to ECU 1? %i\n", j1939_1.all_number_of_ECU);
-	printf("How many external ECU are connected according to ECU 2? %i\n", j1939_2.all_number_of_ECU);
+	printf("How many external ECU are connected according to ECU 1: %i and the NAME came from address = 0x%x\n", j1939_1.number_of_ECU, j1939_1.from_other_ecu_name.from_ecu_address);
+	printf("How many external ECU are connected according to ECU 2: %i and the NAME came from address = 0x%x\n", j1939_2.number_of_ECU, j1939_2.from_other_ecu_name.from_ecu_address);
 
 	return 0;
 }

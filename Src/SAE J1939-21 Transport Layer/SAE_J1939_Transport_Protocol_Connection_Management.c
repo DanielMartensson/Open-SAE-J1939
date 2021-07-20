@@ -16,6 +16,7 @@ void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8
 	j1939->from_other_ecu_tp_cm.total_message_size = (data[2] << 8) | data[1];
 	j1939->from_other_ecu_tp_cm.number_of_packages = data[3];
 	j1939->from_other_ecu_tp_cm.PGN_of_the_packeted_message = (data[7] << 16) | (data[6] << 8) | data[5];
+	j1939->from_other_ecu_tp_cm.from_ecu_address = SA;
 
 	/* Check if we got the Request To Send control byte - We need to answer with CTS - Clear To Send */
 	if(j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS)

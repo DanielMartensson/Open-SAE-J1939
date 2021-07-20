@@ -25,8 +25,9 @@ ENUM_J1939_STATUS_CODES ISO_11783_Send_Auxiliary_Valve_Command_To_All_ECU(J1939 
  * Read an auxiliary valve command from any ECU - Broadcast in other words
  * PGN: 0x00FE30 (65072) to 0x00FE3F (65087)
  */
-void ISO_11783_Read_Auxiliary_Valve_Command(J1939 *j1939, uint8_t valve_number, uint8_t data[]) {
+void ISO_11783_Read_Auxiliary_Valve_Command(J1939 *j1939, uint8_t SA, uint8_t valve_number, uint8_t data[]) {
 	j1939->this_auxiliary_valve_command[valve_number].standard_flow = data[0];
 	j1939->this_auxiliary_valve_command[valve_number].fail_safe_mode = data[2] >> 6;
 	j1939->this_auxiliary_valve_command[valve_number].valve_state = data[2] & 0b00001111;
+	j1939->this_auxiliary_valve_command[valve_number].from_ecu_address = SA;
 }

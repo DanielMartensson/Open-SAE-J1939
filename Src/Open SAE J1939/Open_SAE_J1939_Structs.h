@@ -24,12 +24,14 @@ struct TP_CM {
 	uint16_t total_message_size;					/* Total bytes our complete message includes - 9 to 1785 */
 	uint8_t number_of_packages;						/* How many times we are going to send packages via TP_DT - 2 to 224 */
 	uint32_t PGN_of_the_packeted_message;			/* Our message is going to activate a PGN */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00EB00 - Storing the Transport Protocol Data Transfer from the reading process */
 struct TP_DT {
 	uint8_t sequence_number;						/* When this sequence number is the same as number_of_packages from TP_CM, then we have our complete message */
 	uint8_t data[7][224];							/* Package data of 2D array where first index is data0 -> data6 and second index is sequence of the data. Notice that total_message_size = 1785 divided by 8 and rounded up to 224 */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00EE00 - Storing the Address claimed from the reading process */
@@ -43,6 +45,7 @@ struct Name {
 	uint8_t arbitrary_address_capable;				/* Specify if the ECU have right to change address if addresses conflicts - 0 to 1 */
 	uint8_t industry_group;							/* Specify the group where this ECU is located - 0 to 7 */
 	uint8_t vehicle_system_instance;				/* Specify the vehicle system number - 0 to 15 */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00FECA - Storing the DM1 Active diagnostic trouble codes from the reading process */
@@ -62,6 +65,7 @@ struct DM1 {
 	uint8_t FMI;									/* Type of problem */
 	uint8_t SPN_conversion_method;					/* If SPN_conversion_method = 1 that means Diagnostics Trouble Code are aligned using a newer conversion method. If SPN_conversion_method = 0 means one of the three Diagnostics Trouble Code conversion methods is used and ECU manufacture shall know which of the three methods is used */
 	uint8_t occurrence_count;						/* This tells how many times failure has occurred. Every time fault goes from inactive to active, the occurence_count is incremented by 1. If fault becomes active for more than 126 times the occurence_count remains 126 */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00D800 - Storing the DM15 response from the reading process */
@@ -71,12 +75,14 @@ struct DM15 {
 	uint32_t EDC_parameter;							/* Status code */
 	uint8_t EDCP_extention;							/* Describe how we should interpret the EDC parameter as a status code or error code */
 	uint16_t seed;									/* Response of the key if we need more key or no key at all */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00D700 - Storing the DM16 binary data transfer from the reading process */
 struct DM16 {
 	uint8_t number_of_occurences;					/* How many bytes we have sent */
 	uint8_t raw_binary_data[255];					/* Here we store the bytes */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* Storing the error codes from the reading process */
@@ -94,6 +100,7 @@ struct DM {
 struct Software_identification {
 	uint8_t number_of_fields;						/* How many numbers contains in the identifications array */
 	uint8_t identifications[30];					/* This can be for example ASCII */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00FDC5 - Storing the ECU identification from the reading process */
@@ -103,6 +110,7 @@ struct ECU_identification {
 	uint8_t ecu_serial_number[30];					/* ASCII field */
 	uint8_t ecu_location[30];						/* ASCII field */
 	uint8_t ecu_type[30];							/* ASCII field */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00FEEB - Storing the component identification from the reading process */
@@ -112,6 +120,7 @@ struct Component_identification {
 	uint8_t component_model_name[30];				/* ASCII field */
 	uint8_t component_serial_number[30];			/* ASCII field */
 	uint8_t component_unit_name[30];				/* ASCII field */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00FE30 (65072) to 0x00FE3F (65087) */
@@ -119,6 +128,7 @@ struct Auxiliary_valve_command {
 	uint8_t standard_flow;							/* Command flow */
 	uint8_t fail_safe_mode;							/* If the user want the valve to go to neutral */
 	uint8_t	valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00FE10 (65040) to 0x00FE1F (65055) */
@@ -128,6 +138,7 @@ struct Auxiliary_valve_estimated_flow {
 	uint8_t valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
 	uint8_t fail_safe_mode;							/* The mode if we are going to use fail safe mode or not */
 	uint8_t limit;									/* Enter a limit code */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00C400 (50176) */
@@ -136,6 +147,7 @@ struct General_purpose_valve_command {
 	uint8_t fail_safe_mode;							/* If the user want the valve to go to neutral */
 	uint8_t	valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
 	uint16_t extended_flow;							/* Another command flow */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00C600 (50688) */
@@ -147,22 +159,24 @@ struct General_purpose_valve_estimated_flow {
 	uint8_t limit;									/* Enter a limit code */
 	uint16_t extend_estimated_flow_extended;		/* A measurement */
 	uint16_t retract_estimated_flow_extended;		/* A measurement */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 struct Auxiliary_valve_measured_position {
 	uint16_t measured_position_procent;				/* Procent position */
 	uint8_t valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
 	uint16_t measured_position_micrometer;			/* Micrometer position */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 typedef struct {
-	/* This store the basic information about other ECU */
-	uint8_t all_number_of_ECU;
-	uint8_t all_number_of_cannot_claim_address;
-	uint8_t all_ECU_address[255];					/* Address values between 0 and 254 only because 254 = error address, 255 = Broadcast */
-	struct Name all_name[255];
+	/* Store addresses of ECU */
+	uint8_t number_of_ECU;
+	uint8_t number_of_cannot_claim_address;
+	uint8_t ECU_address[255];					/* Index values between 0 and 254 only because 254 = error address, 255 = Broadcast */
 
 	/* Temporary store the information from the reading process - SAE J1939 */
+	struct Name from_other_ecu_name;
 	struct Acknowledgement from_other_ecu_acknowledgement;
 	struct TP_CM from_other_ecu_tp_cm;
 	struct TP_DT from_other_ecu_tp_dt;
@@ -175,7 +189,6 @@ typedef struct {
 	struct Auxiliary_valve_estimated_flow from_other_ecu_auxiliary_valve_estimated_flow[16];
 	struct Auxiliary_valve_measured_position from_other_ecu_auxiliary_valve_measured_position[16];
 	struct General_purpose_valve_estimated_flow from_other_ecu_general_purpose_valve_estimated_flow;
-
 
 	/* For ID information about this ECU - SAE J1939 */
 	struct Name this_name;

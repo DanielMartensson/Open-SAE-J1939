@@ -56,12 +56,12 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
 	/* Print information */
-	printf("How many external ECU are connected according to ECU 1? %i\n", j1939_1.all_number_of_ECU);
-	printf("How many external ECU are connected according to ECU 2? %i\n", j1939_2.all_number_of_ECU);
+	printf("How many external ECU are connected according to ECU 1? %i\n", j1939_1.number_of_ECU);
+	printf("How many external ECU are connected according to ECU 2? %i\n", j1939_2.number_of_ECU);
 
 	/* Print information about who cannot claim their own address */
-	printf("How many ECU cannot claim their address according to ECU 1? %i\n", j1939_1.all_number_of_cannot_claim_address);
-	printf("How many ECU cannot claim their address according to ECU 2? %i\n", j1939_2.all_number_of_cannot_claim_address);
+	printf("How many ECU cannot claim their address according to ECU 1? %i\n", j1939_1.number_of_cannot_claim_address);
+	printf("How many ECU cannot claim their address according to ECU 2? %i\n", j1939_2.number_of_cannot_claim_address);
 
 	return 0;
 }

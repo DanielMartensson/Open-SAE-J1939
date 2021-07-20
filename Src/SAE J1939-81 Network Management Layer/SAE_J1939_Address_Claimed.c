@@ -43,21 +43,22 @@ void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, u
 		SAE_J1939_Send_Address_Not_Claimed(j1939);
 		return;
 	}
-
-	j1939->all_name[SA].identity_number = ((data[2] & 0b00011111) << 16) | (data[1] << 8) | data[0];
-	j1939->all_name[SA].manufacturer_code = (data[3] << 3) | (data[2] >> 5);
-	j1939->all_name[SA].function_instance = data[4] >> 3;
-	j1939->all_name[SA].ECU_instance = data[4] & 0b00000111;
-	j1939->all_name[SA].function = data[5];
-	j1939->all_name[SA].vehicle_system = data[6] >> 1;
-	j1939->all_name[SA].arbitrary_address_capable = data[7] >> 7;
-	j1939->all_name[SA].industry_group = (data[7] >> 4) & 0b0111;
-	j1939->all_name[SA].vehicle_system_instance = data[7] & 0b00001111;
+	/* If not, then store the temporary information */
+	j1939->from_other_ecu_name.identity_number = ((data[2] & 0b00011111) << 16) | (data[1] << 8) | data[0];
+	j1939->from_other_ecu_name.manufacturer_code = (data[3] << 3) | (data[2] >> 5);
+	j1939->from_other_ecu_name.function_instance = data[4] >> 3;
+	j1939->from_other_ecu_name.ECU_instance = data[4] & 0b00000111;
+	j1939->from_other_ecu_name.function = data[5];
+	j1939->from_other_ecu_name.vehicle_system = data[6] >> 1;
+	j1939->from_other_ecu_name.arbitrary_address_capable = data[7] >> 7;
+	j1939->from_other_ecu_name.industry_group = (data[7] >> 4) & 0b0111;
+	j1939->from_other_ecu_name.vehicle_system_instance = data[7] & 0b00001111;
+	j1939->from_other_ecu_name.from_ecu_address = SA;
 	/* Remember the source address of the ECU */
 	bool exist = false;
 	for (uint8_t i = 0; i < 255; i++)
-		if (j1939->all_ECU_address[i] == SA)
+		if (j1939->ECU_address[i] == SA)
 			exist = true;
 	if (!exist)
-		j1939->all_ECU_address[j1939->all_number_of_ECU++] = SA;	/* For every new ECU address, count how many ECU */
+		j1939->ECU_address[j1939->number_of_ECU++] = SA;	/* For every new ECU address, count how many ECU */
 }

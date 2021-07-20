@@ -57,7 +57,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM2(J1939 *j1939, uint8_t DA)
  * Store the last DM2 information about other ECU. At least we know how many errors are active
  * PGN: 0x00FECB (65227)
  */
-void SAE_J1939_Read_Response_Request_DM2(J1939 *j1939, uint8_t data[], uint8_t errors_dm2_active) {
+void SAE_J1939_Read_Response_Request_DM2(J1939 *j1939, uint8_t SA, uint8_t data[], uint8_t errors_dm2_active) {
 	j1939->from_other_ecu_dm.dm2.SAE_lamp_status_malfunction_indicator = data[0] >> 6;
 	j1939->from_other_ecu_dm.dm2.SAE_lamp_status_red_stop = (data[0] >> 4) & 0b00000011;
 	j1939->from_other_ecu_dm.dm2.SAE_lamp_status_amber_warning = (data[0] >> 2) & 0b00000011;
@@ -70,6 +70,7 @@ void SAE_J1939_Read_Response_Request_DM2(J1939 *j1939, uint8_t data[], uint8_t e
 	j1939->from_other_ecu_dm.dm2.FMI = data[4] & 0b00011111;
 	j1939->from_other_ecu_dm.dm2.SPN_conversion_method = data[5] >> 7;
 	j1939->from_other_ecu_dm.dm2.occurrence_count = data[5] & 0b01111111;
+	j1939->from_other_ecu_dm.dm2.from_ecu_address = SA;
 
 	/* Check if we have no fault cause */
 	if(j1939->from_other_ecu_dm.dm2.FMI == FMI_NOT_AVAILABLE)

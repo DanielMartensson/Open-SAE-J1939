@@ -21,7 +21,7 @@ int main() {
 	J1939 j1939_2 = {0};
 
 	/* Set the ECU address */
-	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_1.this_ECU_address = 0xA;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
 	j1939_2.this_ECU_address = 0x90;
 
 	/* Set the Software Identification */
@@ -31,7 +31,7 @@ int main() {
 		j1939_1.this_software_identification.identifications[i] = (uint8_t) text[i];
 
 	/* Request Software Identification from ECU 2 to ECU 1 */
-	SAE_J1939_Send_Request(&j1939_2, 0x80, PGN_SOFTWARE_IDENTIFICATION);
+	SAE_J1939_Send_Request(&j1939_2, 0xA, PGN_SOFTWARE_IDENTIFICATION);
 
 	/* Response request from ECU 1 perspective */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
@@ -41,7 +41,7 @@ int main() {
 		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Display what ECU 2 got */
-	printf("Number of fields = %i\nIdentifications = %s", j1939_2.from_other_ecu_software_identification.number_of_fields, j1939_2.from_other_ecu_software_identification.identifications);
+	printf("Number of fields = %i\nIdentifications = %s\nFrom ECU address = 0x%x", j1939_2.from_other_ecu_software_identification.number_of_fields, j1939_2.from_other_ecu_software_identification.identifications, j1939_2.from_other_ecu_software_identification.from_ecu_address);
 
 	return 0;
 }

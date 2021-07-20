@@ -29,7 +29,7 @@ ENUM_J1939_STATUS_CODES ISO_11783_Send_General_Purpose_Valve_Estimated_Flow(J193
  * Read a general purpose valve estimated flow from an ECU
  * PGN: 0x00C600 (50688)
  */
-void ISO_11783_Read_General_Purpose_Valve_Estimated_Flow(J1939 *j1939, uint8_t data[]) {
+void ISO_11783_Read_General_Purpose_Valve_Estimated_Flow(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	j1939->from_other_ecu_general_purpose_valve_estimated_flow.extend_estimated_flow_standard = data[0];
 	j1939->from_other_ecu_general_purpose_valve_estimated_flow.retract_estimated_flow_standard = data[1];
 	j1939->from_other_ecu_general_purpose_valve_estimated_flow.fail_safe_mode = data[2] >> 6;
@@ -37,4 +37,5 @@ void ISO_11783_Read_General_Purpose_Valve_Estimated_Flow(J1939 *j1939, uint8_t d
 	j1939->from_other_ecu_general_purpose_valve_estimated_flow.limit = data[3] >> 5;
 	j1939->from_other_ecu_general_purpose_valve_estimated_flow.extend_estimated_flow_extended = (data[5] << 8) | data[4];
 	j1939->from_other_ecu_general_purpose_valve_estimated_flow.retract_estimated_flow_extended = (data[7] << 8) | data[6];
+	j1939->from_other_ecu_general_purpose_valve_estimated_flow.from_ecu_address = SA;
 }
