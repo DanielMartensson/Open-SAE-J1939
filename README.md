@@ -51,6 +51,8 @@ That's the debugging mode.
  - SAE J1939:81 Network Management Layer
  	- Address Claimed
  	- Commanded Address
+ 	- Address Not Claimed
+ 	- Delete Address
  
 # Extra functionality
  - ISO 11783 Tractors And Machinery For Agriculture And Forestry

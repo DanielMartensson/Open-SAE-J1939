@@ -21,6 +21,8 @@ void SAE_J1939_Read_Request(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 		SAE_J1939_Response_Request_Address_Claimed(j1939);
 	} else if (PGN == PGN_COMMANDED_ADDRESS) {
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
+	} else if (PGN == PGN_ADDRESS_DELETE) {
+		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN); /* Not SAE J1939 standard */
 	} else if (PGN == PGN_DM1) {
 		SAE_J1939_Response_Request_DM1(j1939, SA);
 	} else if (PGN == PGN_DM2) {

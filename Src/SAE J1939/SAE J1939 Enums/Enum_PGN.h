@@ -9,6 +9,7 @@
 #define SAE_J1939_ENUMS_SAE_J1939_ENUM_PGN_H_
 
 typedef enum {
+	PGN_ADDRESS_DELETE = 0x000002,	/* NOT SAE J1939 standard. If you find the correct PGN number, please do a pull request */
 	PGN_REQUEST = 0x00EA00,
 	PGN_ACKNOWLEDGEMENT = 0x00E800,
 	PGN_TP_CM = 0x00EC00,

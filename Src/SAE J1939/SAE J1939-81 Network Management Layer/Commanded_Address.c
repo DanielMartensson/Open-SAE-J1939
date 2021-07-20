@@ -29,11 +29,11 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Commanded_Address(J1939 *j1939, uint8_t D
 	if(status != STATUS_SEND_OK)
 		return status;
 	status = SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA, data, total_message_size, number_of_packages);
-	if(status == STATUS_SEND_OK){
-		j1939->ECU_address[DA] = 0; 						/* Delete old destination address */
-		// TODO: Find a PGN request that can j1939->ECU_address[DA] = 0 for all ECU
-		/* According to J1939 standard, request for Address Claimed (broadcast) must be sent after a Commanded Address so we can get back the new name and address */
-		SAE_J1939_Send_Request(j1939, new_ECU_address, PGN_ADDRESS_CLAIMED);
+	if(status == STATUS_SEND_OK) {
+		/* Send to all ECU that the address DA unused */
+		SAE_J1939_Send_Address_Delete(j1939, 0xFF, DA);
+		/* According to J1939 standard, request for Address Claimed (broadcast) must be sent after a Commanded Address so we can get back the new ECU address */
+		SAE_J1939_Send_Request(j1939, 0xFF, PGN_ADDRESS_CLAIMED);
 	}
 	return status;
 }

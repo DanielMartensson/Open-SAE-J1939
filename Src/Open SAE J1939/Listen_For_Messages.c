@@ -64,7 +64,8 @@ void Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 			ISO_11783_Read_Auxiliary_Valve_Command(j1939, SA, DA & 0xF, data); 									/* DA & 0xF = Valve number. Total 16 valves from 0 to 15 */
 		else if (id0 == 0x0C && id1 == 0xC4 && DA == j1939->this_ECU_address)
 			ISO_11783_Read_General_Purpose_Valve_Command(j1939, SA, data);										/* General Purpose Valve Command have only one valve */
-
+		else if (id0 == 0x0 && id1 == 0x2 && (DA == j1939->this_ECU_address || DA == 0xFF))
+			SAE_J1939_Read_Address_Delete(j1939, data);															/* Not a SAE J1939 standard */
 		/* Add more else if statement here */
 	}
 }
