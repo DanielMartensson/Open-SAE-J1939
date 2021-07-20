@@ -40,17 +40,7 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	/* Check what type of function that message want this ECU to do */
 	switch (PGN) {
 	case PGN_COMMANDED_ADDRESS:
-		/* Insert new name and new destination address to this ECU */
-		j1939->this_name.identity_number = ((complete_data[2] & 0b00011111) << 16) | (complete_data[1] << 8) | complete_data[0];
-		j1939->this_name.manufacturer_code = (complete_data[3] << 3) | (complete_data[2] >> 5);
-		j1939->this_name.function_instance = complete_data[4] >> 3;
-		j1939->this_name.ECU_instance = complete_data[4] & 0b00000111;
-		j1939->this_name.function = complete_data[5];
-		j1939->this_name.vehicle_system = complete_data[6] >> 1;
-		j1939->this_name.arbitrary_address_capable = complete_data[7] >> 7;
-		j1939->this_name.industry_group = (complete_data[7] >> 4) & 0b0111;
-		j1939->this_name.vehicle_system_instance = complete_data[7] & 0b00001111;
-		j1939->this_ECU_address = complete_data[8]; 										/* New address of this ECU */
+		SAE_J1939_Read_Commanded_Address(j1939, complete_data);								/* Insert new name and new address to this ECU */
 		break;
 	case PGN_DM1:
 		SAE_J1939_Read_Response_Request_DM1(j1939, SA, complete_data, complete_data[8]); 	/* Sequence number is the last index */
