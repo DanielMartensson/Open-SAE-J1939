@@ -8,7 +8,7 @@
 #include "Diagnostics_Layer.h"
 
 /* Send binary data transfer. This will be sent after DM15 memory response (if it was proceeded)
- * PGN 0x00D700 (55040)
+ * PGN: 0x00D700 (55040)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t DA, uint8_t number_of_occurences, uint8_t raw_binary_data[]) {
 	if(number_of_occurences < 8) {
@@ -38,7 +38,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, u
 
 /*
  * Read binary data transfer
- * PGN 0x00D700 (55040)
+ * PGN: 0x00D700 (55040)
  */
 void SAE_J1939_Read_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	j1939->from_other_ecu_dm.dm16.number_of_occurences = data[0];
@@ -48,6 +48,5 @@ void SAE_J1939_Read_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t SA, uint8_t 
 			j1939->from_other_ecu_dm.dm16.raw_binary_data[i] = data[i+1];
 		else
 			j1939->from_other_ecu_dm.dm16.raw_binary_data[i] = 0xFF;					/* No data */
-
 }
 
