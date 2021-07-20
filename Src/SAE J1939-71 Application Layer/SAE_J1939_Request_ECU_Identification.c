@@ -40,10 +40,11 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_ECU_Identification(J1939* j19
 		uint16_t total_message_size = 0;
 		uint8_t data[length_of_each_field*4];							/* Total 4 fields */
 		for(uint8_t i = 0; i < length_of_each_field; i++) {
-			data[total_message_size++] = j1939->this_ecu_identification.ecu_part_number[i];
-			data[total_message_size++] = j1939->this_ecu_identification.ecu_serial_number[i + length_of_each_field];
-			data[total_message_size++] = j1939->this_ecu_identification.ecu_location[i + length_of_each_field*2];
-			data[total_message_size++] = j1939->this_ecu_identification.ecu_type[i + length_of_each_field*3];
+			data[i] = j1939->this_ecu_identification.ecu_part_number[i];
+			data[length_of_each_field + i] = j1939->this_ecu_identification.ecu_serial_number[i];
+			data[length_of_each_field*2 + i] = j1939->this_ecu_identification.ecu_location[i];
+			data[length_of_each_field*3 + i] = j1939->this_ecu_identification.ecu_type[i];
+			total_message_size += 4;
 		}
 		/* Send TP CM BAM and then TP DT data */
 		uint8_t number_of_packages = total_message_size % 8 > 1 ? total_message_size/8 + 1 : total_message_size/8; /* Rounding up */
