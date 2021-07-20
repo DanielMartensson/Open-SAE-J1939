@@ -20,7 +20,7 @@
 #include "../../Open SAE J1939/Structs.h"
 
 /* Auxiliary Valve Command */
-ENUM_J1939_STATUS_CODES ISO_11783_Send_Auxiliary_Valve_Command_To_All_ECU(J1939 *j1939, uint8_t valve_number, uint8_t standard_flow, uint8_t fail_safe_mode, uint8_t valve_state);
+ENUM_J1939_STATUS_CODES ISO_11783_Send_Auxiliary_Valve_Command(J1939 *j1939, uint8_t valve_number, uint8_t standard_flow, uint8_t fail_safe_mode, uint8_t valve_state);
 void ISO_11783_Read_Auxiliary_Valve_Command(J1939 *j1939, uint8_t SA, uint8_t valve_number, uint8_t data[]);
 
 /* Auxiliary Valve Estimated Flow */
