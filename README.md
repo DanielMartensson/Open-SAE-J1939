@@ -24,7 +24,7 @@ You only need to download this project and paste it into your `IDE`. Then you cr
 use the functions of this project. You don't need to do anything else. But you still need to understand what all
 these function does.
 
-I have added some examples inside the `Src` folder. Notice that you need to have `PROCESSOR_CHOICE 0` inside the `CAN_Network.c` first.
+I have added some examples inside the `Src` folder. Notice that you need to have `PROCESSOR_CHOICE 0` inside the `Processor_choice.h` first.
 That's the debugging mode.
 
 # The structure of the project
