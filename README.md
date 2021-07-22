@@ -43,6 +43,7 @@ for(uint8_t i = 0; i < 255; i++)
 - Step 7: Set your ECU address between `0x0` to `0xFD`. I select `0x80`
 ```
 j1939.this_ECU_address = 0x80;
+```
 - Step 8: Create `NAME`. It's a `SAE J1939` standard for sending out the `NAME` of the ECU at the start up.
 ```
 /* Set NAME for ECU 1 */
