@@ -43,8 +43,24 @@ for(uint8_t i = 0; i < 255; i++)
 - Step 7: Set your ECU address between `0x0` to `0xFD`. I select `0x80`
 ```
 j1939.this_ECU_address = 0x80;
+- Step 8: Create `NAME`. It's a `SAE J1939` standard for sending out the `NAME` of the ECU at the start up.
 ```
-- Step 8: Implement your reading function inside a while loop
+/* Set NAME for ECU 1 */
+j1939.this_name.identity_number = 100;											/* From 0 to 2097151 */
+j1939.this_name.manufacturer_code = 300; 										/* From 0 to 2047 */
+j1939.this_name.function_instance = 10; 										/* From 0 to 31 */
+j1939.this_name.ECU_instance = 2; 												/* From 0 to 7 */
+j1939.this_name.function = FUNCTION_VDC_MODULE;									/* From 0 to 255 */
+j1939.this_name.vehicle_system = 100;											/* From 0 to 127 */
+j1939.this_name.arbitrary_address_capable = 0;									/* From 0 to 1 */
+j1939.this_name.industry_group = INDUSTRY_GROUP_CONSTRUCTION;					/* From 0 to 7 */
+j1939.this_name.vehicle_system_instance = 10;									/* From 0 to 15 */
+```
+Step 9: Broadcast the `NAME`
+```
+SAE_J1939_Response_Request_Address_Claimed(&j1939);								/* This function send out the NAME to all ECU */
+```
+- Step 10: Implement your reading function inside a while loop
 ```
 while(1) {
 	/* Read incoming messages */
