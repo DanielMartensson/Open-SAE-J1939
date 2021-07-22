@@ -21,10 +21,10 @@ That's the debugging mode for internal CAN feedback.
 
 # How to use the project
 
-Step 1: Download this repository
-Step 2: Go to `Processor_choice.h` and select your processor, if it's not avaiable, please write code for it and send me a pull request
-Step 3: Copy over the `Src` folder to your project folder inside your IDE. Rename `Src` to for example `Open SAE J1939`. That's a good name.
-Step 4: Past the header files inside your application code. This is just an example.
+ - Step 1: Download this repository
+ - Step 2: Go to `Processor_choice.h` and select your processor, if it's not avaiable, please write code for it and send me a pull request
+ - Step 3: Copy over the `Src` folder to your project folder inside your IDE. Rename `Src` to for example `Open SAE J1939`. That's a good name.
+ - Step 4: Past the header files inside your application code. This is just an example.
 ```
 #include "Open SAE J1939/SAE J1939/SAE J1939-71 Application Layer/Application_Layer.h"
 #include "Open SAE J1939/SAE J1939/SAE J1939-73 Diagnostics Layer/Diagnostics_Layer.h"
@@ -32,7 +32,7 @@ Step 4: Past the header files inside your application code. This is just an exam
 #include "Open SAE J1939/ISO 11783/ISO 11783-7 Application Layer/Application_Layer.h"
 #include "Open SAE J1939/Open SAE J1939/Open_SAE_J1939.h"
 ```
-Step 5: Create the `J1939 j1939;` inside your application code. You can see inside the examples how I have done
+ - Step 5: Create the `J1939 j1939;` inside your application code. You can see inside the examples how I have done
  
 Now you can use the `Open SAE J1939` library
 
