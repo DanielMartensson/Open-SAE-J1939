@@ -44,7 +44,7 @@ for(uint8_t i = 0; i < 255; i++)
 ```
 j1939.this_ECU_address = 0x80;
 ```
-- Step 8: Create `NAME`. It's a `SAE J1939` standard for sending out the `NAME` of the ECU at the start up.
+- Step 8: Create `NAME`. It's a `SAE J1939` standard for sending out the `NAME` of the ECU at the start up. Don't forget to look in `SAE J1939 Enums` folder for more predefined fields for `NAME` 
 ```
 /* Set NAME for ECU 1 */
 j1939.this_name.identity_number = 100;                                          /* From 0 to 2097151 */
@@ -59,7 +59,7 @@ j1939.this_name.vehicle_system_instance = 10;                                   
 ```
 Step 9: Broadcast the `NAME`
 ```
-SAE_J1939_Response_Request_Address_Claimed(&j1939);								/* This function send out the NAME to all ECU */
+SAE_J1939_Response_Request_Address_Claimed(&j1939);                             /* This function send out the NAME to all ECU */
 ```
 - Step 10: Implement your reading function inside a while loop
 ```
