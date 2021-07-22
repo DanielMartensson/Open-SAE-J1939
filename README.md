@@ -46,8 +46,8 @@ j1939.this_ECU_address = 0x80;
 ```
 - Step 8: Implement your reading function inside a while loop
 ```
-while(1){
-    /* Read incoming messages */
+while(1) {
+	/* Read incoming messages */
 	Open_SAE_J1939_Listen_For_Messages(&j1939);
 	/* Your application code here */
 	....
