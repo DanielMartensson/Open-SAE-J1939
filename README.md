@@ -17,15 +17,24 @@ SAE J1939 standard!
 
 After you have understand the structure of the project, then select processor choice in `Processor_choice.h` file.
 Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc. or if you want to run it on PC first, then select `PROCESSOR_CHOICE 0` and run some examples.
+That's the debugging mode for internal CAN feedback.
 
 # How to use the project
 
-You only need to download this project and paste it into your `IDE`. Then you create the `J1939` structure and
-use the functions of this project. You don't need to do anything else. But you still need to understand what all
-these function does.
-
-I have added some examples inside the `Src` folder. Notice that you need to have `PROCESSOR_CHOICE 0` inside the `Processor_choice.h` first.
-That's the debugging mode.
+Step 1: Download this repository
+Step 2: Go to `Processor_choice.h` and select your processor, if it's not avaiable, please write code for it and send me a pull request
+Step 3: Copy over the `Src` folder to your project folder inside your IDE. Rename `Src` to for example `Open SAE J1939`. That's a good name.
+Step 4: Past the header files inside your application code. This is just an example.
+```
+#include "Open SAE J1939/SAE J1939/SAE J1939-71 Application Layer/Application_Layer.h"
+#include "Open SAE J1939/SAE J1939/SAE J1939-73 Diagnostics Layer/Diagnostics_Layer.h"
+#include "Open SAE J1939/SAE J1939/SAE J1939-81 Network Management Layer/Network_Management_Layer.h"
+#include "Open SAE J1939/ISO 11783/ISO 11783-7 Application Layer/Application_Layer.h"
+#include "Open SAE J1939/Open SAE J1939/Open_SAE_J1939.h"
+```
+Step 5: Create the `J1939 j1939;` inside your application code. You can see inside the examples how I have done
+ 
+Now you can use the `Open SAE J1939` library
 
 # The structure of the project
 
