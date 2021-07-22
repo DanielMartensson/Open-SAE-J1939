@@ -32,7 +32,7 @@ That's the debugging mode for internal CAN feedback.
 #include "Open SAE J1939/ISO 11783/ISO 11783-7 Application Layer/Application_Layer.h"
 #include "Open SAE J1939/Open SAE J1939/Open_SAE_J1939.h"
 ```
- - Step 5: Create the `J1939 j1939;` inside your application code. You can see inside the examples how I have done
+ - Step 5: Create the `J1939 j1939 = {0};` inside your application code. You can see inside the examples how I have done
  - Step 6: Set the addresses to `0xFF`
 ```
 /* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
