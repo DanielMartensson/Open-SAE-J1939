@@ -48,9 +48,9 @@ j1939.this_ECU_address = 0x80;
 ```
 /* Set NAME for ECU 1 */
 j1939.this_name.identity_number = 100;											/* From 0 to 2097151 */
-j1939.this_name.manufacturer_code = 300; 										/* From 0 to 2047 */
-j1939.this_name.function_instance = 10; 										/* From 0 to 31 */
-j1939.this_name.ECU_instance = 2; 												/* From 0 to 7 */
+j1939.this_name.manufacturer_code = 300;										/* From 0 to 2047 */
+j1939.this_name.function_instance = 10;											/* From 0 to 31 */
+j1939.this_name.ECU_instance = 2;												/* From 0 to 7 */
 j1939.this_name.function = FUNCTION_VDC_MODULE;									/* From 0 to 255 */
 j1939.this_name.vehicle_system = 100;											/* From 0 to 127 */
 j1939.this_name.arbitrary_address_capable = 0;									/* From 0 to 1 */
