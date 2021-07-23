@@ -1,5 +1,5 @@
 /*
- * ISO_11783-7_Implement_Messages_Application_Layer.h
+ * ISO_11783-7_Application_Layer.h
  *
  *  Created on: 16 juli 2021
  *      Author: Daniel Mårtensson
