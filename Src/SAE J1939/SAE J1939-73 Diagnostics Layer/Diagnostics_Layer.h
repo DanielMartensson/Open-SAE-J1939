@@ -9,7 +9,7 @@
 #define SAE_J1939_73_DIAGNOSTICS_LAYER_SAE_J1939_73_DIAGNOSTICS_LAYER_H_
 
 /* C standard library */
-#include <String.h>
+#include <string.h>
 
 /* Layers */
 #include "../../Hardware/Memory/FLASH_EEPROM_RAM_Memory.h"
