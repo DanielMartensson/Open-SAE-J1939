@@ -123,6 +123,13 @@ struct Component_identification {
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
+/* Storing the identifications from the reading process */
+struct Identifications {
+	struct Software_identification software_identification;
+	struct ECU_identification ecu_identification;
+	struct Component_identification component_identification;
+};
+
 /* PGN: 0x00FE30 (65072) to 0x00FE3F (65087) */
 struct Auxiliary_valve_command {
 	uint8_t standard_flow;							/* Command flow */
@@ -181,9 +188,7 @@ typedef struct {
 	struct TP_CM from_other_ecu_tp_cm;
 	struct TP_DT from_other_ecu_tp_dt;
 	struct DM from_other_ecu_dm;
-	struct Software_identification from_other_ecu_software_identification;
-	struct ECU_identification from_other_ecu_ecu_identification;
-	struct Component_identification from_other_ecu_component_identification;
+	struct Identifications from_other_ecu_identifications;
 
 	/* Temporary store the valve information from the reading process - ISO 11783-7 */
 	struct Auxiliary_valve_estimated_flow from_other_ecu_auxiliary_valve_estimated_flow[16];
@@ -196,9 +201,7 @@ typedef struct {
 	struct Name this_name;
 	uint8_t this_ECU_address;
 	struct DM this_dm;
-	struct Software_identification this_software_identification;
-	struct ECU_identification this_ecu_identification;
-	struct Component_identification this_component_identification;
+	struct Identifications this_identifications;
 
 	/* For valve information about this ECU - ISO 11783-7 */
 	struct Auxiliary_valve_estimated_flow this_auxiliary_valve_estimated_flow[16];
