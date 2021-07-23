@@ -24,6 +24,7 @@ typedef enum {
 	/* Function */
 	FUNCTION_AUXILIARY_VALVES_CONTROL= 0x81,
 	FUNCTION_VDC_MODULE = 0x87,
+	/* Select of of them if you want the ECU to take own decision to change its own ECU address */
 	ARBITRARY_ADDRESS_CAPABLE_NOT_CAPABLE = 0x0,
 	ARBITRARY_ADDRESS_CAPABLE_CAPABLE = 0x1
 	/* Add more here */
