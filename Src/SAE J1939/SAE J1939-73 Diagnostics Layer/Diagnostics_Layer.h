@@ -9,8 +9,7 @@
 #define SAE_J1939_73_DIAGNOSTICS_LAYER_SAE_J1939_73_DIAGNOSTICS_LAYER_H_
 
 /* C standard library */
-#include "String.h"
-
+#include <String.h>
 
 /* Layers */
 #include "../../Hardware/Memory/FLASH_EEPROM_RAM_Memory.h"
@@ -28,7 +27,6 @@
 
 /* Structs */
 #include "../../Open SAE J1939/Structs.h"
-
 
 /* DM1 */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM1(J1939 *j1939, uint8_t DA);

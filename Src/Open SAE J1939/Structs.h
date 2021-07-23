@@ -8,7 +8,7 @@
 #ifndef OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_
 #define OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_
 
-#include "stdint.h"
+#include <stdint.h>
 
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {

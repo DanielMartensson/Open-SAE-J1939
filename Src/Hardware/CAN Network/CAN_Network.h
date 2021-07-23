@@ -9,8 +9,8 @@
 #define HARDWARE_CAN_NETWORK_H_
 
 /* C standard library */
-#include "stdint.h"
-#include "stdbool.h"
+#include <stdint.h>
+#include <stdbool.h>
 
 /* Layers */
 #include "../Processor_Choice.h"
