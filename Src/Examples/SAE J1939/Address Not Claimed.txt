@@ -5,8 +5,8 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "stdlib.h"
-#include "stdio.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "ISO 11783/ISO 11783-7 Application Layer/Application_Layer.h"
 #include "Open SAE J1939/Open_SAE_J1939.h"

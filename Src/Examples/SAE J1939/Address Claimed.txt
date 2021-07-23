@@ -5,8 +5,8 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "stdlib.h"
-#include "stdio.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "ISO 11783/ISO 11783-7 Application Layer/Application_Layer.h"
 #include "Open SAE J1939/Open_SAE_J1939.h"
@@ -71,8 +71,8 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Print information */
-	printf("How many external ECU are connected according to ECU 1: %i and the NAME came from address = 0x%x\n", j1939_1.number_of_ECU, j1939_1.from_other_ecu_name.from_ecu_address);
-	printf("How many external ECU are connected according to ECU 2: %i and the NAME came from address = 0x%x\n", j1939_2.number_of_ECU, j1939_2.from_other_ecu_name.from_ecu_address);
+	printf("How many external ECU are connected according to ECU 1: %i and the NAME came from address = 0x%X\n", j1939_1.number_of_ECU, j1939_1.from_other_ecu_name.from_ecu_address);
+	printf("How many external ECU are connected according to ECU 2: %i and the NAME came from address = 0x%X\n", j1939_2.number_of_ECU, j1939_2.from_other_ecu_name.from_ecu_address);
 
 	return 0;
 }

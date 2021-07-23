@@ -5,8 +5,8 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "stdlib.h"
-#include "stdio.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "ISO 11783/ISO 11783-7 Application Layer/Application_Layer.h"
 #include "Open SAE J1939/Open_SAE_J1939.h"
@@ -57,6 +57,6 @@ int main() {
 	/* Pick up the message */
 	printf("Message length: %i\n", j1939_2.from_other_ecu_dm.dm16.number_of_occurences);
 	printf("Message text: %s\n", (char*) j1939_2.from_other_ecu_dm.dm16.raw_binary_data);
-	printf("From ECU address: 0x%x", j1939_2.from_other_ecu_dm.dm16.from_ecu_address);
+	printf("From ECU address: 0x%X", j1939_2.from_other_ecu_dm.dm16.from_ecu_address);
 	return 0;
 }
