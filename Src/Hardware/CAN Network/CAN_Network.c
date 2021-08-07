@@ -67,7 +67,7 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[], uint8_t de
 	TxHeader.TransmitGlobalTime = DISABLE;
 	TxHeader.ExtId = ID;
 	TxHeader.StdId = 0x00; 										/* Not used */
-	status = STM32_PLC_CAN_Transmit(data, &TxHeader);
+	status = CAN_Transmit(data, &TxHeader);
 	HAL_Delay(delay);											/* A delay for messages are required sometimes */
 	#elif PROCESSOR_CHOICE == ARDUINO
 	/* Implement your CAN send 8 bytes message function for the Arduino platform */
