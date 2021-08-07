@@ -29,7 +29,7 @@ HAL_StatusTypeDef STM32_PLC_CAN_Transmit(uint8_t TxData[], CAN_TxHeaderTypeDef *
 /* Returns true if the message data is new */
 void STM32_PLC_CAN_Get_ID_Data(uint32_t* ID, uint8_t data[], bool* is_new_message) {
 	CAN_RxHeaderTypeDef RxHeader = {0};
-	uint8_t RxData[8];
+	uint8_t RxData[8] = {0};
 	HAL_StatusTypeDef status = HAL_CAN_GetRxMessage(can_handler, CAN_RX_FIFO0, &RxHeader, RxData);
 	if (status != HAL_OK)
 		Error_Handler();
