@@ -26,11 +26,14 @@ That's the debugging mode for internal CAN feedback.
  - Step 3: Copy over the `Src` folder to your project folder inside your IDE. Rename `Src` to for example `Open SAE J1939`. That's a good name.
  - Step 4: Past the header files inside your application code. This is just an example.
 ```
-#include "Open SAE J1939/SAE J1939/SAE J1939-71 Application Layer/Application_Layer.h"
-#include "Open SAE J1939/SAE J1939/SAE J1939-73 Diagnostics Layer/Diagnostics_Layer.h"
-#include "Open SAE J1939/SAE J1939/SAE J1939-81 Network Management Layer/Network_Management_Layer.h"
-#include "Open SAE J1939/ISO 11783/ISO 11783-7 Application Layer/Application_Layer.h"
-#include "Open SAE J1939/Open SAE J1939/Open_SAE_J1939.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
+#include "Open_SAE_J1939/Open_SAE_J1939.h"
+#include "SAE_J1939/SAE_J1939-71_Application_Layer/Application_Layer.h"
+#include "SAE_J1939/SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
+#include "SAE_J1939/SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
 ```
  - Step 5: Create the `J1939 j1939 = {0};` inside your application code. You can see inside the examples how I have done
  - Step 6: Set the other ECU addresses to broadcast address `0xFF`
