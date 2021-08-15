@@ -178,9 +178,9 @@ struct Auxiliary_valve_measured_position {
 
 typedef struct {
 	/* Store addresses of ECU */
-	uint8_t number_of_ECU;
-	uint8_t number_of_cannot_claim_address;
-	uint8_t ECU_address[255];					/* Index values between 0 and 254 only because 254 = error address, 255 = Broadcast */
+	uint8_t number_of_other_ECU;				/* How many other ECU are connected */
+	uint8_t number_of_cannot_claim_address;			/* How many ECU addresses could not claim their address */
+	uint8_t other_ECU_address[255];				/* Store other ECU addresses here */		
 
 	/* Temporary store the information from the reading process - SAE J1939 */
 	struct Name from_other_ecu_name;
