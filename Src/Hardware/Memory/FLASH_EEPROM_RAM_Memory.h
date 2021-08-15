@@ -11,10 +11,17 @@
 /* C standard library */
 #include "stdint.h"
 
-/* Layers */
+#include "../../SAE_J1939/SAE_J1939_Enums/Enum_DM14_DM15.h"
 #include "../Processor_Choice.h"
-#include "../../SAE J1939/SAE J1939 Enums/Enum_DM14_DM15.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void FLASH_EEPROM_RAM_Memory(uint16_t *number_of_requested_bytes, uint8_t pointer_type, uint8_t *command, uint32_t *pointer, uint8_t *pointer_extension, uint16_t *key, uint8_t raw_binary_data[]);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* HARDWARE_MEMORY_FLASH_EEPROM_RAM_MEMORY_H_ */

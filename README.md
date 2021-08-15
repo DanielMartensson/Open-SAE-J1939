@@ -4,9 +4,9 @@ SAE J1939 is a protocol for shaping the CAN-bus message in a specific way that s
 
 SAE J1939 is a very easy protocol to use, but there is a lack of information about SAE J1939, due to the cost of the protocol document, available how to shape a CAN-bus message according to SAE J1939 protocol standard. So therefore I’m writing a SAE J1939 protocol available for free to use on any embedded systems such as STM32, Arduino, AVR, PIC etc or PC.
 
-To learn to build on this project, you need first to understand SAE J1939. I have written this project in C language because C is an industry standard. The C language dialect I have chosen is C99 and I don’t use dynamical memory allocation in this library. So it will work with MISRA C standard.
+To learn to build on this project, you need first to understand SAE J1939. I have written this project in `C` language because C is an industry standard. The `C` language dialect I have chosen is `C99` and I don't use dynamical memory allocation in this library. So it will work with `MISRA C` standard.
 
-With this library, you can communicate with valves, engines, actuators, machinery, hardware and all other things that are suitable for heavy industrial mobile applications. I have build up a basic structure of the project and I hope that other users will send pull request of their C code for extra functionality to SAE J1939 standard because SAE J1939 is a huge standard. 
+With this library, you can communicate with valves, engines, actuators, machinery, hardware and all other things that are suitable for heavy industrial mobile applications. I have build up a basic structure of the project and I hope that other users will send pull request of their `C` code for extra functionality to SAE J1939 standard because SAE J1939 is a huge standard. 
 
 # Getting started
 
@@ -110,3 +110,20 @@ Now you can use the `Open SAE J1939` library
  		- General Purpose Valve Command
  		- General Purpose Valve Estimated Flow
  	
+# Questions and answers
+ - Q: Can this library be used with `C++`?
+ 	- A: Yes it can be used with `C++`
+ - Q: I want to build on this library, what should I do?
+ 	- A: First you need to know `C99` and bitwise operations. Then you need to understand the `SAE J1939:21 Transport Layer` structure. Don't forget to update the PDF with your new functionality.
+ - Q: Can I use this on my Arduino?
+ 	- A: Yes, this `C` code is 100% pure `C` code and only using `C` standard library and also the code does not take account of what hardware you are using.
+ - Q: Do I need to install the library for to use the library?
+ 	- A: No, just copy over the `.c` and `.h` files to your project and compile. I have used this with QT framework.
+ - Q: This project is quite old now and not so much updates, is it still worth to use it?
+ 	- A: Yes, this library only updates when I or other includes more functionality from SAE J1939. The reason why I wrote this in `C99` is because it's an industry standard and will you will always be able to compile this library and use it.
+ - Q: What is your plan with the library?
+ 	- A: To make SAE J1939 avaiable for everybody
+ - Q: I don't have CAN-bus, but can I use this library anyway with UART, USB, WiFi etc?
+ 	- A: Yes. This is only a way to shape a massage in a specific way.
+ - Q: Can I send data with this library, even if I don't have CAN-bus?
+ 	- A: Yes. There are something called DM14 transmit request, DM15 status response and DM16 binary transfer. Use that if you want to transfer data in an industrial way.
