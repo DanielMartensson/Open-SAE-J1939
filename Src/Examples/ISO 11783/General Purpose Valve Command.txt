@@ -2,7 +2,7 @@
  * Main.c
  *
  *  Created on: 16 juli 2021
- *      Author: Daniel Mårtensson
+ *      Author: Daniel MÃ¥rtensson
  */
 
 #include "stdlib.h"
@@ -23,8 +23,8 @@ int main() {
 	
 	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
 	for(uint8_t i = 0; i < 255; i++){
-		j1939_1.ECU_address[i] = 0xFF;
-		j1939_2.ECU_address[i] = 0xFF;
+		j1939_1.other_ECU_address[i] = 0xFF;
+		j1939_2.other_ECU_address[i] = 0xFF;
 	}
 
 	/* Set the ECU address */
@@ -38,7 +38,7 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Display what we got */
-	printf("Standard flow = %i\nValve state = %i\nFail safe mode = %i\nExtended flow = %i\nFrom ECU address = 0x%x"
+	printf("Standard flow = %i\nValve state = %i\nFail safe mode = %i\nExtended flow = %i\nFrom ECU address = 0x%X"
 			,j1939_2.from_other_ecu_general_purpose_valve_command.standard_flow
 			,j1939_2.from_other_ecu_general_purpose_valve_command.valve_state
 			,j1939_2.from_other_ecu_general_purpose_valve_command.fail_safe_mode
