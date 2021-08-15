@@ -17,6 +17,7 @@ struct Acknowledgement {
 	uint8_t group_function_value;					/* The function code that specify cause of the control byte e.g time out or aborted */
 	uint8_t address;								/* Address from the ECU where the acknowledgement came from */
 	uint32_t PGN_of_requested_info;					/* Information request about the PGN */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00EC00 - Storing the Transport Protocol Connection Management from the reading process */

@@ -16,6 +16,7 @@ void SAE_J1939_Read_Acknowledgement(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	j1939->from_other_ecu_acknowledgement.group_function_value = data[1];				/* The cause of the control byte */
 	j1939->from_other_ecu_acknowledgement.address = data[4]; 							/* The source address from the ECU */
 	j1939->from_other_ecu_acknowledgement.PGN_of_requested_info = (data[7] << 16) | (data[6] << 8) | data[5];
+	j1939->from_other_ecu_acknowledgement.from_ecu_address = SA;						/* From where came the message */
 }
 
 /*
