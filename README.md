@@ -37,7 +37,7 @@ That's the debugging mode for internal CAN feedback.
 ```
 /* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 because this library remembers the ECU addresses. */
 for(uint8_t i = 0; i < 255; i++)
-	j1939.ECU_address[i] = 0xFF; /* 0xFF is not a ECU address, only a broadcast address according to SAE J1939 */
+	j1939.ECU_address[i] = 0xFF; /* 0xFF is not an ECU address, only a broadcast address according to SAE J1939 */
 	
 ```
 - Step 7: Set your ECU address between `0x0` to `0xFD`. I select `0x80`
