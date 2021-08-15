@@ -8,7 +8,7 @@
 #ifndef SAE_J1939_73_DIAGNOSTICS_LAYER_SAE_J1939_73_DIAGNOSTICS_LAYER_H_
 #define SAE_J1939_73_DIAGNOSTICS_LAYER_SAE_J1939_73_DIAGNOSTICS_LAYER_H_
 
-/* C standard library */
+/* The C standard library */
 #include <string.h>
 
 /* Layers */

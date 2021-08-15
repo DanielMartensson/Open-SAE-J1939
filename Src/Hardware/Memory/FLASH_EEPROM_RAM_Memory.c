@@ -2,7 +2,7 @@
  * FLASH_EEPROM_RAM_Memory.c
  *
  *  Created on: 19 juli 2021
- *      Author: Daniel Mårtensson
+ *      Author: Daniel MÃ¥rtensson
  */
 
 #include "FLASH_EEPROM_RAM_Memory.h"

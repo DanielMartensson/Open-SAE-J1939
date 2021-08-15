@@ -22,7 +22,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM14(J1939 *j1939, uint8_t DA, ui
 	data[5] = pointer_extension;
 	data[6] = key;
 	data[7] = key >> 8;
-	return CAN_Send_Message(ID, data, 0);									/* 0 ms delay */
+	return CAN_Send_Message(ID, data, 0);								/* 0 ms delay */
 }
 
 /*

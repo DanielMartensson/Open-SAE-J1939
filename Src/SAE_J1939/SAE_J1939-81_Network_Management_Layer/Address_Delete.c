@@ -24,7 +24,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Address_Delete(J1939 *j1939, uint8_t DA, 
 	uint32_t ID = (0x0002 << 16) | (DA << 8) | j1939->this_ECU_address;
 	uint8_t data[8];
 	data[0] = old_ECU_address;
-	data[1] = data[2] = data[3] = data[4] = data[5] = data[6] = data[7] = 0xFF; /*Reserved */
+	data[1] = data[2] = data[3] = data[4] = data[5] = data[6] = data[7] = 0xFF;  /*Reserved */
 	return CAN_Send_Message(ID, data, 0);
 }
 

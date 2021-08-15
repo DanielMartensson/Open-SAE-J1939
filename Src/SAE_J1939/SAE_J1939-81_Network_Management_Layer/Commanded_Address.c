@@ -24,7 +24,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Commanded_Address(J1939 *j1939, uint8_t D
 	data[5] = function;
 	data[6] = vehicle_system << 1;
 	data[7] = (arbitrary_address_capable << 7) | (industry_group << 4) | vehicle_system_instance;
-	data[8] = new_ECU_address;								/* New address of the ECU we are sending to*/
+	data[8] = new_ECU_address;							/* New address of the ECU we are sending to*/
 	ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_COMMANDED_ADDRESS);
 	if(status != STATUS_SEND_OK)
 		return status;

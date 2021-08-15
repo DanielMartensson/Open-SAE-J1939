@@ -51,7 +51,7 @@ void SAE_J1939_Read_Request(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	} else {
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_NOT_SUPPORTED, GROUP_FUNCTION_VALUE_NO_CAUSE, PGN);
 	}
-	/* Add more else if statements here */
+	/* Add more else if statements here for more read request */
 }
 
 /*

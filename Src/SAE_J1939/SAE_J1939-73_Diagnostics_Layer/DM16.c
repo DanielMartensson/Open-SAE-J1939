@@ -47,6 +47,6 @@ void SAE_J1939_Read_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t SA, uint8_t 
 		if(i < data[0])
 			j1939->from_other_ecu_dm.dm16.raw_binary_data[i] = data[i+1];
 		else
-			j1939->from_other_ecu_dm.dm16.raw_binary_data[i] = 0xFF;					/* No data */
+			j1939->from_other_ecu_dm.dm16.raw_binary_data[i] = 0xFF;		/* No data */
 }
 

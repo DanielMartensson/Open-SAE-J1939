@@ -30,15 +30,15 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Component_Identification(J193
 		data[1] = j1939->this_identifications.component_identification.component_model_name[0];
 		data[2] = j1939->this_identifications.component_identification.component_serial_number[0];
 		data[3] = j1939->this_identifications.component_identification.component_unit_name[0];
-		data[4] = 0xFF;													/* Reserved */
-		data[5] = 0xFF;													/* Reserved */
-		data[6] = 0xFF;													/* Reserved */
-		data[7] = 0xFF;													/* Reserved */
-		return CAN_Send_Message(ID, data, 0);							/* 0 ms delay */
+		data[4] = 0xFF;													 /* Reserved */
+		data[5] = 0xFF;													 /* Reserved */
+		data[6] = 0xFF;													 /* Reserved */
+		data[7] = 0xFF;													 /* Reserved */
+		return CAN_Send_Message(ID, data, 0);							 /* 0 ms delay */
 	} else {
 		/* Multiple messages - Use Transport Protocol Connection Management BAM */
 		uint16_t total_message_size = 0;
-		uint8_t data[length_of_each_field*4];							/* Total 4 fields */
+		uint8_t data[length_of_each_field*4];							 /* Total 4 fields */
 		for(uint8_t i = 0; i < length_of_each_field; i++) {
 			data[i] = j1939->this_identifications.component_identification.component_product_date[i];
 			data[length_of_each_field + i] = j1939->this_identifications.component_identification.component_model_name[i];

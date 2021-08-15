@@ -8,7 +8,7 @@
 #ifndef SAE_J1939_ENUMS_SAE_J1939_ENUM_DM1_DM2_H_
 #define SAE_J1939_ENUMS_SAE_J1939_ENUM_DM1_DM2_H_
 
-/* Notice that DM2 error messages is previously activated DM1 error messages */
+/* Notice that the DM2 error messages is previously activated DM1 error messages */
 typedef enum {
 	/* FMI codes */
 	FMI_ABOVE_NORMAL_MOST_SEVERE = 0x0,

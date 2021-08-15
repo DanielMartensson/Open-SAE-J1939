@@ -22,7 +22,7 @@ int main() {
 
 	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
 	for(uint8_t i = 0; i < 255; i++){
-		j1939_1.other_ECU_address[i] = 0xFF;
+		j1939_1.other_ECU_address[i] = 0xFF; /* 0xFF is the broadcast address */
 		j1939_2.other_ECU_address[i] = 0xFF;
 	}
 

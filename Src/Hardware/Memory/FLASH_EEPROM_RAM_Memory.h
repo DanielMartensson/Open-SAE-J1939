@@ -2,7 +2,7 @@
  * FLASH_EEPROM_RAM_Memory.h
  *
  *  Created on: 19 juli 2021
- *      Author: Daniel Mårtensson
+ *      Author: Daniel MÃ¥rtensson
  */
 
 #ifndef HARDWARE_MEMORY_FLASH_EEPROM_RAM_MEMORY_H_

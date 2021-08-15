@@ -2,7 +2,7 @@
  * SAE_J1939_Read_j1939_Transport_Protocol_Connection_Management.c
  *
  *  Created on: 14 juli 2021
- *      Author: Daniel Mårtensson
+ *      Author: Daniel Mï¿½rtensson
  */
 
 #include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
@@ -35,9 +35,9 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(
 	data[1] = total_message_size;
 	data[2] = total_message_size >> 8;
 	data[3] = number_of_packages;
-	data[4] = 0xFF; 														/* Reserved */
+	data[4] = 0xFF; 															/* Reserved */
 	data[5] = PGN_of_the_packeted_message;
 	data[6] = PGN_of_the_packeted_message >> 8;
 	data[7] = PGN_of_the_packeted_message >> 16;
-	return CAN_Send_Message(ID, data, 100);									/* 100 ms delay */
+	return CAN_Send_Message(ID, data, 100);										/* 100 ms delay */
 }

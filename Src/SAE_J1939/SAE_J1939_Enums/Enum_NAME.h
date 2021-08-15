@@ -8,6 +8,7 @@
 #ifndef SAE_J1939_ENUMS_SAE_J1939_ENUM_NAME_H_
 #define SAE_J1939_ENUMS_SAE_J1939_ENUM_NAME_H_
 
+/* NAME fields enums */
 typedef enum {
 	/* Manufacturer code */
 	MANUFACTURER_CODE_SONCEBOZ = 0x147,

@@ -2,7 +2,7 @@
  * ISO_11783_7_Auxiliary_Valve_Command.c
  *
  *  Created on: 16 juli 2021
- *      Author: Daniel Mårtensson
+ *      Author: Daniel MÃ¥rtensson
  */
 
 #include "../../ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"

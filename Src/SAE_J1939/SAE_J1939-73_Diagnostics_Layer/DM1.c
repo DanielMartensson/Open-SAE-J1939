@@ -43,8 +43,8 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM1(J1939* j1939, uint8_t DA)
 		data[3] = j1939->this_dm.dm1.SPN >> 8;
 		data[4] = ((j1939->this_dm.dm1.SPN >> 11) & 0b11100000) | j1939->this_dm.dm1.FMI;
 		data[5] = (j1939->this_dm.dm1.SPN_conversion_method << 7) | j1939->this_dm.dm1.occurrence_count;
-		data[6] = 0xFF;							/* Reserved */
-		data[7] = 0xFF;							/* Reserved */
+		data[6] = 0xFF;													/* Reserved */
+		data[7] = 0xFF;													/* Reserved */
 		data[8] = j1939->this_dm.errors_dm1_active;
 		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_DM1);
 		if(status != STATUS_SEND_OK)

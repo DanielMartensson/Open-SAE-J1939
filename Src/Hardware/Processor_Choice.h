@@ -2,7 +2,7 @@
  * Processor_Choice.h
  *
  *  Created on: 19 juli 2021
- *      Author: Daniel Mårtensson
+ *      Author: Daniel MÃ¥rtensson
  */
 
 #ifndef HARDWARE_PROCESSOR_CHOICE_H_

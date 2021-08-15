@@ -2,7 +2,7 @@
  * ISO_11783_7_General_Purpose_Valve_Estimated_Flow.c
  *
  *  Created on: 16 juli 2021
- *      Author: Daniel Mårtensson
+ *      Author: Daniel Mï¿½rtensson
  */
 
 #include "../../ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
@@ -24,7 +24,7 @@ ENUM_J1939_STATUS_CODES ISO_11783_Response_Request_General_Purpose_Valve_Estimat
 	uint8_t data[8];
 	data[0] = j1939->this_general_purpose_valve_estimated_flow.extend_estimated_flow_standard;
 	data[1] = j1939->this_general_purpose_valve_estimated_flow.retract_estimated_flow_standard;
-	data[2] = (j1939->this_general_purpose_valve_estimated_flow.fail_safe_mode << 6) | (0b11 << 4) | j1939->this_general_purpose_valve_estimated_flow.valve_state; 	/* Bit 5 and 6 are reserved */
+	data[2] = (j1939->this_general_purpose_valve_estimated_flow.fail_safe_mode << 6) | (0b11 << 4) | j1939->this_general_purpose_valve_estimated_flow.valve_state; 	/* Bit 5 and 6 are reserved for further use */
 	data[3] = j1939->this_general_purpose_valve_estimated_flow.limit << 5;
 	data[4] = j1939->this_general_purpose_valve_estimated_flow.extend_estimated_flow_extended;
 	data[5] = j1939->this_general_purpose_valve_estimated_flow.extend_estimated_flow_extended >> 8;

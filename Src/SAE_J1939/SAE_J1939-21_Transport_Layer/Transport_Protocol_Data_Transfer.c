@@ -78,14 +78,14 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j
 	uint16_t bytes_sent = 0;
 	ENUM_J1939_STATUS_CODES status = STATUS_SEND_OK;
 	for(uint8_t i = 1; i <= number_of_packages; i++) {
-		package[0] = i; 													/* Number of package */
+		package[0] = i; 																	/* Number of package */
 		for(uint8_t j = 0; j < 7; j++)
 			if(bytes_sent < total_message_size)
-				package[j+1] = data[bytes_sent++];							/* Data */
+				package[j+1] = data[bytes_sent++];											/* Data */
 			 else
-				package[j+1] = 0xFF; 										/* Reserved */
+				package[j+1] = 0xFF; 														/* Reserved */
 
-		status = CAN_Send_Message(ID, package, 100);						/* 100 ms delay */
+		status = CAN_Send_Message(ID, package, 100);										/* 100 ms delay */
 		if(status != STATUS_SEND_OK)
 			return status;
 	}

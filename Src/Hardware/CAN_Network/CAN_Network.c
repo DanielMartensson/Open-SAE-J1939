@@ -11,7 +11,6 @@
 /* Platform independent library headers for CAN */
 #if PROCESSOR_CHOICE == STM32
 #include "main.h"
-#include "../../Functions.h"									/* This is important for STM32 PLC - You can delete this if you not running my STM32 PLC board */
 #elif PROCESSOR_CHOICE == ARDUINO
 #elif PROCESSOR_CHOICE == PIC
 #elif PROCESSOR_CHOICE == AVR

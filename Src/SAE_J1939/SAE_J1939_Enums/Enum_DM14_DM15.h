@@ -8,6 +8,7 @@
 #ifndef SAE_J1939_ENUMS_SAE_J1939_ENUM_DM14_DM15_H_
 #define SAE_J1939_ENUMS_SAE_J1939_ENUM_DM14_DM15_H_
 
+/* DM14 and DM15 enums */
 typedef enum {
 	/* Status */
 	STATUS_DM15_PROCEED = 0x0,

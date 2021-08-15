@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-/* Enums and processor choice */
+/* Enums and processor choices */
 #include "../../SAE_J1939/SAE_J1939_Enums/Enum_Send_Status.h"
 #include "../Processor_Choice.h"
 

@@ -2,7 +2,7 @@
  * ISO_11783-7_Application_Layer.h
  *
  *  Created on: 16 juli 2021
- *      Author: Daniel Mårtensson
+ *      Author: Daniel MÃ¥rtensson
  */
 
 #ifndef ISO_11783_ISO_11783_7_APPLICATION_LAYER_ISO_11783_7_APPLICATION_LAYER_H_
