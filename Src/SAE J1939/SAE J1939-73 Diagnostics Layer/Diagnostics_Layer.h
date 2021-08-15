@@ -17,7 +17,6 @@
 
 /* Enums */
 #include "../SAE J1939 Enums/Enum_Control_Byte.h"
-#include "../SAE J1939 Enums/Enum_Control_Byte.h"
 #include "../SAE J1939 Enums/Enum_Group_Function_Value.h"
 #include "../SAE J1939 Enums/Enum_DM1_DM2.h"
 #include "../SAE J1939 Enums/Enum_DM14_DM15.h"
