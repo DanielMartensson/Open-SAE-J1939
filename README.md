@@ -2,9 +2,9 @@
 
 SAE J1939 is a protocol for shaping the CAN-bus message in a specific way that suits industrial vehicles such as tractors, machinery, trucks and more.
 
-SAE J1939 is a very easy protocol to use, but there is a lack of information about SAE J1939, due to the cost of the protocol document, available how to shape a CAN-bus message according to SAE J1939 protocol standard. So therefore I’m writing a SAE J1939 protocol available for free to use on any embedded systems such as STM32, Arduino, AVR, PIC etc or PC.
+SAE J1939 is a very easy protocol to use, but there is a lack of information about SAE J1939, due to the cost of the protocol document, available how to shape a CAN-bus message according to SAE J1939 protocol standard. So therefore Iâ€™m writing a SAE J1939 protocol available for free to use on any embedded systems such as STM32, Arduino, AVR, PIC etc or PC.
 
-To learn to build on this project, you need first to understand SAE J1939. I have written this project in C language because C is an industry standard. The C language dialect I have chosen is C99 and I don’t use dynamical memory allocation in this library. So it will work with MISRA C standard.
+To learn to build on this project, you need first to understand SAE J1939. I have written this project in C language because C is an industry standard. The C language dialect I have chosen is C99 and I donâ€™t use dynamical memory allocation in this library. So it will work with MISRA C standard.
 
 With this library, you can communicate with valves, engines, actuators, machinery, hardware and all other things that are suitable for heavy industrial mobile applications. I have build up a basic structure of the project and I hope that other users will send pull request of their C code for extra functionality to SAE J1939 standard because SAE J1939 is a huge standard. 
 
@@ -33,11 +33,11 @@ That's the debugging mode for internal CAN feedback.
 #include "Open SAE J1939/Open SAE J1939/Open_SAE_J1939.h"
 ```
  - Step 5: Create the `J1939 j1939 = {0};` inside your application code. You can see inside the examples how I have done
- - Step 6: Set the addresses to `0xFF`
+ - Step 6: Set the other ECU addresses to broadcast address `0xFF`
 ```
-/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
+/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 because this library remembers the ECU addresses. */
 for(uint8_t i = 0; i < 255; i++)
-	j1939.ECU_address[i] = 0xFF;
+	j1939.ECU_address[i] = 0xFF; /* 0xFF is not a ECU address, only a broadcast address according to SAE J1939 */
 	
 ```
 - Step 7: Set your ECU address between `0x0` to `0xFD`. I select `0x80`
