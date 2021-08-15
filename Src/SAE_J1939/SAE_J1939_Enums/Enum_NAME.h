@@ -2,7 +2,7 @@
  * SAE_J1939_Enum_NAME.h
  *
  *  Created on: 15 juli 2021
- *      Author: Daniel Mårtenssons
+ *      Author: Daniel Mårtensson
  */
 
 #ifndef SAE_J1939_ENUMS_SAE_J1939_ENUM_NAME_H_
