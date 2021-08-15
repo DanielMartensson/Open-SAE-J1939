@@ -2,7 +2,7 @@
  * Main.c
  *
  *  Created on: 16 juli 2021
- *      Author: Daniel Mårtensson
+ *      Author: Daniel MÃ¥rtensson
  */
 
 #include <stdlib.h>
@@ -22,8 +22,8 @@ int main() {
 	
 	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
 	for(uint8_t i = 0; i < 255; i++){
-		j1939_1.ECU_address[i] = 0xFF;
-		j1939_2.ECU_address[i] = 0xFF;
+		j1939_1.other_ECU_address[i] = 0xFF;
+		j1939_2.other_ECU_address[i] = 0xFF;
 	}
 
 	/* Set the ECU address - Notice that they are the same address! */
@@ -62,8 +62,8 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
 	/* Print information */
-	printf("How many external ECU are connected according to ECU 1? %i\n", j1939_1.number_of_ECU);
-	printf("How many external ECU are connected according to ECU 2? %i\n", j1939_2.number_of_ECU);
+	printf("How many external ECU are connected according to ECU 1? %i\n", j1939_1.number_of_other_ECU);
+	printf("How many external ECU are connected according to ECU 2? %i\n", j1939_2.number_of_other_ECU);
 
 	/* Print information about who cannot claim their own address */
 	printf("How many ECU cannot claim their address according to ECU 1? %i\n", j1939_1.number_of_cannot_claim_address);
