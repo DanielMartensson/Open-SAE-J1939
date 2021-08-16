@@ -125,7 +125,7 @@ Now you can use the `Open SAE J1939` library
  - Q: This project is quite old now and not so much updates, is it still worth to use it?
  	- A: Yes, this library only updates when I or other includes more functionality from SAE J1939. The reason why I wrote this in `C99` is because it's an industry standard and will you will always be able to compile this library and use it.
  - Q: What is your plan with the library?
- 	- A: To make SAE J1939 avaiable for everybody
+ 	- A: To make SAE J1939 available for everybody
  - Q: I don't have CAN-bus, but can I use this library anyway with UART, USB, WiFi etc?
  	- A: Yes. This is only a way to shape a massage in a specific way.
  - Q: Can I send data with this library, even if I don't have CAN-bus?
