@@ -94,7 +94,7 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[], uint8_t del
 	TxHeader.TransmitGlobalTime = DISABLE;
 	TxHeader.ExtId = ID;
 	TxHeader.StdId = 0x00; 										/* Not used */
-	status = STM32_PLC_CAN_Transmit(PGN, &TxHeader);
+	status = CAN_Transmit(PGN, &TxHeader);
 	HAL_Delay(delay);											/* A delay for messages are required sometimes */
 	#elif PROCESSOR_CHOICE == ARDUINO
 	/* Implement your CAN send 3 bytes message function for the Arduino platform */
