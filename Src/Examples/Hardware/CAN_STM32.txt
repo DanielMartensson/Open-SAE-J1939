@@ -2,7 +2,7 @@
  * CAN.c
  *
  *  Created on: Jun 14, 2021
- *      Author: Daniel Mårtensson
+ *      Author: Daniel MÃ¥rtensson
  */
 
 #include "Functions.h"
