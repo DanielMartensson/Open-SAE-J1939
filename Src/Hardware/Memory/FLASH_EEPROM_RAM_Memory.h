@@ -9,7 +9,7 @@
 #define HARDWARE_MEMORY_FLASH_EEPROM_RAM_MEMORY_H_
 
 /* C standard library */
-#include "stdint.h"
+#include <stdint.h>
 
 #include "../../SAE_J1939/SAE_J1939_Enums/Enum_DM14_DM15.h"
 #include "../Processor_Choice.h"
