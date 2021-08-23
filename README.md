@@ -25,7 +25,7 @@ That's the debugging mode for internal CAN feedback.
  - Step 2: Go to `Processor_choice.h` and select your processor, if it's not avaiable, please write code for it and send me a pull request
  - Step 3: Copy over the `Src` folder to your project folder inside your IDE. Rename `Src` to for example `Open SAE J1939`. That's a good name.
  - Step 4: Past the header files inside your application code. This is just an example.
-```
+```c
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -37,18 +37,18 @@ That's the debugging mode for internal CAN feedback.
 ```
  - Step 5: Create the `J1939 j1939 = {0};` inside your application code. You can see inside the examples how I have done
  - Step 6: Set the other ECU addresses to broadcast address `0xFF`
-```
+```c
 /* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 because this library remembers the ECU addresses. */
 for(uint8_t i = 0; i < 255; i++)
 	j1939.other_ECU_address[i] = 0xFF; /* 0xFF is not an ECU address, only a broadcast address according to SAE J1939 */
 	
 ```
 - Step 7: Set your ECU address between `0x0` to `0xFD`. I select `0x80`
-```
+```c
 j1939.this_ECU_address = 0x80;
 ```
 - Step 8: Create `NAME`. It's a `SAE J1939` standard for sending out the `NAME` of the ECU at the start up. Don't forget to look in `SAE J1939 Enums` folder for more predefined fields for `NAME` 
-```
+```c
 /* Set NAME for ECU 1 */
 j1939.this_name.identity_number = 100;                                          /* From 0 to 2097151 */
 j1939.this_name.manufacturer_code = 300;                                        /* From 0 to 2047 */
@@ -61,11 +61,11 @@ j1939.this_name.industry_group = INDUSTRY_GROUP_CONSTRUCTION;                   
 j1939.this_name.vehicle_system_instance = 10;                                   /* From 0 to 15 */
 ```
 Step 9: Broadcast the `NAME`
-```
+```c
 SAE_J1939_Response_Request_Address_Claimed(&j1939);                             /* This function send out the NAME to all ECU */
 ```
 - Step 10: Implement your reading function inside a while loop
-```
+```c
 while(1) {
 	/* Read incoming messages */
 	Open_SAE_J1939_Listen_For_Messages(&j1939);
