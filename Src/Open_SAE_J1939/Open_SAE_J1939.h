@@ -19,7 +19,7 @@ extern "C" {
 #endif
 
 /* This functions must be called all the time, or be placed inside an interrupt listener */
-void Open_SAE_J1939_Listen_For_Messages(J1939 *j1939);
+bool Open_SAE_J1939_Listen_For_Messages(J1939 *j1939);
 
 #ifdef __cplusplus
 }

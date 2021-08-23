@@ -9,10 +9,15 @@
 #include "../Open_SAE_J1939/Open_SAE_J1939.h"
 
 /* This function should be called all the time, or be placed inside an interrupt listener */
-void Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
+bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 	uint32_t ID = 0;
 	uint8_t data[8] = {0};
-	if(CAN_Read_Message(&ID, data)){
+	bool is_new_message = CAN_Read_Message(&ID, data);
+	if(is_new_message){
+		/* Save latest */
+		j1939->ID = ID;
+		memcpy(j1939->data, data, 8);
+
 		uint8_t id0 = ID >> 24;
 		uint8_t id1 = ID >> 16;
 		uint8_t DA = ID >> 8; 	/* Destination address which is this ECU. if DA = 0xFF = broadcast to all ECU. Sometimes DA can be an ID number too */
@@ -68,4 +73,5 @@ void Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 			SAE_J1939_Read_Address_Delete(j1939, data);															/* Not a SAE J1939 standard */
 		/* Add more else if statement here */
 	}
+	return is_new_message;
 }
