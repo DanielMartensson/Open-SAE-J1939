@@ -17,6 +17,7 @@ bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 		/* Save latest */
 		j1939->ID = ID;
 		memcpy(j1939->data, data, 8);
+		j1939->is_new_message = true;
 
 		uint8_t id0 = ID >> 24;
 		uint8_t id1 = ID >> 16;

@@ -182,6 +182,7 @@ typedef struct {
 	/* Latest CAN message */
 	uint32_t ID;
 	uint8_t data[8];
+	bool is_new_message;
 
 	/* Store addresses of ECU */
 	uint8_t number_of_other_ECU;				 	/* How many other ECU are connected */
