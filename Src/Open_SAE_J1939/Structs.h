@@ -180,9 +180,9 @@ struct Auxiliary_valve_measured_position {
 
 typedef struct {
 	/* Latest CAN message */
-	uint32_t ID;
-	uint8_t data[8];
-	bool message_has_been_read;
+	uint32_t ID;									/* This is the CAN bus ID */
+	uint8_t data[8];								/* This is the CAN bus data */
+	bool message_has_been_read;						/* This is a flag that going to be set to false for every time ID and data updates */
 
 	/* Store addresses of ECU */
 	uint8_t number_of_other_ECU;				 	/* How many other ECU are connected */
