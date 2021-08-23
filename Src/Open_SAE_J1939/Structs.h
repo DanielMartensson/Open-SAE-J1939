@@ -10,6 +10,7 @@
 
 /* The C standard library */
 #include <stdint.h>
+#include <stdbool.h>
 
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {
