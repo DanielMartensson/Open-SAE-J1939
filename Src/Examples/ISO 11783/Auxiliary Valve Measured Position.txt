@@ -32,7 +32,7 @@ int main() {
 
 	/* Set the information about valve 1 for ECU 2 */
 	uint8_t valve_number = 1;
-	j1939_2.this_auxiliary_valve_measured_position[valve_number].measured_position_procent = 100;
+	j1939_2.this_auxiliary_valve_measured_position[valve_number].measured_position_percent = 100;
 	j1939_2.this_auxiliary_valve_measured_position[valve_number].measured_position_micrometer = 50000; 	/* 5 mm */
 	j1939_2.this_auxiliary_valve_measured_position[valve_number].valve_state = VALVE_STATE_RETRACT;		/* Spool in reverse */
 
@@ -46,8 +46,8 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
 	/* Display what we got */
-	printf("Measured position procent = %i\nMeasured position micrometer = %i\nValve state = %i\nFrom ECU address = 0x%X"
-			,j1939_1.from_other_ecu_auxiliary_valve_measured_position[valve_number].measured_position_procent
+	printf("Measured position percent = %i\nMeasured position micrometer = %i\nValve state = %i\nFrom ECU address = 0x%X"
+			,j1939_1.from_other_ecu_auxiliary_valve_measured_position[valve_number].measured_position_percent
 			,j1939_1.from_other_ecu_auxiliary_valve_measured_position[valve_number].measured_position_micrometer
 			,j1939_1.from_other_ecu_auxiliary_valve_measured_position[valve_number].valve_state
 			,j1939_1.from_other_ecu_auxiliary_valve_measured_position[valve_number].from_ecu_address);

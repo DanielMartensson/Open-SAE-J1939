@@ -173,7 +173,7 @@ struct General_purpose_valve_estimated_flow {
 };
 
 struct Auxiliary_valve_measured_position {
-	uint16_t measured_position_procent;				/* Percent position */
+	uint16_t measured_position_percent;				/* Percent position */
 	uint8_t valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
 	uint16_t measured_position_micrometer;			/* Micrometer position */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
