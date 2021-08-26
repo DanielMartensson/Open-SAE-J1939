@@ -172,6 +172,7 @@ struct General_purpose_valve_estimated_flow {
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
+/* PGN: 0x00FF20 (65312) to 0x00FF2F (65327) */
 struct Auxiliary_valve_measured_position {
 	uint16_t measured_position_percent;				/* Percent position */
 	uint8_t valve_state;							/* Retract, Extend, Neutral, Init, Error etc */
