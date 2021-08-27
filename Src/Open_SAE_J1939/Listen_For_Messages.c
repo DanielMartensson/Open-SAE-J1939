@@ -6,7 +6,7 @@
  */
 
 #include "../ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
-#include "../Open_SAE_J1939/Open_SAE_J1939.h"
+#include "Open_SAE_J1939.h"
 
 /* This function should be called all the time, or be placed inside an interrupt listener */
 bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {

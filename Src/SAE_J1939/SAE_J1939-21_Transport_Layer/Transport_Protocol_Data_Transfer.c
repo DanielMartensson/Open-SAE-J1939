@@ -5,7 +5,7 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
+#include "Transport_Layer.h"
 
 /*
  * Store the sequence data packages from other ECU

@@ -5,7 +5,7 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
+#include "Diagnostics_Layer.h"
 
 /*
  * Send a memory response. This will be sent after a DM14 memory request

@@ -5,7 +5,7 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../SAE_J1939-71_Application_Layer/Application_Layer.h"
+#include "Application_Layer.h"
 
 /*
  * Send request software identification to another ECU

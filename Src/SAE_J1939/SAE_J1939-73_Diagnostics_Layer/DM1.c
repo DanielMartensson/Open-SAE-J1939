@@ -5,7 +5,7 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
+#include "Diagnostics_Layer.h"
 
 /*
  * Request DM1 from another ECU

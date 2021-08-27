@@ -2,10 +2,10 @@
  * ISO_11783_7_General_Purpose_Valve_Command.c
  *
  *  Created on: 16 juli 2021
- *      Author: Daniel M�rtensson
+ *      Author: Daniel Mårtensson
  */
 
-#include "../../ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
+#include "Application_Layer.h"
 
 /*
  * Send a general purpose valve command to an ECU

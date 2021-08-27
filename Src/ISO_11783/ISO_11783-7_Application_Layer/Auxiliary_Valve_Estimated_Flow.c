@@ -5,7 +5,7 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../../ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
+#include "Application_Layer.h"
 
 /*
  * Request auxiliary valve estimated flow to all ECU

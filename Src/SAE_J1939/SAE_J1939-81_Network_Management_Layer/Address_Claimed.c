@@ -5,7 +5,7 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
+#include "Network_Management_Layer.h"
 
 /*
  * Send request address claimed to other ECU

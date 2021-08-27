@@ -5,7 +5,7 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
+#include "Diagnostics_Layer.h"
 
 /* Send binary data transfer. This will be sent after DM15 memory response (if it was proceeded)
  * PGN: 0x00D700 (55040)
