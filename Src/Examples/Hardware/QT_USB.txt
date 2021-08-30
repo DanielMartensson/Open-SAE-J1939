@@ -1,0 +1,70 @@
+#include "can_to_usb.h"
+
+/* Private include */
+#include "../../../../USB/usb_message_sizes.h"
+
+static QSerialPort* this_serial_port;
+
+void QT_USB_set_serial_handler(QSerialPort* serial_port){
+    this_serial_port = serial_port;
+}
+
+ENUM_J1939_STATUS_CODES QT_USB_Transmit(uint32_t ID, uint8_t data[], uint8_t DLC){
+    uint8_t send_data_array[USB_J1939_MESSAGE_BYTES_FROM_OPENSOURCELOGGER] = {0};
+    send_data_array[0] = J1939_MESSAGE_TYPE;
+    send_data_array[1] = ID >> 24;  /* Most significant bit */
+    send_data_array[2] = ID >> 16;
+    send_data_array[3] = ID >> 8;
+    send_data_array[4] = ID;        /* Least significant bit */
+    send_data_array[5] = DLC;       /* Data length */
+    for(uint8_t i = 0; i < 8; i++)
+        if(i < DLC)
+            send_data_array[6+i] = data[i];
+        else
+            send_data_array[6+i] = 0;
+    this_serial_port->write((char*)send_data_array, 6+8);
+    return STATUS_SEND_OK;
+}
+
+void QT_USB_Get_ID_Data(uint32_t *ID, uint8_t data[], bool* is_new_message){
+    uint8_t receive_buf[READ_USB_J1939_MESSAGE_BYTES_FROM_STM32] = {0};
+    this_serial_port->read((char*)receive_buf, READ_USB_J1939_MESSAGE_BYTES_FROM_STM32);
+    *ID = (receive_buf[0] << 24) | (receive_buf[1] << 16) | (receive_buf[2] << 8) | receive_buf[3];
+    uint8_t DLC = receive_buf[4];
+    if(DLC == 0){
+        *is_new_message = false;
+    }else{
+        for(uint8_t i = 0; i < 8; i++)
+            if(i < DLC)
+                data[i] = receive_buf[5+i];
+            else
+                data[i] = 0;
+        *is_new_message = true;
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+#ifndef CAN_BUS_H
+#define CAN_BUS_H
+
+#include "../../../../J1939/SAE_J1939/SAE_J1939_Enums/Enum_Send_Status.h"
+#include <stdint.h>
+#include <stdbool.h>
+
+#ifdef __cplusplus
+#include <QSerialPort>
+void QT_USB_set_serial_handler(QSerialPort* serial_port);
+extern "C" {
+#endif
+
+ENUM_J1939_STATUS_CODES QT_USB_Transmit(uint32_t ID, uint8_t data[], uint8_t DLC);
+void QT_USB_Get_ID_Data(uint32_t *ID, uint8_t data[], bool* is_new_message);
+
+#ifdef __cplusplus
+}
+
+#endif
+
+#endif // CAN_BUS_H

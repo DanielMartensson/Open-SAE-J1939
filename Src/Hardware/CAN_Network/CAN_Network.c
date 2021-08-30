@@ -14,6 +14,8 @@
 #elif PROCESSOR_CHOICE == ARDUINO
 #elif PROCESSOR_CHOICE == PIC
 #elif PROCESSOR_CHOICE == AVR
+#elif PROCESSOR_CHOICE == QT_USB
+#include "CAN_to_USB/can_to_usb.h"
 #else
 /* Internal fields */
 static bool internal_new_message[256] = {false};
@@ -74,6 +76,8 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[], uint8_t de
 	/* Implement your CAN send 8 bytes message function for the PIC platform */
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN send 8 bytes message function for the AVR platform */
+    #elif PROCESSOR_CHOICE == QT_USB
+    status = QT_USB_Transmit(ID, data, 8);
 	#else
 	/* If no processor are used, use internal feedback for debugging */
 	status = Internal_Transmit(ID, data, 8);
@@ -102,6 +106,8 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[], uint8_t del
 	/* Implement your CAN send 3 bytes message function for the PIC platform */
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN send 3 bytes message function for the AVR platform */
+    #elif PROCESSOR_CHOICE == QT_USB
+    status = QT_USB_Transmit(ID, PGN, 3);                       /* PGN is always 3 bytes */
 	#else
 	/* If no processor are used, use internal feedback for debugging */
 	status = Internal_Transmit(ID, PGN, 3);
@@ -120,6 +126,8 @@ bool CAN_Read_Message(uint32_t *ID, uint8_t data[]) {
 	/* Implement your CAN function to get ID, data[] and the flag is_new_message here for the PIC platform */
 	#elif PROCESSOR_CHOICE == AVR
 	/* Implement your CAN function to get ID, data[] and the flag is_new_message here for the AVR platform */
+    #elif PROCESSOR_CHOICE == QT_USB
+    QT_USB_Get_ID_Data(ID, data, &is_new_message);
 	#else
 	/* If no processor are used, use internal feedback for debugging */
 	Internal_Receive(ID, data, &is_new_message);

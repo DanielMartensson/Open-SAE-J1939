@@ -13,6 +13,7 @@
 #define ARDUINO 2
 #define PIC 3
 #define AVR 4
+#define QT_USB 5
 #define PROCESSOR_CHOICE 0
 
 #endif /* HARDWARE_PROCESSOR_CHOICE_H_ */
