@@ -41,7 +41,6 @@ void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, u
 	/* Check if it's the same address */
 	if(j1939->this_ECU_address == SA){
 		SAE_J1939_Send_Address_Not_Claimed(j1939);
-		return;
 	}
 	/* If not, then store the temporary information */
 	j1939->from_other_ecu_name.identity_number = ((data[2] & 0b00011111) << 16) | (data[1] << 8) | data[0];
