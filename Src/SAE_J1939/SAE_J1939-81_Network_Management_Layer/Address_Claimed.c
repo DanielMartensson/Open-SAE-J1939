@@ -39,9 +39,9 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Address_Claimed(J1939 *j1939)
  */
 void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	/* Check if it's the same address */
-	if(j1939->this_ECU_address == SA){
+	if(j1939->this_ECU_address == SA)
 		SAE_J1939_Send_Address_Not_Claimed(j1939);
-	}
+
 	/* If not, then store the temporary information */
 	j1939->from_other_ecu_name.identity_number = ((data[2] & 0b00011111) << 16) | (data[1] << 8) | data[0];
 	j1939->from_other_ecu_name.manufacturer_code = (data[3] << 3) | (data[2] >> 5);
