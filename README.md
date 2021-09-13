@@ -130,3 +130,8 @@ Now you can use the `Open SAE J1939` library
  	- A: Yes. This is only a way to shape a massage in a specific way.
  - Q: Can I send data with this library, even if I don't have CAN-bus?
  	- A: Yes. There are something called DM14 transmit request, DM15 status response and DM16 binary transfer. Use that if you want to transfer data in an industrial way.
+ 	
+# Issues and answers
+
+- I: I cannot compile this library. I'm using `Keil Microvision`.
+	- A: `Keil Microvision` cannot handle binary numbers such as `0b010101`. Try `STM32CubeIDE` instead because `Open SAE J1939` is made in `STM32CubeIDE`
