@@ -2,7 +2,7 @@
  * CAN_Network.h
  *
  *  Created on: 14 juli 2021
- *      Author: danie
+ *      Author: Daniel Mårtensson
  */
 
 #ifndef HARDWARE_CAN_NETWORK_H_
