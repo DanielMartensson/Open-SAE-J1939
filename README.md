@@ -135,3 +135,5 @@ Now you can use the `Open SAE J1939` library
 
 - I: I cannot compile this library. I'm using `Keil Microvision`.
 	- A: `Keil Microvision` cannot handle binary numbers such as `0b010101`. Try `STM32CubeIDE` instead because `Open SAE J1939` is made in `STM32CubeIDE`
+- I: Can you provide us with some hardware examples for example `STM32`?
+	- A: Yes! There is a STM32 example how to get connection with CAN-bus including an interrupt listener for messages. Go to `Examples -> Hardware` folder at look for `CAN_STM32.txt`. Also there is a `USB` example as well for `QT C++`.
