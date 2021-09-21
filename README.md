@@ -60,9 +60,12 @@ j1939.this_name.arbitrary_address_capable = 0;                                  
 j1939.this_name.industry_group = INDUSTRY_GROUP_CONSTRUCTION;                   /* From 0 to 7 */
 j1939.this_name.vehicle_system_instance = 10;                                   /* From 0 to 15 */
 ```
-Step 9: Broadcast the `NAME`
+Step 9: Broadcast the `NAME` and ask other ECU for their NAME and address
 ```c
-SAE_J1939_Response_Request_Address_Claimed(&j1939);                             /* This function send out the NAME to all ECU */
+/* This broadcast out this ECU NAME + address to all other ECU:s */
+SAE_J1939_Response_Request_Address_Claimed(j1939);
+/* This asking all ECU about their NAME + address */
+SAE_J1939_Send_Request_Address_Claimed(j1939, 0xFF);
 ```
 - Step 10: Implement your reading function inside a while loop
 ```c
