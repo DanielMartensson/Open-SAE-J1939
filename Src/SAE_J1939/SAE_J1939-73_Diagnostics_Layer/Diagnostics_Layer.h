@@ -11,8 +11,7 @@
 /* The C standard library */
 #include <string.h>
 
-/* Layers */
-#include "../../Hardware/Memory/FLASH_EEPROM_RAM_Memory.h"
+#include "../../Hardware/CAN_Memory/CAN_Memory.h"
 #include "../../Open_SAE_J1939/Structs.h"
 #include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
 #include "../SAE_J1939_Enums/Enum_Control_Byte.h"

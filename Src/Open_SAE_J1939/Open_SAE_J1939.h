@@ -9,7 +9,7 @@
 #define OPEN_SAE_J1939_OPEN_SAE_J1939_H_
 
 /* Layers */
-#include "../Open_SAE_J1939/Structs.h"
+#include "Structs.h"
 #include "../SAE_J1939/SAE_J1939-71_Application_Layer/Application_Layer.h"
 #include "../SAE_J1939/SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
 #include "../SAE_J1939/SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
