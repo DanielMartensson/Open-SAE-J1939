@@ -43,11 +43,18 @@ for(uint8_t i = 0; i < 255; i++)
 	j1939.other_ECU_address[i] = 0xFF; /* 0xFF is not an ECU address, only a broadcast address according to SAE J1939 */
 	
 ```
-- Step 7: Set your ECU address between `0x0` to `0xFD`. I select `0x80`
+ - Step 7: Set the array length of the identifications. Maximum length is 30.
+```c
+j1939.this_identifications.ecu_identification.length_of_each_field = 30;
+j1939.this_identifications.component_identification.length_of_each_field = 30;
+j1939.from_other_ecu_identifications.ecu_identification.length_of_each_field = 30;
+j1939.from_other_ecu_identifications.component_identification.length_of_each_field = 30;
+```
+ - Step 8: Set your ECU address between `0x0` to `0xFD`. I select `0x80`
 ```c
 j1939.this_ECU_address = 0x80;
 ```
-- Step 8: Create `NAME`. It's a `SAE J1939` standard for sending out the `NAME` of the ECU at the start up. Don't forget to look in `SAE J1939 Enums` folder for more predefined fields for `NAME` 
+ - Step 9: Create `NAME`. It's a `SAE J1939` standard for sending out the `NAME` of the ECU at the start up. Don't forget to look in `SAE J1939 Enums` folder for more predefined fields for `NAME` 
 ```c
 /* Set NAME for ECU 1 */
 j1939.this_name.identity_number = 100;                                          /* From 0 to 2097151 */
@@ -60,14 +67,14 @@ j1939.this_name.arbitrary_address_capable = 0;                                  
 j1939.this_name.industry_group = INDUSTRY_GROUP_CONSTRUCTION;                   /* From 0 to 7 */
 j1939.this_name.vehicle_system_instance = 10;                                   /* From 0 to 15 */
 ```
-Step 9: Broadcast the `NAME` and ask other ECU for their NAME and address
+ - Step 10: Broadcast the `NAME` and ask other ECU for their NAME and address
 ```c
 /* This broadcast out this ECU NAME + address to all other ECU:s */
-SAE_J1939_Response_Request_Address_Claimed(j1939);
+SAE_J1939_Response_Request_Address_Claimed(&j1939);
 /* This asking all ECU about their NAME + address */
-SAE_J1939_Send_Request_Address_Claimed(j1939, 0xFF);
+SAE_J1939_Send_Request_Address_Claimed(&j1939, 0xFF);
 ```
-- Step 10: Implement your reading function inside a while loop
+ - Step 11: Implement your reading function inside a while loop
 ```c
 while(1) {
 	/* Read incoming messages */
