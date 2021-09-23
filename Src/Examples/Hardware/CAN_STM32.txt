@@ -19,11 +19,6 @@ void STM32_PLC_Start_CAN(CAN_HandleTypeDef *hcan, J1939 *j1939) {
 	if (HAL_CAN_Start(hcan) != HAL_OK)
 		Error_Handler();
 	Create_CAN_Interrupt(hcan);
-	
-    /* This broadcast out this ECU NAME + address to all other ECU:s */
-	SAE_J1939_Response_Request_Address_Claimed(j1939);
-	/* This asking all ECU about their NAME + address */
-	SAE_J1939_Send_Request_Address_Claimed(j1939, 0xFF);
 }
 
 HAL_StatusTypeDef STM32_PLC_CAN_Transmit(uint8_t TxData[], CAN_TxHeaderTypeDef *TxHeader) {
