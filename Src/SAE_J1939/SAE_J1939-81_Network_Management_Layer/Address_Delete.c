@@ -16,7 +16,8 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Address_Delete(J1939 *j1939, uint8_t DA, 
 	for(uint8_t i = 0; i < 255; i++){
 		if(old_ECU_address == j1939->other_ECU_address[i]){
 			j1939->other_ECU_address[i] = 0xFF;
-			j1939->number_of_other_ECU--;
+			if(j1939->number_of_other_ECU > 0)
+				j1939->number_of_other_ECU--;
 		}
 	}
 
