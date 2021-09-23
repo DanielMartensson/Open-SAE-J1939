@@ -53,4 +53,5 @@ void SAE_J1939_Read_Commanded_Address(J1939 *j1939, uint8_t data[]) {
 	j1939->this_name.industry_group = (data[7] >> 4) & 0b0111;
 	j1939->this_name.vehicle_system_instance = data[7] & 0b00001111;
 	j1939->this_ECU_address = data[8]; 						/* New address of this ECU */
+	Save_Struct((uint8_t*)j1939, sizeof(J1939), J1939_TEXT_FILE_NAME); /* It's important to save our new NAME and address because we load the name and address at the start up */
 }
