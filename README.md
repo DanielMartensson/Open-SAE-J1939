@@ -25,6 +25,7 @@ That's the debugging mode for internal CAN feedback.
  - Step 2: Go to `Processor_choice.h` and select your processor, if it's not avaiable, please write code for it and send me a pull request
  - Step 3: Copy over the `Src` folder to your project folder inside your IDE. Rename `Src` to for example `Open SAE J1939`. That's a good name.
  - Step 4: Past the header files inside your application code. This is just an example.
+ 
 ```c
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,25 +37,52 @@ That's the debugging mode for internal CAN feedback.
 #include "SAE_J1939/SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
 ```
  - Step 5: Create the `J1939 j1939 = {0};` inside your application code. You can see inside the examples how I have done
- - Step 6: Set the other ECU addresses to broadcast address `0xFF`
+ - Step 6: For every start up, you need to load `uint8_t` data and cast it to the `j1939` struct
+ 
 ```c
-/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 because this library remembers the ECU addresses. */
-for(uint8_t i = 0; i < 255; i++)
-	j1939.other_ECU_address[i] = 0xFF; /* 0xFF is not an ECU address, only a broadcast address according to SAE J1939 */
-	
-```
- - Step 7: Set the array length of the identifications. Maximum length is 30.
-```c
+/* Load J1939 struct */
+uint32_t j1939_length = sizeof(J1939);
+uint8_t j1939_data[j1939_length];
+if(!Load_Struct(j1939_data, j1939_length, J1939_TEXT_FILE_NAME))
+	return; /* Problems occurs */
+memcpy(&j1939, (J1939*)j1939_data, j1939_length);
+
+/* Delete all addresses */
+memset(j1939.other_ECU_address, 0, 0xFF);
+
+/* Set countings to 0 */
+j1939.number_of_cannot_claim_address = 0;
+j1939.number_of_other_ECU = 0;
+
+/* If we are going to send and receive the ECU identification and component identification, we need to specify the size of them */
 j1939.this_identifications.ecu_identification.length_of_each_field = 30;
 j1939.this_identifications.component_identification.length_of_each_field = 30;
 j1939.from_other_ecu_identifications.ecu_identification.length_of_each_field = 30;
 j1939.from_other_ecu_identifications.component_identification.length_of_each_field = 30;
+	
+/* This broadcast out this ECU NAME + address to all other ECU:s */
+SAE_J1939_Response_Request_Address_Claimed(&j1939);
+	
+/* This asking all ECU about their NAME + address */
+SAE_J1939_Send_Request_Address_Claimed(&j1939, 0xFF);
+
+while(1) {
+	/* Read incoming messages */
+	Open_SAE_J1939_Listen_For_Messages(&j1939);
+	/* Your application code here */
+	....
+	....
+	....
+}
 ```
- - Step 8: Set your ECU address between `0x0` to `0xFD`. I select `0x80`
+Now you can use the `Open SAE J1939` library
+
+If you want to rename the `NAME` and address of your ECU
+
 ```c
 j1939.this_ECU_address = 0x80;
 ```
- - Step 9: Create `NAME`. It's a `SAE J1939` standard for sending out the `NAME` of the ECU at the start up. Don't forget to look in `SAE J1939 Enums` folder for more predefined fields for `NAME` 
+Don't forget to look in `SAE J1939 Enums` folder for more predefined fields for `NAME` 
 ```c
 /* Set NAME for ECU 1 */
 j1939.this_name.identity_number = 100;                                          /* From 0 to 2097151 */
@@ -67,25 +95,6 @@ j1939.this_name.arbitrary_address_capable = 0;                                  
 j1939.this_name.industry_group = INDUSTRY_GROUP_CONSTRUCTION;                   /* From 0 to 7 */
 j1939.this_name.vehicle_system_instance = 10;                                   /* From 0 to 15 */
 ```
- - Step 10: Broadcast the `NAME` and ask other ECU for their NAME and address
-```c
-/* This broadcast out this ECU NAME + address to all other ECU:s */
-SAE_J1939_Response_Request_Address_Claimed(&j1939);
-/* This asking all ECU about their NAME + address */
-SAE_J1939_Send_Request_Address_Claimed(&j1939, 0xFF);
-```
- - Step 11: Implement your reading function inside a while loop
-```c
-while(1) {
-	/* Read incoming messages */
-	Open_SAE_J1939_Listen_For_Messages(&j1939);
-	/* Your application code here */
-	....
-	....
-	....
-}
-```
-Now you can use the `Open SAE J1939` library
 
 # The structure of the project
 
