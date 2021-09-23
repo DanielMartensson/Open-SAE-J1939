@@ -30,10 +30,10 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Commanded_Address(J1939 *j1939, uint8_t D
 		return status;
 	status = SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA, data, total_message_size, number_of_packages);
 	if(status == STATUS_SEND_OK) {
-		/* Send to all ECU that the address DA unused */
+		/* Send to all ECU that the address DA is unused */
 		SAE_J1939_Send_Address_Delete(j1939, 0xFF, DA);
 		/* According to J1939 standard, request for Address Claimed (broadcast) must be sent after a Commanded Address so we can get back the new ECU address */
-		SAE_J1939_Send_Request(j1939, 0xFF, PGN_ADDRESS_CLAIMED);
+		SAE_J1939_Send_Request_Address_Claimed(j1939, 0xFF);
 	}
 	return status;
 }
