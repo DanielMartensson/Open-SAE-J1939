@@ -217,7 +217,6 @@ typedef struct {
 	struct Auxiliary_valve_measured_position this_auxiliary_valve_measured_position[16];
 	struct General_purpose_valve_estimated_flow this_general_purpose_valve_estimated_flow;
 
-
 } J1939;
 
 #endif /* OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_ */
