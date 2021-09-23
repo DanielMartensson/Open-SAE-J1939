@@ -58,7 +58,7 @@ void SAE_J1939_Read_Request(J1939 *j1939, uint8_t SA, uint8_t data[]) {
  * Request PGN information at other ECU
  * PGN: 0x00EA00 (59904)
  */
-ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request(J1939* j1939, uint8_t DA, uint32_t PGN_code) {
+ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request(J1939 *j1939, uint8_t DA, uint32_t PGN_code) {
 	uint8_t PGN[3];
 	PGN[0] = PGN_code;														/* PGN least significant bit */
 	PGN[1] = PGN_code >> 8;													/* PGN mid bit */

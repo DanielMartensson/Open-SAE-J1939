@@ -32,7 +32,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Acknowledgement(J1939 *j1939, uint8_t DA,
 
 /* Request */
 void SAE_J1939_Read_Request(J1939 *j1939, uint8_t SA, uint8_t data[]);
-ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request(J1939* j1939, uint8_t DA, uint32_t PGN_code);
+ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request(J1939 *j1939, uint8_t DA, uint32_t PGN_code);
 
 /* Transport Protocol Connection Management */
 void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8_t SA, uint8_t data[]);
