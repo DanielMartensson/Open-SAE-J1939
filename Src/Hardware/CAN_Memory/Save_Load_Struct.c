@@ -7,9 +7,15 @@
 
 #include "CAN_Memory.h"
 
-void Save_Struct_To_SD_Card(J1939* j1939){
+bool Save_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 #if PROCESSOR_CHOICE == STM32
-	/* Implement your memory handler function for the STM32 platform */
+	/* Save it to SD card */
+	if(STM32_PLC_SD_Mont_Card() != FR_OK)
+		return false;
+	STM32_PLC_SD_Create_File_With_Write(file_name);
+	STM32_PLC_SD_Write_Data(data, data_length);
+	STM32_PLC_SD_Close_File();
+	STM32_PLC_SD_Unmount_Card();
 #elif PROCESSOR_CHOICE == ARDUINO
 	/* Implement your memory handler function for the Arduino platform */
 #elif PROCESSOR_CHOICE == PIC
@@ -17,11 +23,18 @@ void Save_Struct_To_SD_Card(J1939* j1939){
 #elif PROCESSOR_CHOICE == AVR
 	/* Implement your memory handler function for the AVR platform */
 #endif
+	return true;
 }
 
-void Load_Struct_From_SD_Card(J1939* j1939){
+bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 #if PROCESSOR_CHOICE == STM32
-	/* Implement your memory handler function for the STM32 platform */
+	/* Load it from SD card */
+	if(STM32_PLC_SD_Mont_Card() != FR_OK)
+		return false;
+	STM32_PLC_SD_Open_File_With_Read(file_name);
+	STM32_PLC_SD_Read_Data(data, data_length);
+	STM32_PLC_SD_Close_File();
+	STM32_PLC_SD_Unmount_Card();
 #elif PROCESSOR_CHOICE == ARDUINO
 	/* Implement your memory handler function for the Arduino platform */
 #elif PROCESSOR_CHOICE == PIC
@@ -29,5 +42,5 @@ void Load_Struct_From_SD_Card(J1939* j1939){
 #elif PROCESSOR_CHOICE == AVR
 	/* Implement your memory handler function for the AVR platform */
 #endif
+	return true;
 }
-
