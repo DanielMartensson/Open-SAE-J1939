@@ -80,11 +80,12 @@ Now you can use the `Open SAE J1939` library
 If you want to rename the `NAME` and address of your ECU
 
 ```c
+/* Set address for the ECU */
 j1939.this_ECU_address = 0x80;
 ```
 Don't forget to look in `SAE J1939 Enums` folder for more predefined fields for `NAME` 
 ```c
-/* Set NAME for ECU 1 */
+/* Set NAME for the ECU */
 j1939.this_name.identity_number = 100;                                          /* From 0 to 2097151 */
 j1939.this_name.manufacturer_code = 300;                                        /* From 0 to 2047 */
 j1939.this_name.function_instance = 10;                                         /* From 0 to 31 */
