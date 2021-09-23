@@ -47,7 +47,7 @@ if(!Load_Struct(j1939_data, j1939_length, J1939_TEXT_FILE_NAME))
 	return; /* Problems occurs */
 memcpy(&j1939, (J1939*)j1939_data, j1939_length);
 
-/* Delete all addresses by setting them to broad cast address */
+/* Delete all addresses by setting them to broadcast address */
 memset(j1939.other_ECU_address, 0xFF, 0xFF);
 
 /* Set countings to 0 */
