@@ -47,13 +47,6 @@ if(!Load_Struct(j1939_data, j1939_length, J1939_TEXT_FILE_NAME))
 	return; /* Problems occurs */
 memcpy(&j1939, (J1939*)j1939_data, j1939_length);
 
-/* Delete all addresses by setting them to broadcast address */
-memset(j1939.other_ECU_address, 0xFF, 0xFF);
-
-/* Set countings to 0 */
-j1939.number_of_cannot_claim_address = 0;
-j1939.number_of_other_ECU = 0;
-
 /* If we are going to send and receive the ECU identification and component identification, we need to specify the size of them */
 j1939.this_identifications.ecu_identification.length_of_each_field = 30;
 j1939.this_identifications.component_identification.length_of_each_field = 30;
