@@ -8,10 +8,14 @@
 #include "Network_Management_Layer.h"
 
 /*
- * Send request address claimed to other ECU
+ * Send request address claimed to other ECU. Every time we asking addresses from other ECU, then we clear our storage of other ECU
  * PGN: 0x00EE00 (60928)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Address_Claimed(J1939 *j1939, uint8_t DA) {
+	/* Delete all addresses by setting them to broadcast address and set the counters to 0 */
+	memset(j1939->other_ECU_address, 0xFF, 0xFF);
+	j1939->number_of_cannot_claim_address = 0;
+	j1939->number_of_other_ECU = 0;
 	return SAE_J1939_Send_Request(j1939, DA, PGN_ADDRESS_CLAIMED);
 }
 
