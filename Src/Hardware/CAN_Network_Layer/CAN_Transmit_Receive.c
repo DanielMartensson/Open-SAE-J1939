@@ -6,7 +6,7 @@
  */
 
 /* Layer */
-#include "../CAN_Network/CAN_Network.h"
+#include "../CAN_Network_Layer/CAN_Network_Layer.h"
 
 /* Platform independent library headers for CAN */
 #if PROCESSOR_CHOICE == STM32

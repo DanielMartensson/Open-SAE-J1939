@@ -8,12 +8,8 @@
 #ifndef SAE_J1939_21_TRANSPORT_LAYER_SAE_J1939_21_TRANSPORT_LAYER_H_
 #define SAE_J1939_21_TRANSPORT_LAYER_SAE_J1939_21_TRANSPORT_LAYER_H_
 
-/* Layers */
-#include "../../Hardware/CAN_Network/CAN_Network.h"
+/* Enums and structs */
 #include "../../Open_SAE_J1939/Structs.h"
-#include "../SAE_J1939-71_Application_Layer/Application_Layer.h"
-#include "../SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
-#include "../SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
 #include "../SAE_J1939_Enums/Enum_Control_Byte.h"
 #include "../SAE_J1939_Enums/Enum_DM1_DM2.h"
 #include "../SAE_J1939_Enums/Enum_DM14_DM15.h"

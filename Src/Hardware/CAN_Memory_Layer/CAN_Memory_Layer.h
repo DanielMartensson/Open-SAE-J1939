@@ -5,8 +5,8 @@
  *      Author: Daniel Mårtensson
  */
 
-#ifndef HARDWARE_CAN_MEMORY_CAN_MEMORY_H_
-#define HARDWARE_CAN_MEMORY_CAN_MEMORY_H_
+#ifndef HARDWARE_CAN_MEMORY_LAYER_CAN_MEMORY_LAYER_H_
+#define HARDWARE_CAN_MEMORY_LAYER_CAN_MEMORY_LAYER_H_
 
 /* C standard library */
 #include <stdint.h>
@@ -14,10 +14,6 @@
 
 #include "../../SAE_J1939/SAE_J1939_Enums/Enum_DM14_DM15.h"
 #include "../Processor_Choice.h"
-#include "../../Open_SAE_J1939/Structs.h"
-
-/* This text name follows 8.3 filename standard - Important if you want to save to SD card */
-#define INFORMATION_THIS_ECU "ECUINFO.TXT"
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,4 +27,4 @@ bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]);
 }
 #endif
 
-#endif /* HARDWARE_CAN_MEMORY_CAN_MEMORY_H_ */
+#endif /* HARDWARE_CAN_MEMORY_LAYER_CAN_MEMORY_LAYER_H_ */

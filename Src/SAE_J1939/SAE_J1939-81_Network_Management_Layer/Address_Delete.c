@@ -7,6 +7,9 @@
 
 #include "Network_Management_Layer.h"
 
+/* Layers */
+#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+
 /*
  * This is not a SAE J1939 standard. It's only for deleting the j1939->ECU_address
  * PGN: 0x000002 (2)

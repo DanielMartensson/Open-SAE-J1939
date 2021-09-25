@@ -7,6 +7,10 @@
 
 #include "Diagnostics_Layer.h"
 
+/* Layers */
+#include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
+#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+
 /* Send binary data transfer. This will be sent after DM15 memory response (if it was proceeded)
  * PGN: 0x00D700 (55040)
  */

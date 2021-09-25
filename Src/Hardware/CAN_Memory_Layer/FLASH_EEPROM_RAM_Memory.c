@@ -5,7 +5,7 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "CAN_Memory.h"
+#include "CAN_Memory_Layer.h"
 
 /*
  * This function ask the hardware for memory access with pointers.

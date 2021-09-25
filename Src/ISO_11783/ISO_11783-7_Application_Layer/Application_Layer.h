@@ -8,12 +8,11 @@
 #ifndef ISO_11783_ISO_11783_7_APPLICATION_LAYER_ISO_11783_7_APPLICATION_LAYER_H_
 #define ISO_11783_ISO_11783_7_APPLICATION_LAYER_ISO_11783_7_APPLICATION_LAYER_H_
 
-/* Layers */
-#include "../../Hardware/CAN_Network/CAN_Network.h"
+/* Enums and struct */
 #include "../../ISO_11783/ISO_11783_Enums/Enum_Auxiliary_And_General_Purpose_Valves.h"
 #include "../../Open_SAE_J1939/Structs.h"
-#include "../../SAE_J1939/SAE_J1939-21_Transport_Layer/Transport_Layer.h"
 #include "../../SAE_J1939/SAE_J1939_Enums/Enum_PGN.h"
+#include "../../SAE_J1939/SAE_J1939_Enums/Enum_Send_Status.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -8,9 +8,8 @@
 #ifndef SAE_J1939_71_APPLICATION_LAYER_SAE_J1939_71_APPLICATION_LAYER_H_
 #define SAE_J1939_71_APPLICATION_LAYER_SAE_J1939_71_APPLICATION_LAYER_H_
 
-/* Layers */
+/* Enums and structs */
 #include "../../Open_SAE_J1939/Structs.h"
-#include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
 #include "../SAE_J1939_Enums/Enum_Control_Byte.h"
 #include "../SAE_J1939_Enums/Enum_DM1_DM2.h"
 #include "../SAE_J1939_Enums/Enum_DM14_DM15.h"

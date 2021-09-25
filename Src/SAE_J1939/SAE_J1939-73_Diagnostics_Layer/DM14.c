@@ -7,6 +7,11 @@
 
 #include "Diagnostics_Layer.h"
 
+/* Layers */
+#include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
+#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+#include "../../Hardware/CAN_Memory_Layer/CAN_Memory_Layer.h"
+
 /*
  * Request DM14 from another ECU
  * PGN: 0x00D900 (55552)

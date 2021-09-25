@@ -5,8 +5,15 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
 #include "Open_SAE_J1939.h"
+
+/* Layers */
+#include "../SAE_J1939/SAE_J1939-71_Application_Layer/Application_Layer.h"
+#include "../SAE_J1939/SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
+#include "../SAE_J1939/SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
+#include "../ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
+#include "../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+#include "../SAE_J1939/SAE_J1939-21_Transport_Layer/Transport_Layer.h"
 
 /* This function should be called all the time, or be placed inside an interrupt listener */
 bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {

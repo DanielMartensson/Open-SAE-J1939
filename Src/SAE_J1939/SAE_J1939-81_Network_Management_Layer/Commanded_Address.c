@@ -7,6 +7,10 @@
 
 #include "Network_Management_Layer.h"
 
+/* Layers */
+#include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
+#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+
 /*
  * Send commanded address to another ECU
  * PGN: 0x00FED8 (65240)

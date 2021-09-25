@@ -2,10 +2,13 @@
  * SAE_J1939_Address_Not_Claimed.c
  *
  *  Created on: 19 juli 2021
- *      Author: Daniel M�rtensson
+ *      Author: Daniel Mårtensson
  */
 
 #include "Network_Management_Layer.h"
+
+/* Layers */
+#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
 
 /*
  * Send Address Not Claimed if the address conflicts with each other

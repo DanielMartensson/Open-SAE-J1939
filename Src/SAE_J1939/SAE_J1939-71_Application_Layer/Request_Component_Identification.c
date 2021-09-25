@@ -7,6 +7,10 @@
 
 #include "Application_Layer.h"
 
+/* Layers */
+#include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
+#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+
 /*
  * Request component identification to another ECU
  * PGN: 0x00FEEB (65259)

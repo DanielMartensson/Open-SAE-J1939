@@ -10,9 +10,6 @@
 
 /* Layers */
 #include "Structs.h"
-#include "../SAE_J1939/SAE_J1939-71_Application_Layer/Application_Layer.h"
-#include "../SAE_J1939/SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
-#include "../SAE_J1939/SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
 
 #ifdef __cplusplus
 extern "C" {

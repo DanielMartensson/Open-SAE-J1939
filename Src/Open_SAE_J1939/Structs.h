@@ -12,6 +12,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/* This text name follows 8.3 filename standard - Important if you want to save to SD card */
+#define INFORMATION_THIS_ECU "ECUINFO.TXT"
+
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {
 	uint8_t control_byte;							/* This indicates the status of the requested information about PGN: */

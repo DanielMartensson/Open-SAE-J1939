@@ -2,10 +2,13 @@
  * SAE_J1939_Read_j1939_Transport_Protocol_Connection_Management.c
  *
  *  Created on: 14 juli 2021
- *      Author: Daniel M�rtensson
+ *      Author: Daniel Mårtensson
  */
 
 #include "Transport_Layer.h"
+
+/* Layers */
+#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
 
 /*
  * Store information about sequence data packages from other ECU who are going to send to this ECU

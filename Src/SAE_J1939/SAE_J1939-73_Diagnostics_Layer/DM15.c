@@ -7,6 +7,10 @@
 
 #include "Diagnostics_Layer.h"
 
+/* Layers */
+#include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
+#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+
 /*
  * Send a memory response. This will be sent after a DM14 memory request
  * PGN: 0x00D800 (55296)

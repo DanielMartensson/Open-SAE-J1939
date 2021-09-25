@@ -7,6 +7,10 @@
 
 #include "Diagnostics_Layer.h"
 
+/* Layers */
+#include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
+#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+
 /*
  * Request DM2 from another ECU
  * PGN: 0x00FECB (65227)
