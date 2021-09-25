@@ -24,17 +24,17 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Address_Claimed(J1939 *j1939, uin
  * PGN: 0x00EE00 (60928)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Address_Claimed(J1939 *j1939) {
-	uint32_t ID = (0x18EEFF << 8) | j1939->this_ECU_address;
+	uint32_t ID = (0x18EEFF << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t data[8];
-	data[0] = j1939->this_name.identity_number;
-	data[1] = j1939->this_name.identity_number >> 8;
-	data[2] = (j1939->this_name.identity_number >> 16) |  (j1939->this_name.manufacturer_code << 5);
-	data[3] = j1939->this_name.manufacturer_code >> 3;
-	data[4] = (j1939->this_name.function_instance << 3) | j1939->this_name.ECU_instance;
-	data[5] = j1939->this_name.function;
-	data[6] = j1939->this_name.vehicle_system << 1;
-	data[7] = (j1939->this_name.arbitrary_address_capable << 7) | (j1939->this_name.industry_group << 4) | j1939->this_name.vehicle_system_instance;
-	return CAN_Send_Message(ID, data, 0);						/* 0 ms delay */
+	data[0] = j1939->information_this_ECU.this_name.identity_number;
+	data[1] = j1939->information_this_ECU.this_name.identity_number >> 8;
+	data[2] = (j1939->information_this_ECU.this_name.identity_number >> 16) |  (j1939->information_this_ECU.this_name.manufacturer_code << 5);
+	data[3] = j1939->information_this_ECU.this_name.manufacturer_code >> 3;
+	data[4] = (j1939->information_this_ECU.this_name.function_instance << 3) | j1939->information_this_ECU.this_name.ECU_instance;
+	data[5] = j1939->information_this_ECU.this_name.function;
+	data[6] = j1939->information_this_ECU.this_name.vehicle_system << 1;
+	data[7] = (j1939->information_this_ECU.this_name.arbitrary_address_capable << 7) | (j1939->information_this_ECU.this_name.industry_group << 4) | j1939->information_this_ECU.this_name.vehicle_system_instance;
+	return CAN_Send_Message(ID, data);
 }
 
 /*
@@ -43,7 +43,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Address_Claimed(J1939 *j1939)
  */
 void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	/* Check if it's the same address */
-	if(j1939->this_ECU_address == SA)
+	if(j1939->information_this_ECU.this_ECU_address == SA)
 		SAE_J1939_Send_Address_Not_Claimed(j1939);
 
 	/* If not, then store the temporary information */

@@ -43,15 +43,15 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Commanded_Address(J1939 *j1939, uint8_t D
  * PGN: 0x00FED8 (65240)
  */
 void SAE_J1939_Read_Commanded_Address(J1939 *j1939, uint8_t data[]) {
-	j1939->this_name.identity_number = ((data[2] & 0b00011111) << 16) | (data[1] << 8) | data[0];
-	j1939->this_name.manufacturer_code = (data[3] << 3) | (data[2] >> 5);
-	j1939->this_name.function_instance = data[4] >> 3;
-	j1939->this_name.ECU_instance = data[4] & 0b00000111;
-	j1939->this_name.function = data[5];
-	j1939->this_name.vehicle_system = data[6] >> 1;
-	j1939->this_name.arbitrary_address_capable = data[7] >> 7;
-	j1939->this_name.industry_group = (data[7] >> 4) & 0b0111;
-	j1939->this_name.vehicle_system_instance = data[7] & 0b00001111;
-	j1939->this_ECU_address = data[8]; 						/* New address of this ECU */
-	Save_Struct((uint8_t*)j1939, sizeof(J1939), J1939_TEXT_FILE_NAME); /* It's important to save our new NAME and address because we load the name and address at the start up */
+	j1939->information_this_ECU.this_name.identity_number = ((data[2] & 0b00011111) << 16) | (data[1] << 8) | data[0];
+	j1939->information_this_ECU.this_name.manufacturer_code = (data[3] << 3) | (data[2] >> 5);
+	j1939->information_this_ECU.this_name.function_instance = data[4] >> 3;
+	j1939->information_this_ECU.this_name.ECU_instance = data[4] & 0b00000111;
+	j1939->information_this_ECU.this_name.function = data[5];
+	j1939->information_this_ECU.this_name.vehicle_system = data[6] >> 1;
+	j1939->information_this_ECU.this_name.arbitrary_address_capable = data[7] >> 7;
+	j1939->information_this_ECU.this_name.industry_group = (data[7] >> 4) & 0b0111;
+	j1939->information_this_ECU.this_name.vehicle_system_instance = data[7] & 0b00001111;
+	j1939->information_this_ECU.this_ECU_address = data[8]; 		/* New address of this ECU */
+	Save_Struct((uint8_t*)&j1939->information_this_ECU, sizeof(Information_this_ECU), INFORMATION_THIS_ECU);
 }

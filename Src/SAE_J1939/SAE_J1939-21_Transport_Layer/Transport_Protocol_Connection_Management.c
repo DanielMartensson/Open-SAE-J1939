@@ -29,7 +29,7 @@ void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8
  * PGN: 0x00EC00 (60416)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(J1939 *j1939, uint8_t DA, uint8_t control_byte, uint16_t total_message_size, uint8_t number_of_packages, uint32_t PGN_of_the_packeted_message) {
-	uint32_t ID = (0x1CEC << 16) | (DA << 8) | j1939->this_ECU_address;
+	uint32_t ID = (0x1CEC << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t data[8];
 	data[0] = control_byte;
 	data[1] = total_message_size;
@@ -39,5 +39,5 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(
 	data[5] = PGN_of_the_packeted_message;
 	data[6] = PGN_of_the_packeted_message >> 8;
 	data[7] = PGN_of_the_packeted_message >> 16;
-	return CAN_Send_Message(ID, data, 100);										/* 100 ms delay */
+	return CAN_Send_Message(ID, data);
 }

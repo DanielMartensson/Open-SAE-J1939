@@ -20,14 +20,14 @@ ENUM_J1939_STATUS_CODES ISO_11783_Send_Request_Auxiliary_Valve_Estimated_Flow(J1
  * PGN: 0x00FE10 (65040) to 0x00FE1F (65055)
  */
 ENUM_J1939_STATUS_CODES ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(J1939 *j1939, uint8_t valve_number) {
-	uint32_t ID = (0x0CFE << 16) | ((0x10 + valve_number) << 8) | j1939->this_ECU_address;
+	uint32_t ID = (0x0CFE << 16) | ((0x10 + valve_number) << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t data[8];
 	data[0] = j1939->this_auxiliary_valve_estimated_flow[valve_number].extend_estimated_flow_standard;
 	data[1] = j1939->this_auxiliary_valve_estimated_flow[valve_number].retract_estimated_flow_standard;
 	data[2] = (j1939->this_auxiliary_valve_estimated_flow[valve_number].fail_safe_mode << 6) | (0b11 << 4) | j1939->this_auxiliary_valve_estimated_flow[valve_number].valve_state; 	/* Bit 5 and 6 are reserved */
 	data[3] = j1939->this_auxiliary_valve_estimated_flow[valve_number].limit << 5;
 	data[4] = data[5] = data[6] = data[7] = 0xFF;					/* All reserved */
-	return CAN_Send_Message(ID, data, 0);							/* 0 ms delay */
+	return CAN_Send_Message(ID, data);
 }
 
 /*

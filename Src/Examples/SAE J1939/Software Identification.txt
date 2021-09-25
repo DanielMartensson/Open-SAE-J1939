@@ -27,14 +27,14 @@ int main() {
 	}
 
 	/* Set the ECU address */
-	j1939_1.this_ECU_address = 0xA2;											/* From 0 to 253 because 254 = error address and 255 = broadcast address */
-	j1939_2.this_ECU_address = 0x90;
+	j1939_1.information_this_ECU.this_ECU_address = 0xA2;											/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0x90;
 
 	/* Set the Software Identification */
-	j1939_1.this_identifications.software_identification.number_of_fields = 15;
+	j1939_1.information_this_ECU.this_identifications.software_identification.number_of_fields = 15;
 	char text[15] = "SAE J1939!!!";
 	for(uint8_t i = 0; i < 15; i++)
-		j1939_1.this_identifications.software_identification.identifications[i] = (uint8_t) text[i];
+		j1939_1.information_this_ECU.this_identifications.software_identification.identifications[i] = (uint8_t) text[i];
 
 	/* Request Software Identification from ECU 2 to ECU 1 */
 	SAE_J1939_Send_Request(&j1939_2, 0xA2, PGN_SOFTWARE_IDENTIFICATION);

@@ -27,23 +27,23 @@ int main() {
 	}
 
 	/* Set the ECU address */
-	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
-	j1939_2.this_ECU_address = 0x90;
+	j1939_1.information_this_ECU.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0x90;
 
 	/* This is important because length_of_each_field is not a SAE J1939 standard. The software need to know how large field it is from the beginning */
 	j1939_2.from_other_ecu_identifications.ecu_identification.length_of_each_field = 20;
 
 	/* Set the ECU Identification */
-	j1939_1.this_identifications.ecu_identification.length_of_each_field = 20;
+	j1939_1.information_this_ECU.this_identifications.ecu_identification.length_of_each_field = 20;
 	char ecu_part_number[20] = "ABC-1100P-XXXX10";
 	char ecu_serial_number[20] = "1-200-K-10M";
 	char ecu_location[20] = "Under bridge";
 	char ecu_type[20] = "Model G";
 	for(uint8_t i = 0; i < 20; i++){
-		j1939_1.this_identifications.ecu_identification.ecu_part_number[i] = (uint8_t) ecu_part_number[i];
-		j1939_1.this_identifications.ecu_identification.ecu_serial_number[i] = (uint8_t) ecu_serial_number[i];
-		j1939_1.this_identifications.ecu_identification.ecu_location[i] = (uint8_t) ecu_location[i];
-		j1939_1.this_identifications.ecu_identification.ecu_type[i] = (uint8_t) ecu_type[i];
+		j1939_1.information_this_ECU.this_identifications.ecu_identification.ecu_part_number[i] = (uint8_t) ecu_part_number[i];
+		j1939_1.information_this_ECU.this_identifications.ecu_identification.ecu_serial_number[i] = (uint8_t) ecu_serial_number[i];
+		j1939_1.information_this_ECU.this_identifications.ecu_identification.ecu_location[i] = (uint8_t) ecu_location[i];
+		j1939_1.information_this_ECU.this_identifications.ecu_identification.ecu_type[i] = (uint8_t) ecu_type[i];
 	}
 
 	/* Request Software Identification from ECU 2 to ECU 1 */

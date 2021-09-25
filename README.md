@@ -15,16 +15,16 @@ Learn the structure of the project, else you won't be able to understand SAE J19
 After you have got a basic understanding of the project, you are able to build on it. Keep it simple and follow the 
 SAE J1939 standard!
 
-After you have understand the structure of the project, then select processor choice in `Processor_choice.h` file.
+After you have understand the structure of the project, then select processor choice in `Hardware -> Processor_choice.h` file.
 Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc. or if you want to run it on PC first, then select `PROCESSOR_CHOICE 0` and run some examples.
 That's the debugging mode for internal CAN feedback.
 
 # How to use the project
 
  - Step 1: Download this repository
- - Step 2: Go to `Processor_choice.h` and select your processor, if it's not avaiable, please write code for it and send me a pull request
+ - Step 2: Go to `Hardware -> Processor_choice.h` and select your processor, if it's not available, please write code for it and send me a pull request
  - Step 3: Copy over the `Src` folder to your project folder inside your IDE. Rename `Src` to for example `Open SAE J1939`. That's a good name.
- - Step 4: Past the header files inside your application code. This is just an example.
+ - Step 4: Use the `Examples -> Open SAE J1939 -> Startup.txt` example as your initial starting code for a SAE J1939 project.
  
 ```c
 #include <stdlib.h>
@@ -35,60 +35,26 @@ That's the debugging mode for internal CAN feedback.
 #include "SAE_J1939/SAE_J1939-71_Application_Layer/Application_Layer.h"
 #include "SAE_J1939/SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
 #include "SAE_J1939/SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
-```
- - Step 5: Create the `J1939 j1939 = {0};` inside your application code. You can see inside the examples how I have done
- - Step 6: For every start up, you need to load `uint8_t` data and cast it to the `j1939` struct
- 
-```c
-/* Load J1939 struct */
-uint32_t j1939_length = sizeof(J1939);
-uint8_t j1939_data[j1939_length];
-if(!Load_Struct(j1939_data, j1939_length, J1939_TEXT_FILE_NAME))
-	return; /* Problems occurs */
-memcpy(&j1939, (J1939*)j1939_data, j1939_length);
 
-/* If we are going to send and receive the ECU identification and component identification, we need to specify the size of them */
-j1939.this_identifications.ecu_identification.length_of_each_field = 30;
-j1939.this_identifications.component_identification.length_of_each_field = 30;
-j1939.from_other_ecu_identifications.ecu_identification.length_of_each_field = 30;
-j1939.from_other_ecu_identifications.component_identification.length_of_each_field = 30;
-	
-/* This broadcast out this ECU NAME + address to all other ECU:s */
-SAE_J1939_Response_Request_Address_Claimed(&j1939);
-	
-/* This asking all ECU about their NAME + address */
-SAE_J1939_Send_Request_Address_Claimed(&j1939, 0xFF);
+int main() {
 
-while(1) {
-	/* Read incoming messages */
-	Open_SAE_J1939_Listen_For_Messages(&j1939);
-	/* Your application code here */
-	....
-	....
-	....
+	/* Create our J1939 structure */
+	J1939 j1939 = {0};
+
+	/* Load your ECU information */
+	Open_SAE_J1939_Startup_ECU(&j1939);
+
+	while(1) {
+		/* Read incoming messages */
+		Open_SAE_J1939_Listen_For_Messages(&j1939);
+		/* Your application code here */
+
+	}
+
+	return 0;
 }
 ```
-Now you can use the `Open SAE J1939` library
-
-If you want to rename the `NAME` and address of your ECU
-
-```c
-/* Set address for the ECU */
-j1939.this_ECU_address = 0x80;
-```
-Don't forget to look in `SAE J1939 Enums` folder for more predefined fields for `NAME` 
-```c
-/* Set NAME for the ECU */
-j1939.this_name.identity_number = 100;                                          /* From 0 to 2097151 */
-j1939.this_name.manufacturer_code = 300;                                        /* From 0 to 2047 */
-j1939.this_name.function_instance = 10;                                         /* From 0 to 31 */
-j1939.this_name.ECU_instance = 2;                                               /* From 0 to 7 */
-j1939.this_name.function = FUNCTION_VDC_MODULE;                                 /* From 0 to 255 */
-j1939.this_name.vehicle_system = 100;                                           /* From 0 to 127 */
-j1939.this_name.arbitrary_address_capable = 0;                                  /* From 0 to 1 */
-j1939.this_name.industry_group = INDUSTRY_GROUP_CONSTRUCTION;                   /* From 0 to 7 */
-j1939.this_name.vehicle_system_instance = 10;                                   /* From 0 to 15 */
-```
+See the examples in `Examples -> SAE J1939` how to change the address, NAME or identifications for your ECU.
 
 # The structure of the project
 

@@ -63,6 +63,6 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request(J1939 *j1939, uint8_t DA, uint32_
 	PGN[0] = PGN_code;														/* PGN least significant bit */
 	PGN[1] = PGN_code >> 8;													/* PGN mid bit */
 	PGN[2] = PGN_code >> 16;												/* PGN most significant bit */
-	uint32_t ID = (0x18EA << 16) | (DA << 8) | j1939->this_ECU_address;
-	return CAN_Send_Request(ID, PGN, 100);									/* 100 ms delay */
+	uint32_t ID = (0x18EA << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
+	return CAN_Send_Request(ID, PGN);
 }

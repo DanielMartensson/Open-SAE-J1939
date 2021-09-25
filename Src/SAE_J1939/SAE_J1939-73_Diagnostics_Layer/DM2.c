@@ -21,7 +21,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM2(J1939 *j1939, uint8_t DA) {
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM2(J1939 *j1939, uint8_t DA) {
 	if(j1939->this_dm.errors_dm2_active < 2) {
-		uint32_t ID = (0x18FECB << 8) | j1939->this_ECU_address;
+		uint32_t ID = (0x18FECB << 8) | j1939->information_this_ECU.this_ECU_address;
 		uint8_t data[8];
 		data[0] = (j1939->this_dm.dm2.SAE_lamp_status_malfunction_indicator << 6) | (j1939->this_dm.dm2.SAE_lamp_status_red_stop << 4) | (j1939->this_dm.dm2.SAE_lamp_status_amber_warning << 2) | (j1939->this_dm.dm2.SAE_lamp_status_protect_lamp);
 		data[1] = (j1939->this_dm.dm2.SAE_flash_lamp_malfunction_indicator << 6) | (j1939->this_dm.dm2.SAE_flash_lamp_red_stop << 4) | (j1939->this_dm.dm2.SAE_flash_lamp_amber_warning << 2) | (j1939->this_dm.dm2.SAE_flash_lamp_protect_lamp);
@@ -31,7 +31,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM2(J1939 *j1939, uint8_t DA)
 		data[5] = (j1939->this_dm.dm2.SPN_conversion_method << 7) | j1939->this_dm.dm2.occurrence_count;
 		data[6] = 0xFF;													/* Reserved */
 		data[7] = 0xFF;													/* Reserved */
-		return CAN_Send_Message(ID, data, 0);							/* 0 ms delay */
+		return CAN_Send_Message(ID, data);
 	} else {
 		/* Multiple messages - Use Transport Protocol Connection Management BAM */
 		uint8_t number_of_packages = 2;

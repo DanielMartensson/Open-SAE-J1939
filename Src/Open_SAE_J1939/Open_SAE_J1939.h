@@ -21,6 +21,9 @@ extern "C" {
 /* This functions must be called all the time, or be placed inside an interrupt listener */
 bool Open_SAE_J1939_Listen_For_Messages(J1939 *j1939);
 
+/* This function should ONLY be called at your ECU startup */
+bool Open_SAE_J1939_Startup_ECU(J1939* j1939);
+
 #ifdef __cplusplus
 }
 #endif

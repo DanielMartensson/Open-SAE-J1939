@@ -12,7 +12,7 @@
  * PGN: 0x00D800 (55296)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Response_DM15(J1939 *j1939, uint8_t DA, uint16_t number_of_allowed_bytes, uint8_t status, uint32_t EDC_parameter, uint8_t EDCP_extention, uint16_t seed) {
-	uint32_t ID = (0x18D8 << 16) | (DA << 8) | j1939->this_ECU_address;
+	uint32_t ID = (0x18D8 << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t response_data[8];
 	response_data[0] = number_of_allowed_bytes;
 	response_data[1] = (number_of_allowed_bytes >> 3) | (0b1 << 4) | (status << 1) | 0b1;	 /* bit 5 and 1 are reserved */
@@ -22,7 +22,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Response_DM15(J1939 *j1939, uint8_t DA, u
 	response_data[5] = EDCP_extention;
 	response_data[6] = seed;
 	response_data[7] = seed >> 8;
-	return CAN_Send_Message(ID, response_data, 0); 											 /* 0 ms delay */
+	return CAN_Send_Message(ID, response_data);
 }
 
 /*

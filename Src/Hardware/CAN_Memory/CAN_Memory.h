@@ -16,7 +16,8 @@
 #include "../Processor_Choice.h"
 #include "../../Open_SAE_J1939/Structs.h"
 
-#define J1939_TEXT_FILE_NAME "J1939.TXT"
+/* This text name follows 8.3 filename standard - Important if you want to save to SD card */
+#define INFORMATION_THIS_ECU "ECUINFO.TXT"
 
 #ifdef __cplusplus
 extern "C" {

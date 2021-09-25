@@ -27,8 +27,8 @@ int main() {
 	}
 
 	/* Set the ECU address */
-	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
-	j1939_2.this_ECU_address = 0x90;
+	j1939_1.information_this_ECU.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0x90;
 
 	/* Send an acknowledgement from ECU 1 to ECU 2 where we say that the PGN function is busy because of time out */
 	SAE_J1939_Send_Acknowledgement(&j1939_1, 0x90, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_BUSY, GROUP_FUNCTION_VALUE_ABORT_TIME_OUT, PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_0);

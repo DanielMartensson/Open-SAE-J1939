@@ -58,7 +58,7 @@ static void Internal_Receive(uint32_t *ID, uint8_t data[], bool *is_new_message)
 }
 #endif
 
-ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[], uint8_t delay) {
+ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[]) {
 	ENUM_J1939_STATUS_CODES status;
 	#if PROCESSOR_CHOICE == STM32
 	CAN_TxHeaderTypeDef TxHeader;
@@ -69,7 +69,6 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[], uint8_t de
 	TxHeader.ExtId = ID;
 	TxHeader.StdId = 0x00; 										/* Not used */
 	status = STM32_PLC_CAN_Transmit(data, &TxHeader);
-	HAL_Delay(delay);											/* A delay for messages are required sometimes */
 	#elif PROCESSOR_CHOICE == ARDUINO
 	/* Implement your CAN send 8 bytes message function for the Arduino platform */
 	#elif PROCESSOR_CHOICE == PIC
@@ -88,7 +87,7 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[], uint8_t de
 /* Send a PGN request
  * PGN: 0x00EA00 (59904)
  */
-ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[], uint8_t delay) {
+ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[]) {
 	ENUM_J1939_STATUS_CODES status;
 	#if PROCESSOR_CHOICE == STM32
 	CAN_TxHeaderTypeDef TxHeader;
@@ -99,7 +98,6 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[], uint8_t del
 	TxHeader.ExtId = ID;
 	TxHeader.StdId = 0x00; 										/* Not used */
 	status = STM32_PLC_CAN_Transmit(PGN, &TxHeader);
-	HAL_Delay(delay);											/* A delay for messages are required sometimes */
 	#elif PROCESSOR_CHOICE == ARDUINO
 	/* Implement your CAN send 3 bytes message function for the Arduino platform */
 	#elif PROCESSOR_CHOICE == PIC

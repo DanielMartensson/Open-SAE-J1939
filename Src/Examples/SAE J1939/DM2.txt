@@ -27,8 +27,8 @@ int main() {
 	}
 
 	/* Set the ECU address */
-	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
-	j1939_2.this_ECU_address = 0x90;
+	j1939_1.information_this_ECU.this_ECU_address = 0x80;							/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0x90;
 
 	/* Set the dm2 error message - You can have multiple error messages, but only send one at the time */
 	j1939_1.this_dm.dm2.SAE_lamp_status_malfunction_indicator = 1;

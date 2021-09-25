@@ -20,7 +20,7 @@ ENUM_J1939_STATUS_CODES ISO_11783_Send_Request_General_Purpose_Valve_Estimated_F
  * PGN: 0x00C600 (50688)
  */
 ENUM_J1939_STATUS_CODES ISO_11783_Response_Request_General_Purpose_Valve_Estimated_Flow(J1939 *j1939, uint8_t DA) {
-	uint32_t ID = (0x0CC6 << 16) | (DA << 8) | j1939->this_ECU_address;
+	uint32_t ID = (0x0CC6 << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t data[8];
 	data[0] = j1939->this_general_purpose_valve_estimated_flow.extend_estimated_flow_standard;
 	data[1] = j1939->this_general_purpose_valve_estimated_flow.retract_estimated_flow_standard;
@@ -30,7 +30,7 @@ ENUM_J1939_STATUS_CODES ISO_11783_Response_Request_General_Purpose_Valve_Estimat
 	data[5] = j1939->this_general_purpose_valve_estimated_flow.extend_estimated_flow_extended >> 8;
 	data[6] = j1939->this_general_purpose_valve_estimated_flow.retract_estimated_flow_extended;
 	data[7] = j1939->this_general_purpose_valve_estimated_flow.retract_estimated_flow_extended >> 8;
-	return CAN_Send_Message(ID, data, 0);
+	return CAN_Send_Message(ID, data);
 }
 
 /*

@@ -12,13 +12,13 @@
  * PGN: 0x00FE30 (65072) to 0x00FE3F (65087)
  */
 ENUM_J1939_STATUS_CODES ISO_11783_Send_Auxiliary_Valve_Command(J1939 *j1939, uint8_t valve_number, uint8_t standard_flow, uint8_t fail_safe_mode, uint8_t valve_state) {
-	uint32_t ID = (0x0CFE << 16) | ((0x30 + valve_number) << 8) | j1939->this_ECU_address;
+	uint32_t ID = (0x0CFE << 16) | ((0x30 + valve_number) << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t data[8];
 	data[0] = standard_flow;
 	data[1] = 0xFF; 												/* Reserved */
 	data[2] = (fail_safe_mode << 6) | (0b11 << 4) | valve_state; 	/* Bit 5 and 6 are reserved */
 	data[3] = data[4] = data[5] = data[6] = data[7] = 0xFF;			/* All reserved */
-	return CAN_Send_Message(ID, data, 0);							/* 0 ms delay */
+	return CAN_Send_Message(ID, data);
 }
 
 /*

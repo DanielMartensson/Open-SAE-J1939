@@ -73,7 +73,7 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
  * PGN: 0x00EB00 (60160)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t DA, uint8_t data[], uint16_t total_message_size, uint8_t number_of_packages){
-	uint32_t ID = (0x1CEB << 16) | (DA << 8) | j1939->this_ECU_address;
+	uint32_t ID = (0x1CEB << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t package[8];
 	uint16_t bytes_sent = 0;
 	ENUM_J1939_STATUS_CODES status = STATUS_SEND_OK;
@@ -85,7 +85,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j
 			 else
 				package[j+1] = 0xFF; 														/* Reserved */
 
-		status = CAN_Send_Message(ID, package, 100);										/* 100 ms delay */
+		status = CAN_Send_Message(ID, package);
 		if(status != STATUS_SEND_OK)
 			return status;
 	}

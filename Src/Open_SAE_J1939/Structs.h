@@ -180,6 +180,14 @@ struct Auxiliary_valve_measured_position {
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
+/* This struct is used for save information and load information from hard drive/SD-card/flash etc. due to the large size of J1939 */
+typedef struct{
+	struct Name this_name;
+	uint8_t this_ECU_address;
+	struct Identifications this_identifications;
+} Information_this_ECU;
+
+/* This struct is used for handling J1939 information */
 typedef struct {
 	/* Latest CAN message */
 	uint32_t ID;									/* This is the CAN bus ID */
@@ -207,10 +215,8 @@ typedef struct {
 	struct General_purpose_valve_command from_other_ecu_general_purpose_valve_command;
 
 	/* For ID information about this ECU - SAE J1939 */
-	struct Name this_name;
-	uint8_t this_ECU_address;
+	Information_this_ECU information_this_ECU;
 	struct DM this_dm;
-	struct Identifications this_identifications;
 
 	/* For valve information about this ECU - ISO 11783-7 */
 	struct Auxiliary_valve_estimated_flow this_auxiliary_valve_estimated_flow[16];
@@ -218,5 +224,6 @@ typedef struct {
 	struct General_purpose_valve_estimated_flow this_general_purpose_valve_estimated_flow;
 
 } J1939;
+
 
 #endif /* OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_ */

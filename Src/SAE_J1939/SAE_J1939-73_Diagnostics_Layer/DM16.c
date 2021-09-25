@@ -12,12 +12,12 @@
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t DA, uint8_t number_of_occurences, uint8_t raw_binary_data[]) {
 	if(number_of_occurences < 8) {
-		uint32_t ID = (0x18D7 << 16) | (DA << 8) | j1939->this_ECU_address;
+		uint32_t ID = (0x18D7 << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
 		uint8_t data[number_of_occurences + 1];								/* number_of_occurences must be 7 */
 		data[0] = number_of_occurences;										/* How much binary data we want to send */
 		for(uint8_t i = 0; i < number_of_occurences; i++)
 			data[i+1] = raw_binary_data[i];
-		return CAN_Send_Message(ID, data, 0);								/* 0 ms delay */
+		return CAN_Send_Message(ID, data);
 	}else{
 		/* Multiple messages - Use Transport Protocol Connection Management BAM */
 		uint8_t data[number_of_occurences + 1];								/* If number_of_occurences = 255, then data have 256 elements */

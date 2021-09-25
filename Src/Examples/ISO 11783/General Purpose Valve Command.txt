@@ -19,7 +19,7 @@ int main() {
 	/* Create our J1939 structure with two ECU */
 	J1939 j1939_1 = {0};
 	J1939 j1939_2 = {0};
-	
+
 	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
 	for(uint8_t i = 0; i < 255; i++){
 		j1939_1.other_ECU_address[i] = 0xFF;
@@ -27,8 +27,8 @@ int main() {
 	}
 
 	/* Set the ECU address */
-	j1939_1.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
-	j1939_2.this_ECU_address = 0xFD;
+	j1939_1.information_this_ECU.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0xFD;
 
 	/* Send a command from ECU 1 to ECU 2 */
 	ISO_11783_Send_General_Purpose_Valve_Command(&j1939_1, 0xFD, 100, FAIL_SAFE_MODE_ACTIVATED, VALVE_STATE_INITIALISATION, 60000);
