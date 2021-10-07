@@ -23,7 +23,7 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	j1939->from_other_ecu_tp_dt.from_ecu_address = SA;
 	uint8_t index = data[0] - 1;
 	for (uint8_t i = 1; i < 8; i++)
-		j1939->from_other_ecu_tp_dt.data[i-1][index] = data[i];
+		j1939->from_other_ecu_tp_dt.data[index*7 + i-1] = data[i]; /* For every package, we send 7 bytes of data where the first byte data[0] is the sequence number */
 
 	/* Check if we have completed our message - Return = Not completed */
 	if (j1939->from_other_ecu_tp_cm.number_of_packages != j1939->from_other_ecu_tp_dt.sequence_number || j1939->from_other_ecu_tp_cm.number_of_packages == 0)
@@ -37,7 +37,7 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	for (uint8_t i = 0; i < j1939->from_other_ecu_tp_dt.sequence_number; i++)
 		for (uint8_t j = 0; j < 7; j++)
 			if (inserted_bytes < total_message_size)
-				complete_data[inserted_bytes++] = j1939->from_other_ecu_tp_dt.data[j][i];
+				complete_data[inserted_bytes++] = j1939->from_other_ecu_tp_dt.data[i*7 + j];
 
 	/* Send an end of message ACK back */
 	if(j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS)
@@ -75,19 +75,19 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 }
 
 /*
- * Send sequence data packages to other ECU
+ * Send sequence data packages to other ECU that we have loaded
  * PGN: 0x00EB00 (60160)
  */
-ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t DA, uint8_t data[], uint16_t total_message_size, uint8_t number_of_packages){
+ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t DA){
 	uint32_t ID = (0x1CEB << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t package[8];
 	uint16_t bytes_sent = 0;
 	ENUM_J1939_STATUS_CODES status = STATUS_SEND_OK;
-	for(uint8_t i = 1; i <= number_of_packages; i++) {
+	for(uint8_t i = 1; i <= j1939->this_ecu_tp_cm.number_of_packages; i++) {
 		package[0] = i; 																	/* Number of package */
 		for(uint8_t j = 0; j < 7; j++)
-			if(bytes_sent < total_message_size)
-				package[j+1] = data[bytes_sent++];											/* Data */
+			if(bytes_sent < j1939->this_ecu_tp_cm.total_message_size)
+				package[j+1] = j1939->this_ecu_tp_dt.data[bytes_sent++];					/* Data that we have collected */
 			 else
 				package[j+1] = 0xFF; 														/* Reserved */
 

@@ -28,7 +28,7 @@ struct Acknowledgement {
 struct TP_CM {
 	uint8_t control_byte;							/* What type of message are we going to send */
 	uint16_t total_message_size;					/* Total bytes our complete message includes - 9 to 1785 */
-	uint8_t number_of_packages;						/* How many times we are going to send packages via TP_DT - 2 to 224 */
+	uint8_t number_of_packages;						/* How many times we are going to send packages via TP_DT - 2 to 224 because 1785/8 is 224 rounded up */
 	uint32_t PGN_of_the_packeted_message;			/* Our message is going to activate a PGN */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
@@ -36,7 +36,7 @@ struct TP_CM {
 /* PGN: 0x00EB00 - Storing the Transport Protocol Data Transfer from the reading process */
 struct TP_DT {
 	uint8_t sequence_number;						/* When this sequence number is the same as number_of_packages from TP_CM, then we have our complete message */
-	uint8_t data[7][224];							/* Package data of 2D array where first index is data0 -> data6 and second index is sequence of the data. Notice that total_message_size = 1785 divided by 8 and rounded up to 224 */
+	uint8_t data[1785];								/* This is the collected data we are going to send. Also we are using this as a filler */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
@@ -209,6 +209,10 @@ typedef struct {
 	struct TP_DT from_other_ecu_tp_dt;
 	struct DM from_other_ecu_dm;
 	struct Identifications from_other_ecu_identifications;
+
+	/* Temporary hold this values for this ECU when we are going to send data */
+	struct TP_CM this_ecu_tp_cm;
+	struct TP_DT this_ecu_tp_dt;
 
 	/* Temporary store the valve information from the reading process - ISO 11783-7 */
 	struct Auxiliary_valve_estimated_flow from_other_ecu_auxiliary_valve_estimated_flow[16];
