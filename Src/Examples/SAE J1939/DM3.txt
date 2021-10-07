@@ -49,7 +49,10 @@ int main() {
 	/* Request DM3 delete DM2 from ECU 2 to ECU 1 */
 	SAE_J1939_Send_Request(&j1939_2, 0x80, PGN_DM3);
 
-	/* Response request from ECU 1 perspective */
+	/* Response request from ECU 1 perspective - Don't worry, in real CAN applications you don't need this mess. */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
 	/* Read response request from ECU 1 to ECU 2 */

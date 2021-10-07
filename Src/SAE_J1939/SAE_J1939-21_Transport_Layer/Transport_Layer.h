@@ -22,9 +22,6 @@
 extern "C" {
 #endif
 
-enum {
-	CONTROL_BYTE_FOR_MULTI_PACK_MESSAGE = CONTROL_BYTE_TP_CM_BAM /* There are only two control bytes to choose: CONTROL_BYTE_TP_CM_BAM or CONTROL_BYTE_TP_CM_RTS */
-};
 
 /* Acknowledgement */
 void SAE_J1939_Read_Acknowledgement(J1939 *j1939, uint8_t SA, uint8_t data[]);

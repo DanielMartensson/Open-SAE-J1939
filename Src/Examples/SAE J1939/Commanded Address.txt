@@ -69,12 +69,14 @@ int main() {
 	SAE_J1939_Send_Commanded_Address(&j1939_1, 0x90, 0x91, 5000, 500, 30, 5, FUNCTION_AUXILIARY_VALVES_CONTROL, 50, 0, INDUSTRY_GROUP_AGRICULTURAL_AND_FORESTRY, 15);
 
 	/* Listen for messages - The reason why it looks like this is because ECU 1 and ECU 2 shares the same CAN-bus buffer - In CAN bus application, you don't need this mess */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_2); /* Read TP CM from ECU 1 */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2); /* Read TP CM with control byte RTS from ECU 1 to ECU 2 */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1); /* Read control byte CTS response from ECU 2 */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2); /* Read TP DT package 1 from ECU 1 */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2); /* Read TP DT package 2 from ECU 1 */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_1); /* Read the delete request from ECU 2*/
-	Open_SAE_J1939_Listen_For_Messages(&j1939_1); /* Read the send request of address claimed from ECU 2 */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_2); /* Read the response request of address claimed from ECU 1 */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2); /* Read one more package */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1); /* Read the send request of delete address from ECU 2 */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1); /* Read the new address from ECU 2 */
+
 
 	/* Print information */
 	printf("Identity number = %i\nManufacturer code = %i\nFunction instance = %i\nECU instance = %i\nFunction = %i\nVehicle system = %i\nArbitrary address capable = %i\nIndustry group = %i\nVehicle system instance = %i\nNew ECU address = 0x%X\n"

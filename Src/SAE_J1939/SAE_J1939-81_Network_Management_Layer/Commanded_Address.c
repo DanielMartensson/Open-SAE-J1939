@@ -31,7 +31,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Commanded_Address(J1939 *j1939, uint8_t D
 
 	/* Send TP CM */
 	j1939->this_ecu_tp_cm.PGN_of_the_packeted_message = PGN_COMMANDED_ADDRESS;
-	j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_FOR_MULTI_PACK_MESSAGE;
+	j1939->this_ecu_tp_cm.control_byte = DA == 0xFF ? CONTROL_BYTE_TP_CM_BAM : CONTROL_BYTE_TP_CM_RTS; /* If broadcast, then use BAM control byte */
 	ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA);
 	if(status != STATUS_SEND_OK)
 		return status;

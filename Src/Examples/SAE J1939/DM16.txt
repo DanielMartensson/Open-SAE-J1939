@@ -51,6 +51,10 @@ int main() {
 	/* Send binary data to ECU 2 */
 	SAE_J1939_Send_Binary_Data_Transfer_DM16(&j1939_1, 0x6A, number_of_occurences, raw_binary_data);
 
+	/* This is only here because we using the internal message buffer - In real CAN applications, this mess is not needed */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+
 	/* Read binary data at ECU 2 - Ten times would be good enough to get all messages because this message above is multi-packet */
 	for(uint8_t i = 0; i < 10; i++)
 		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
