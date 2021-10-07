@@ -24,7 +24,8 @@ That's the debugging mode for internal CAN feedback.
  - Step 1: Download this repository
  - Step 2: Go to `Hardware -> Processor_choice.h` and select your processor, if it's not available, please write code for it and send me a pull request
  - Step 3: Copy over the `Src` folder to your project folder inside your IDE. Rename `Src` to for example `Open SAE J1939`. That's a good name.
- - Step 4: Use the `Examples -> Open SAE J1939 -> Startup.txt` example as your initial starting code for a SAE J1939 project.
+ - Step 4: Go to `Transport_layer.h` and choose if you want to send multipackets with `BAM = Send all at once` or `RTS = Wait for the receiver to give the transmitter OK`. See `Open SAE J1939.pdf`.
+ - Step 5: Use the `Examples -> Open SAE J1939 -> Startup.txt` example as your initial starting code for a SAE J1939 project.
  
 ```c
 #include <stdlib.h>
