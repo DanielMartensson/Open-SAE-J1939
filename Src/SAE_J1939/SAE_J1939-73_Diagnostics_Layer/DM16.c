@@ -23,19 +23,24 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, u
 			data[i+1] = raw_binary_data[i];
 		return CAN_Send_Message(ID, data);
 	}else{
-		/* Multiple messages - Use Transport Protocol Connection Management BAM */
-		uint8_t data[number_of_occurences + 1];								/* If number_of_occurences = 255, then data have 256 elements */
-		uint16_t total_message_size = 0;
-		data[total_message_size++] = number_of_occurences;
+		/* Multiple messages - Load data */
+		j1939->this_ecu_tp_cm.total_message_size = 0;
+		j1939->this_ecu_tp_dt.data[j1939->this_ecu_tp_cm.total_message_size++] = number_of_occurences;
 		for(uint8_t i = 0; i < number_of_occurences; i++)
-			data[total_message_size++] = raw_binary_data[i];				/* When i = 0, then total_message_size = 1 */
+			j1939->this_ecu_tp_dt.data[j1939->this_ecu_tp_cm.total_message_size++] = raw_binary_data[i];				/* When i = 0, then total_message_size = 1 */
 
-		/* Send TP CM BAM and then TP DT data */
-		uint8_t number_of_packages = total_message_size % 8 > 1 ? total_message_size/8 + 1 : total_message_size/8; /* Rounding up */
-		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_DM16);
+		/* Send TP CM */
+		j1939->this_ecu_tp_cm.number_of_packages = j1939->this_ecu_tp_cm.total_message_size % 8 > 0 ? j1939->this_ecu_tp_cm.total_message_size/8 + 1 : j1939->this_ecu_tp_cm.total_message_size/8; /* Rounding up */
+		j1939->this_ecu_tp_cm.PGN_of_the_packeted_message = PGN_DM16;
+		j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_FOR_MULTI_PACK_MESSAGE;
+		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA);
 		if(status != STATUS_SEND_OK)
 			return status;
-		return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA, data, total_message_size, number_of_packages);
+
+		/* Check if we are going to send it directly (BAM) - Else, the TP CM will send a RTS control byte to the other ECU and the ECU will answer with control byte CTS */
+		if(j1939->this_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_BAM)
+			return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA);
+		return status;
 	}
 }
 

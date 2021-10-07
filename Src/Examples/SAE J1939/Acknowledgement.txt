@@ -38,7 +38,7 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Check what acknowledgement we have */
-	printf("Control byte = %i\nGroup function value = %i\nPGN of requested info = %i\nAddress(Which is the same as the source address of the ECU) = %i\nFrom where came the message = 0x%X"
+	printf("Control byte = %i\nGroup function value = %i\nPGN of requested info = %i\nAddress(Which is the same as the source address of the ECU) = 0x%X\nFrom where came the message = 0x%X"
 			, j1939_2.from_other_ecu_acknowledgement.control_byte
 			, j1939_2.from_other_ecu_acknowledgement.group_function_value
 			, j1939_2.from_other_ecu_acknowledgement.PGN_of_requested_info

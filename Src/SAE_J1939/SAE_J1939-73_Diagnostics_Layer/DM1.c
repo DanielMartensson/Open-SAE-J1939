@@ -37,23 +37,30 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM1(J1939* j1939, uint8_t DA)
 		data[7] = 0xFF;													/* Reserved */
 		return CAN_Send_Message(ID, data);
 	} else {
-		/* Multiple messages - Use Transport Protocol Connection Management BAM */
-		uint8_t number_of_packages = 2;
-		uint16_t total_message_size = 9;
-		uint8_t data[9];
-		data[0] = (j1939->this_dm.dm1.SAE_lamp_status_malfunction_indicator << 6) | (j1939->this_dm.dm1.SAE_lamp_status_red_stop << 4) | (j1939->this_dm.dm1.SAE_lamp_status_amber_warning << 2) | (j1939->this_dm.dm1.SAE_lamp_status_protect_lamp);
-		data[1] = (j1939->this_dm.dm1.SAE_flash_lamp_malfunction_indicator << 6) | (j1939->this_dm.dm1.SAE_flash_lamp_red_stop << 4) | (j1939->this_dm.dm1.SAE_flash_lamp_amber_warning << 2) | (j1939->this_dm.dm1.SAE_flash_lamp_protect_lamp);
-		data[2] = j1939->this_dm.dm1.SPN;
-		data[3] = j1939->this_dm.dm1.SPN >> 8;
-		data[4] = ((j1939->this_dm.dm1.SPN >> 11) & 0b11100000) | j1939->this_dm.dm1.FMI;
-		data[5] = (j1939->this_dm.dm1.SPN_conversion_method << 7) | j1939->this_dm.dm1.occurrence_count;
-		data[6] = 0xFF;													/* Reserved */
-		data[7] = 0xFF;													/* Reserved */
-		data[8] = j1939->this_dm.errors_dm1_active;
-		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA, CONTROL_BYTE_TP_CM_BAM, total_message_size, number_of_packages, PGN_DM1);
+		/* Multiple messages - Load data */
+		j1939->this_ecu_tp_cm.number_of_packages = 2;
+		j1939->this_ecu_tp_cm.total_message_size = 9;
+		j1939->this_ecu_tp_dt.data[0] = (j1939->this_dm.dm1.SAE_lamp_status_malfunction_indicator << 6) | (j1939->this_dm.dm1.SAE_lamp_status_red_stop << 4) | (j1939->this_dm.dm1.SAE_lamp_status_amber_warning << 2) | (j1939->this_dm.dm1.SAE_lamp_status_protect_lamp);
+		j1939->this_ecu_tp_dt.data[1] = (j1939->this_dm.dm1.SAE_flash_lamp_malfunction_indicator << 6) | (j1939->this_dm.dm1.SAE_flash_lamp_red_stop << 4) | (j1939->this_dm.dm1.SAE_flash_lamp_amber_warning << 2) | (j1939->this_dm.dm1.SAE_flash_lamp_protect_lamp);
+		j1939->this_ecu_tp_dt.data[2] = j1939->this_dm.dm1.SPN;
+		j1939->this_ecu_tp_dt.data[3] = j1939->this_dm.dm1.SPN >> 8;
+		j1939->this_ecu_tp_dt.data[4] = ((j1939->this_dm.dm1.SPN >> 11) & 0b11100000) | j1939->this_dm.dm1.FMI;
+		j1939->this_ecu_tp_dt.data[5] = (j1939->this_dm.dm1.SPN_conversion_method << 7) | j1939->this_dm.dm1.occurrence_count;
+		j1939->this_ecu_tp_dt.data[6] = 0xFF;													/* Reserved */
+		j1939->this_ecu_tp_dt.data[7] = 0xFF;													/* Reserved */
+		j1939->this_ecu_tp_dt.data[8] = j1939->this_dm.errors_dm1_active;
+
+		/* Send TP CM */
+		j1939->this_ecu_tp_cm.PGN_of_the_packeted_message = PGN_DM1;
+		j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_FOR_MULTI_PACK_MESSAGE;
+		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA);
 		if(status != STATUS_SEND_OK)
 			return status;
-		return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA, data, total_message_size, number_of_packages);
+
+		/* Check if we are going to send it directly (BAM) - Else, the TP CM will send a RTS control byte to the other ECU and the ECU will answer with control byte CTS */
+		if(j1939->this_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_BAM)
+			return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA);
+		return status;
 	}
 }
 
