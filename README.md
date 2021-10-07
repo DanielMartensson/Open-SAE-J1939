@@ -110,7 +110,8 @@ See the examples in `Examples -> SAE J1939` how to change the address, NAME or i
  	- A: Yes. This is only a way to shape a massage in a specific way.
  - Q: Can I send data with this library, even if I don't have CAN-bus?
  	- A: Yes. There are something called DM14 transmit request, DM15 status response and DM16 binary transfer. Use that if you want to transfer data in an industrial way.
- 	
+ - Q: Can I send multi package messages from from multiple ECU:s to one ECU at the same time?
+ 	- A: No. If you starting to send multipackages from multiple ECU:s to another ECU, then that ECU cannot understand the message. Transmit only multipackage messages one at the time if the destination address is the same.
 # Issues and answers
 
 - I: I cannot compile this library. I'm using `Keil Microvision`.
