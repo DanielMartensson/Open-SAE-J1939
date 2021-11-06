@@ -18,7 +18,7 @@ Learn the structure of the project, else you won't be able to understand SAE J19
 After you have got a basic understanding of the project, you are able to build on it. Keep it simple and follow the 
 SAE J1939 standard!
 
-After you have understand the structure of the project, then select processor choice in `Hardware -> Processor_choice.h` file.
+After you have understand the structure of the project, then select processor choice in `Hardware -> Hardware.h` file.
 Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc. or if you want to run it on PC first, then select `PROCESSOR_CHOICE 0` and run some examples.
 That's the debugging mode for internal CAN feedback.
 
