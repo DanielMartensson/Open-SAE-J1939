@@ -28,7 +28,7 @@ ENUM_J1939_STATUS_CODES ISO_11783_Response_Request_Auxiliary_Valve_Measured_Posi
 	uint8_t data[8];
 	data[0] = j1939->this_auxiliary_valve_measured_position[valve_number].measured_position_percent;
 	data[1] = j1939->this_auxiliary_valve_measured_position[valve_number].measured_position_percent >> 8;
-	data[2] = j1939->this_auxiliary_valve_measured_position[valve_number].valve_state;
+	data[2] = 0b11110000 | j1939->this_auxiliary_valve_measured_position[valve_number].valve_state;
 	data[3] = j1939->this_auxiliary_valve_measured_position[valve_number].measured_position_micrometer;
 	data[4] = j1939->this_auxiliary_valve_measured_position[valve_number].measured_position_micrometer >> 8;
 	data[5] = data[6] = data[7] = 0xFF;								/* All reserved */
