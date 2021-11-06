@@ -8,7 +8,7 @@
 #include "Network_Management_Layer.h"
 
 /* Layers */
-#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+#include "../../Hardware/Hardware.h"
 
 /*
  * Send Address Not Claimed if the address conflicts with each other

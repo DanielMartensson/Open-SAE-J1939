@@ -8,12 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
+/* Include Open SAE J1939 */
 #include "Open_SAE_J1939/Open_SAE_J1939.h"
-#include "SAE_J1939/SAE_J1939-71_Application_Layer/Application_Layer.h"
-#include "SAE_J1939/SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
-#include "SAE_J1939/SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
-#include "SAE_J1939/SAE_J1939-21_Transport_Layer/Transport_Layer.h"
 
 int main() {
 
@@ -32,10 +28,10 @@ int main() {
 	j1939_2.information_this_ECU.this_ECU_address = 0x90;
 
 	/* This is important because length_of_each_field is not a SAE J1939 standard. The software need to know how large field it is from the beginning */
-	j1939_2.from_other_ecu_identifications.component_identification.length_of_each_field = 20;
+	j1939_2.from_other_ecu_identifications.component_identification.length_of_each_field = 30;
 
 	/* Set the Component Identification */
-	j1939_1.information_this_ECU.this_identifications.component_identification.length_of_each_field = 20;
+	j1939_1.information_this_ECU.this_identifications.component_identification.length_of_each_field = 30;
 	char component_product_date[20] = "2021-07-20";
 	char component_model_name[20] = "200X-PPT";
 	char component_serial_number[20] = "1243-13244-1244";

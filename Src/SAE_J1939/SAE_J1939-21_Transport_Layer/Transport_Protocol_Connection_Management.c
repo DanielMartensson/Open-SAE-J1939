@@ -8,7 +8,7 @@
 #include "Transport_Layer.h"
 
 /* Layers */
-#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+#include "../../Hardware/Hardware.h"
 
 /*
  * Store information about sequence data packages from other ECU who are going to send to this ECU

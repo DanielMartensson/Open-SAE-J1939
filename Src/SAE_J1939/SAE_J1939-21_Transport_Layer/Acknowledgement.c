@@ -8,7 +8,7 @@
 #include "Transport_Layer.h"
 
 /* Layers */
-#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+#include "../../Hardware/Hardware.h"
 
 /*
  * Store acknowledgement information from other ECU about PGN request to other ECU

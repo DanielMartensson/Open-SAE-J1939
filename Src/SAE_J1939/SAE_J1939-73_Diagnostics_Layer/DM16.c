@@ -9,9 +9,9 @@
 
 /* Layers */
 #include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
-#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+#include "../../Hardware/Hardware.h"
 
-/* Send binary data transfer. This will be sent after DM15 memory response (if it was proceeded)
+/* Send binary data transfer. This will be sent after DM15 memory response (if DM15 was proceeded)
  * PGN: 0x00D700 (55040)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t DA, uint8_t number_of_occurences, uint8_t raw_binary_data[]) {

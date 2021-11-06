@@ -8,14 +8,14 @@
 #include "Network_Management_Layer.h"
 
 /* Layers */
-#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+#include "../../Hardware/Hardware.h"
 
 /*
  * This is not a SAE J1939 standard. It's only for deleting the j1939->ECU_address
  * PGN: 0x000002 (2)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Address_Delete(J1939 *j1939, uint8_t DA, uint8_t old_ECU_address) {
-	/* Delete (other) ECU address in this ECU */
+	/* Delete other ECU address in this ECU */
 	for(uint8_t i = 0; i < j1939->number_of_other_ECU; i++){
 		if(old_ECU_address == j1939->other_ECU_address[i]){
 			j1939->other_ECU_address[i] = 0xFF;
@@ -36,7 +36,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Address_Delete(J1939 *j1939, uint8_t DA, 
  * PGN: 0x000002 (2)
  */
 void SAE_J1939_Read_Address_Delete(J1939 *j1939, uint8_t data[]) {
-	/* Delete (other) ECU address in this ECU */
+	/* Delete other ECU address in this ECU */
 	uint8_t old_ECU_address = data[0];
 	for(uint8_t i = 0; i < j1939->number_of_other_ECU; i++){
 		if(old_ECU_address == j1939->other_ECU_address[i]){

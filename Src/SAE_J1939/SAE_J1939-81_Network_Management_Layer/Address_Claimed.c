@@ -9,7 +9,7 @@
 
 /* Layers */
 #include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
-#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
+#include "../../Hardware/Hardware.h"
 
 /*
  * Send request address claimed to other ECU. Every time we asking addresses from other ECU, then we clear our storage of other ECU

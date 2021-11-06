@@ -1,12 +1,12 @@
 /*
- * CAN_Functions.c
+ * CAN_Transmit_Receive.c
  *
  *  Created on: 11 juli 2021
  *      Author: Daniel Mårtensson
  */
 
 /* Layer */
-#include "../CAN_Network_Layer/CAN_Network_Layer.h"
+#include "Hardware.h"
 
 /* Platform independent library headers for CAN */
 #if PROCESSOR_CHOICE == STM32

@@ -25,7 +25,7 @@ That's the debugging mode for internal CAN feedback.
 # How to use the project
 
  - Step 1: Download this repository
- - Step 2: Go to `Hardware -> Processor_choice.h` and select your processor, if it's not available, please write code for it and send me a pull request
+ - Step 2: Go to `Hardware -> Hardware.h` and select your processor, if it's not available, please write code for it and send me a pull request
  - Step 3: Copy over the `Src` folder to your project folder inside your IDE. Rename `Src` to for example `Open SAE J1939`. That's a good name.
  - Step 4: Use the `Examples -> Open SAE J1939 -> Startup.txt` example as your initial starting code for a SAE J1939 project.
  
@@ -35,9 +35,6 @@ That's the debugging mode for internal CAN feedback.
 
 #include "Open_SAE_J1939/Open_SAE_J1939.h"
 #include "ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
-#include "SAE_J1939/SAE_J1939-71_Application_Layer/Application_Layer.h"
-#include "SAE_J1939/SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
-#include "SAE_J1939/SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
 
 int main() {
 

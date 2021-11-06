@@ -1,5 +1,5 @@
 /*
- * SAE_J1939-81_Network_Management_Layer.h
+ * Network_Management_Layer.h
  *
  *  Created on: 14 juli 2021
  *      Author: Daniel Mårtensson

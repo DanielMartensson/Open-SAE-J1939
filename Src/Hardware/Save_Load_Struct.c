@@ -1,11 +1,11 @@
 /*
- * Save_Load_J1939_Struct.c
+ * Save_Load_Struct.c
  *
  *  Created on: 22 sep. 2021
  *      Author: Daniel Mårtensson
  */
 
-#include "CAN_Memory_Layer.h"
+#include "Hardware.h"
 
 bool Save_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 #if PROCESSOR_CHOICE == STM32

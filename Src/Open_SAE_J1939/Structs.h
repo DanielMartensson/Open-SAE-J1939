@@ -1,5 +1,5 @@
 /*
- * SAE_J1939_Structs.h
+ * Structs.h
  *
  *  Created on: 14 juli 2021
  *      Author: Daniel Mårtensson
@@ -200,7 +200,7 @@ typedef struct {
 	/* Store addresses of ECU */
 	uint8_t number_of_other_ECU;				 	/* How many other ECU are connected */
 	uint8_t number_of_cannot_claim_address;			/* How many ECU addresses could not claim their address */
-	uint8_t other_ECU_address[255];					/* Store other ECU addresses here */
+	uint8_t other_ECU_address[255];					/* Store other ECU addresses here. Address 0xFF is the broad cast address, not an ECU address */
 
 	/* Temporary store the information from the reading process - SAE J1939 */
 	struct Name from_other_ecu_name;

@@ -5,12 +5,12 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../Hardware/CAN_Memory_Layer/CAN_Memory_Layer.h"
 
 /* Layers */
 #include "../SAE_J1939/SAE_J1939-71_Application_Layer/Application_Layer.h"
 #include "../SAE_J1939/SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
 #include "../SAE_J1939/SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
+#include "../Hardware/Hardware.h"
 
 /* Load our ECU parameters into J1939 structure. Very useful if you want your ECU remember its NAME + address + identifications at startup. */
 bool Open_SAE_J1939_Startup_ECU(J1939* j1939) {

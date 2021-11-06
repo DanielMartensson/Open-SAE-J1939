@@ -1,5 +1,5 @@
 /*
- * SAE_J1939-73_Diagnostics_Layer.h
+ * Diagnostics_Layer.h
  *
  *  Created on: 14 juli 2021
  *      Author: Daniel Mårtensson

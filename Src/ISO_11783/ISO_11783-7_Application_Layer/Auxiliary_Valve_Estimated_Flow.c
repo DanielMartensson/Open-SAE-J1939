@@ -5,11 +5,11 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
 #include "Application_Layer.h"
 
 /* Layers */
 #include "../../SAE_J1939/SAE_J1939-21_Transport_Layer/Transport_Layer.h"
+#include "../../Hardware/Hardware.h"
 
 /*
  * Request auxiliary valve estimated flow to all ECU

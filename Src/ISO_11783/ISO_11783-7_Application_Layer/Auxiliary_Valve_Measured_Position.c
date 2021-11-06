@@ -5,11 +5,11 @@
  *      Author: Daniel Mårtensson
  */
 
-#include "../../Hardware/CAN_Network_Layer/CAN_Network_Layer.h"
 #include "Application_Layer.h"
 
 /* Layers */
 #include "../../SAE_J1939/SAE_J1939-21_Transport_Layer/Transport_Layer.h"
+#include "../../Hardware/Hardware.h"
 
 /*
  * Request auxiliary valve measured position to all ECU
@@ -41,7 +41,7 @@ ENUM_J1939_STATUS_CODES ISO_11783_Response_Request_Auxiliary_Valve_Measured_Posi
  */
 void ISO_11783_Read_Response_Request_Auxiliary_Valve_Measured_Position(J1939 *j1939, uint8_t SA, uint8_t valve_number, uint8_t data[]) {
 	j1939->from_other_ecu_auxiliary_valve_measured_position[valve_number].measured_position_percent = (data[1] << 8) | data[0];
-	j1939->from_other_ecu_auxiliary_valve_measured_position[valve_number].valve_state = data[2];
+	j1939->from_other_ecu_auxiliary_valve_measured_position[valve_number].valve_state = 0b00001111 & data[2];
 	j1939->from_other_ecu_auxiliary_valve_measured_position[valve_number].measured_position_micrometer = (data[4] << 8) | data[3];
 	j1939->from_other_ecu_auxiliary_valve_measured_position[valve_number].from_ecu_address = SA;
 }
