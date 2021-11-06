@@ -1,5 +1,5 @@
 /*
- * J1939_Enum_DM1.h
+ * Enum_DM1_DM2.h
  *
  *  Created on: 9 juli 2021
  *      Author: Daniel Mårtensson

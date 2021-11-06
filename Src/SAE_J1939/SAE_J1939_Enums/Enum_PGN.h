@@ -1,5 +1,5 @@
 /*
- * J1939_Enum_PGN.h
+ * Enum_PGN.h
  *
  *  Created on: 9 juli 2021
  *      Author: Daniel Mårtensson

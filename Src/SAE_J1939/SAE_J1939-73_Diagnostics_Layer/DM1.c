@@ -1,5 +1,5 @@
 /*
- * SAE_J1939_DM1.c
+ * DM1.c
  *
  *  Created on: 14 juli 2021
  *      Author: Daniel Mårtensson

@@ -1,5 +1,5 @@
 /*
- * SAE_J1939_Control_Byte.h
+ * Enum_Control_Byte.h
  *
  *  Created on: 14 juli 2021
  *      Author: Daniel Mårtensson

@@ -1,5 +1,5 @@
 /*
- * SAE_J1939_Read_j1939_Transport_Protocol_Connection_Management.c
+ * Transport_Protocol_Connection_Management.c
  *
  *  Created on: 14 juli 2021
  *      Author: Daniel Mårtensson

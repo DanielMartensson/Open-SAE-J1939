@@ -1,5 +1,5 @@
 /*
- * SAE_J1939_Enum_Send_Status.h
+ * Enum_Send_Status.h
  *
  *  Created on: 15 juli 2021
  *      Author: Daniel Mårtensson

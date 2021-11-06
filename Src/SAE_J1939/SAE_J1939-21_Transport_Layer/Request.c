@@ -1,5 +1,5 @@
 /*
- * SAE_J1939_Request.c
+ * Request.c
  *
  *  Created on: 14 juli 2021
  *      Author: Daniel Mårtensson

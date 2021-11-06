@@ -1,5 +1,5 @@
 /*
- * ISO_11783_Enum_Auxiliary_And_General_Purpose_Valves.h
+ * Enum_Auxiliary_And_General_Purpose_Valves.h
  *
  *  Created on: 14 juli 2021
  *      Author: Daniel Mårtensson
