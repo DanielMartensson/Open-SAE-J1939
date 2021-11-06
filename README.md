@@ -33,7 +33,10 @@ That's the debugging mode for internal CAN feedback.
 #include <stdlib.h>
 #include <stdio.h>
 
+/* Include Open SAE J1939 */
 #include "Open_SAE_J1939/Open_SAE_J1939.h"
+
+/* Include ISO 11783 */
 #include "ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
 
 int main() {
