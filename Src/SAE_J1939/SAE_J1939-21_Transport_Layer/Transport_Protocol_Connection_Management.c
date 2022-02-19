@@ -7,9 +7,6 @@
 
 #include "Transport_Layer.h"
 
-/* Layers */
-#include "../../Hardware/Hardware.h"
-
 /*
  * Store information about sequence data packages from other ECU who are going to send to this ECU
  * PGN: 0x00EC00 (60416)

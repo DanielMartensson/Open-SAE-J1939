@@ -11,7 +11,6 @@
 #include "../SAE_J1939-81_Network_Management_Layer/Network_Management_Layer.h"
 #include "../SAE_J1939-73_Diagnostics_Layer/Diagnostics_Layer.h"
 #include "../SAE_J1939-71_Application_Layer/Application_Layer.h"
-#include "../../Hardware/Hardware.h"
 
 /*
  * Store the sequence data packages from other ECU

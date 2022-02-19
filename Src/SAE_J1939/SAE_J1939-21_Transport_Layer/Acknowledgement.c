@@ -7,9 +7,6 @@
 
 #include "Transport_Layer.h"
 
-/* Layers */
-#include "../../Hardware/Hardware.h"
-
 /*
  * Store acknowledgement information from other ECU about PGN request to other ECU
  * PGN: 0x00E800 (59392)

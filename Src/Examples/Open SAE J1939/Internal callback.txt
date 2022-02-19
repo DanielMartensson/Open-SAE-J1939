@@ -1,0 +1,62 @@
+/*
+ * Main.c
+ *
+ *  Created on: 16 juli 2021
+ *      Author: Daniel Mårtensson
+ */
+
+#include <stdlib.h>
+#include <stdio.h>
+
+/* Include Open SAE J1939 */
+#include "Open_SAE_J1939/Open_SAE_J1939.h"
+
+int main() {
+
+	/* Create our J1939 structure with two ECU */
+	J1939 j1939_1 = {0};
+	
+	/* DON'T FORGET TO CHANGE THE PROCESSOR_CHOICE to INTERNAL_CALLBACK */
+
+	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
+	for(uint8_t i = 0; i < 255; i++){
+		j1939_1.other_ECU_address[i] = 0xFF;
+	}
+
+	/* Set the ECU address */
+	j1939_1.information_this_ECU.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+
+	/* Every time we want to send a CAN message, this function will be called */
+	ENUM_J1939_STATUS_CODES Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]){
+		printf("Callback_Function_Send called\n");
+		printf("ID = 0x%X\n", ID);
+		printf("DLC = %i\n", DLC);
+		for(uint8_t i = 0; i < DLC; i++)
+			printf("data[%i] = 0x%X\n", i, data[i]);
+		printf("\n");
+		return STATUS_SEND_OK;
+	}
+
+	/* Every time we want to read a CAN message, this function will be called */
+	bool Callback_Function_Read(uint32_t *ID, uint8_t data[]){
+		printf("Callback_Function_Read called\n");
+		*ID = 0xFF;
+		for(uint8_t i = 0; i < 8; i++)
+			data[i] = 0xFF;
+		return true;
+	}
+
+	/* Set the callback functions for the hardware */
+	CAN_Set_Callback_Functions(&Callback_Function_Send, &Callback_Function_Read);
+
+	/* Set NAME for ECU 2 by using Commanded Address. Also change the ECU address from 0x90 to 0x91 */
+	SAE_J1939_Send_Commanded_Address(&j1939_1, 0x90, 0x91, 5000, 500, 30, 5, FUNCTION_AUXILIARY_VALVES_CONTROL, 50, 0, INDUSTRY_GROUP_AGRICULTURAL_AND_FORESTRY, 15);
+
+	/* Send a PGN request */
+	SAE_J1939_Send_Request(&j1939_1, 0x20, PGN_AUXILIARY_VALVE_COMMAND_0);
+
+	/* Read a SAE J1939 message */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+
+	return 0;
+}
