@@ -15,7 +15,7 @@ int main() {
 
 	/* Create our J1939 structure with two ECU */
 	J1939 j1939_1 = {0};
-	
+
 	/* DON'T FORGET TO CHANGE THE PROCESSOR_CHOICE to INTERNAL_CALLBACK */
 
 	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
@@ -27,23 +27,22 @@ int main() {
 	j1939_1.information_this_ECU.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
 
 	/* Every time we want to send a CAN message, this function will be called */
-	ENUM_J1939_STATUS_CODES Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]){
+	void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]){
 		printf("Callback_Function_Send called\n");
 		printf("ID = 0x%X\n", ID);
 		printf("DLC = %i\n", DLC);
 		for(uint8_t i = 0; i < DLC; i++)
 			printf("data[%i] = 0x%X\n", i, data[i]);
 		printf("\n");
-		return STATUS_SEND_OK;
 	}
 
 	/* Every time we want to read a CAN message, this function will be called */
-	bool Callback_Function_Read(uint32_t *ID, uint8_t data[]){
+	void Callback_Function_Read(uint32_t *ID, uint8_t data[], bool *is_new_data){
 		printf("Callback_Function_Read called\n");
 		*ID = 0xFF;
 		for(uint8_t i = 0; i < 8; i++)
 			data[i] = 0xFF;
-		return true;
+		*is_new_data = true;
 	}
 
 	/* Set the callback functions for the hardware */

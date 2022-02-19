@@ -9,8 +9,8 @@
 #include "Hardware.h"
 
 /* This is a call back function e.g listener, that will be called once SAE J1939 data is going to be sent */
-static ENUM_J1939_STATUS_CODES (*Callback_Function_Send)(uint32_t, uint8_t, uint8_t[]);
-static bool (*Callback_Function_Read)(uint32_t*, uint8_t[]);
+static void (*Callback_Function_Send)(uint32_t, uint8_t, uint8_t[]);
+static void (*Callback_Function_Read)(uint32_t*, uint8_t[], bool*);
 
 /* Platform independent library headers for CAN */
 #if PROCESSOR_CHOICE == STM32
@@ -85,7 +85,8 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[]) {
     status = QT_USB_Transmit(ID, data, 8);
 	#elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
     /* Call our callback function */
-    status = Callback_Function_Send(ID, 8, data);
+    Callback_Function_Send(ID, 8, data);
+    status = STATUS_SEND_OK;
 	#else
 	/* If no processor are used, use internal feedback for debugging */
 	status = Internal_Transmit(ID, data, 8);
@@ -117,7 +118,8 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[]) {
     status = QT_USB_Transmit(ID, PGN, 3);                       /* PGN is always 3 bytes */
 	#elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
     /* Call our callback function */
-    status = Callback_Function_Send(ID, 3, PGN);
+    Callback_Function_Send(ID, 3, PGN);
+    status = STATUS_SEND_OK;
 	#else
 	/* If no processor are used, use internal feedback for debugging */
 	status = Internal_Transmit(ID, PGN, 3);
@@ -139,7 +141,7 @@ bool CAN_Read_Message(uint32_t *ID, uint8_t data[]) {
     #elif PROCESSOR_CHOICE == QT_USB
     QT_USB_Get_ID_Data(ID, data, &is_new_message);
 	#elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
-    is_new_message = Callback_Function_Read(ID, data);
+    Callback_Function_Read(ID, data, &is_new_message);
 	#else
 	/* If no processor are used, use internal feedback for debugging */
 	Internal_Receive(ID, data, &is_new_message);
@@ -147,7 +149,7 @@ bool CAN_Read_Message(uint32_t *ID, uint8_t data[]) {
 	return is_new_message;
 }
 
-void CAN_Set_Callback_Functions(ENUM_J1939_STATUS_CODES (*Callback_Function_Send_)(uint32_t, uint8_t, uint8_t[]), bool (*Callback_Function_Read_)(uint32_t*, uint8_t[])){
+void CAN_Set_Callback_Functions(void (*Callback_Function_Send_)(uint32_t, uint8_t, uint8_t[]), void (*Callback_Function_Read_)(uint32_t*, uint8_t[], bool*)){
 	Callback_Function_Send = Callback_Function_Send_;
 	Callback_Function_Read = Callback_Function_Read_;
 }
