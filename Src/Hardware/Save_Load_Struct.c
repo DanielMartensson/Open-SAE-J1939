@@ -7,6 +7,9 @@
 
 #include "Hardware.h"
 
+/* Layers */
+#include <stdio.h>
+
 bool Save_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 #if PROCESSOR_CHOICE == STM32
 	/* Save it to SD card */
@@ -23,6 +26,11 @@ bool Save_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 #elif PROCESSOR_CHOICE == AVR
 	/* Implement your memory handler function for the AVR platform */
 #endif
+	/* Write a file */
+	FILE *file;
+	file = fopen(file_name, "wb");
+	fwrite(data, 1, data_length, file);
+	fclose(file);
 	return true;
 }
 
@@ -42,5 +50,12 @@ bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 #elif PROCESSOR_CHOICE == AVR
 	/* Implement your memory handler function for the AVR platform */
 #endif
+	/* Read a file */
+	FILE *file;
+	file = fopen(file_name, "rb");
+	if(file == NULL)
+		file = fopen(file_name, "wb");
+	fread(data, 1, data_length, file);
+	fclose(file);
 	return true;
 }

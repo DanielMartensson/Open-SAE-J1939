@@ -15,7 +15,7 @@ bool Open_SAE_J1939_Startup_ECU(J1939* j1939) {
 	uint32_t ECU_information_length = sizeof(Information_this_ECU);
 	uint8_t ECU_information_data[ECU_information_length];
 	memset(ECU_information_data, 0, ECU_information_length);
-	if(!Load_Struct(ECU_information_data, ECU_information_length, INFORMATION_THIS_ECU))
+	if(!Load_Struct(ECU_information_data, ECU_information_length, (char*)INFORMATION_THIS_ECU))
 		return false; /* Problems occurs */
 	memcpy(&j1939->information_this_ECU, (Information_this_ECU*)ECU_information_data, ECU_information_length);
 
