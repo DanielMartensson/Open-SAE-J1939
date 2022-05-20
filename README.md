@@ -112,7 +112,7 @@ See the examples in `Examples -> SAE J1939` how to change the address, NAME or i
  - Q: What is your plan with the library?
  	- A: To make SAE J1939 available for everybody
  - Q: I don't have CAN-bus, but can I use this library anyway with UART, USB, WiFi etc?
- 	- A: Yes. This is only a way to shape a massage in a specific way.
+ 	- A: Yes. This is only a way to shape a message in a specific way.
  - Q: Can I send data with this library, even if I don't have CAN-bus?
  	- A: Yes. There are something called DM14 transmit request, DM15 status response and DM16 binary transfer. Use that if you want to transfer data in an industrial way.
  - Q: Can I send multi package messages from from multiple ECU:s to one ECU at the same time?
