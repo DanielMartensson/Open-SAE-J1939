@@ -14,6 +14,9 @@ https://github.com/DanielMartensson/Easy-CANopen/
 Looking for a QT C++ framework implementation with Open SAE J1939 over USB? 
 https://github.com/DanielMartensson/OpenSourceLogger
 
+Logging for a STM32 project with Open SAE J1939?
+https://github.com/DanielMartensson/STM32-PLC
+
 # Getting started
 
 The first thing you need to know is to read the document `Open SAE J1939.pdf` inside the `Documentation` folder.
