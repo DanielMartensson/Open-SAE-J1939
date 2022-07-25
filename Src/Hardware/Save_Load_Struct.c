@@ -19,19 +19,21 @@ bool Save_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 	STM32_PLC_SD_Write_Data(data, data_length);
 	STM32_PLC_SD_Close_File();
 	STM32_PLC_SD_Unmount_Card();
+	return true;
 #elif PROCESSOR_CHOICE == ARDUINO
 	/* Implement your memory handler function for the Arduino platform */
 #elif PROCESSOR_CHOICE == PIC
 	/* Implement your memory handler function for the PIC platform */
 #elif PROCESSOR_CHOICE == AVR
 	/* Implement your memory handler function for the AVR platform */
-#endif
+#else
 	/* Write a file */
 	FILE *file;
 	file = fopen(file_name, "wb");
 	fwrite(data, 1, data_length, file);
 	fclose(file);
 	return true;
+#endif
 }
 
 bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
@@ -43,13 +45,14 @@ bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 	STM32_PLC_SD_Read_Data(data, data_length);
 	STM32_PLC_SD_Close_File();
 	STM32_PLC_SD_Unmount_Card();
+	return true;
 #elif PROCESSOR_CHOICE == ARDUINO
 	/* Implement your memory handler function for the Arduino platform */
 #elif PROCESSOR_CHOICE == PIC
 	/* Implement your memory handler function for the PIC platform */
 #elif PROCESSOR_CHOICE == AVR
 	/* Implement your memory handler function for the AVR platform */
-#endif
+#else
 	/* Read a file */
 	FILE *file;
 	file = fopen(file_name, "rb");
@@ -58,4 +61,5 @@ bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 	fread(data, 1, data_length, file);
 	fclose(file);
 	return true;
+#endif
 }
