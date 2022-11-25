@@ -46,7 +46,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM1(J1939* j1939, uint8_t DA)
 		j1939->this_ecu_tp_dt.data[0] = (j1939->this_dm.dm1.SAE_lamp_status_malfunction_indicator << 6) | (j1939->this_dm.dm1.SAE_lamp_status_red_stop << 4) | (j1939->this_dm.dm1.SAE_lamp_status_amber_warning << 2) | (j1939->this_dm.dm1.SAE_lamp_status_protect_lamp);
 		j1939->this_ecu_tp_dt.data[1] = (j1939->this_dm.dm1.SAE_flash_lamp_malfunction_indicator << 6) | (j1939->this_dm.dm1.SAE_flash_lamp_red_stop << 4) | (j1939->this_dm.dm1.SAE_flash_lamp_amber_warning << 2) | (j1939->this_dm.dm1.SAE_flash_lamp_protect_lamp);
 		/* Load DTCs into TP data package */
-		for (uint8_t i = 0; i < j1939->this_ecu_tp_cm.total_message_size; i=i++){
+		for (uint8_t i = 0; i < j1939->this_ecu_tp_cm.total_message_size; i++){
 			j1939->this_ecu_tp_dt.data[i*4 + 2] = j1939->this_dm.dm1.SPN[i];
 			j1939->this_ecu_tp_dt.data[i*4 + 3] = j1939->this_dm.dm1.SPN[i] >> 8;
 			j1939->this_ecu_tp_dt.data[i*4 + 4] = ((j1939->this_dm.dm1.SPN[i] >> 11) & 0b11100000) | j1939->this_dm.dm1.FMI[i];
@@ -77,6 +77,7 @@ void SAE_J1939_Read_Response_Request_DM1(J1939 *j1939, uint8_t SA, uint8_t data[
 		memset(&j1939->from_other_ecu_dm.dm1.SPN, 0, sizeof(j1939->from_other_ecu_dm.dm1.SPN)); 	/* This set all fields of dm1 to 0 */
 	}
 
+	/* Decode lamp status */
 	j1939->from_other_ecu_dm.dm1.SAE_lamp_status_malfunction_indicator = data[0] >> 6;
 	j1939->from_other_ecu_dm.dm1.SAE_lamp_status_red_stop = (data[0] >> 4) & 0b00000011;
 	j1939->from_other_ecu_dm.dm1.SAE_lamp_status_amber_warning = (data[0] >> 2) & 0b00000011;
@@ -86,7 +87,7 @@ void SAE_J1939_Read_Response_Request_DM1(J1939 *j1939, uint8_t SA, uint8_t data[
 	j1939->from_other_ecu_dm.dm1.SAE_flash_lamp_amber_warning = (data[1] >> 2) & 0b00000011;
 	j1939->from_other_ecu_dm.dm1.SAE_flash_lamp_protect_lamp = data[1] & 0b00000011;
 
-	/*Read and Decode DTC info for up to 10 active DTCs*/
+	/* Read and Decode DTC info for up to 10 active DTCs */
 	for (uint8_t i = 0; i < errors_dm1_active && i < 10; i++){
 		j1939->from_other_ecu_dm.dm1.SPN[i] = ((data[(i*4)+4] & 0b11100000) << 11) | (data[(i*4)+3] << 8) | data[(i*4)+2];
 		j1939->from_other_ecu_dm.dm1.FMI[i] = data[(i*4)+4] & 0b00011111;
@@ -95,14 +96,11 @@ void SAE_J1939_Read_Response_Request_DM1(J1939 *j1939, uint8_t SA, uint8_t data[
 		j1939->from_other_ecu_dm.dm1.from_ecu_address[i] = SA;
 	}
 
-
 	/* Check if we have no fault cause 
-	 * When there is a single DM1 code, and the SPN is 0, this signals all DM1 messages have cleared and no active messages are left
-	 */
+	 * When there is a single DM1 code, and the SPN is 0, this signals all DM1 messages have cleared and no active messages are left */
 	if (errors_dm1_active == 1 && j1939->from_other_ecu_dm.dm1.SPN == 0) {
 		j1939->from_other_ecu_dm.errors_dm1_active = 0;
 	} else if (j1939->from_other_ecu_dm.errors_dm1_active > errors_dm1_active) {
 		j1939->from_other_ecu_dm.errors_dm1_active = errors_dm1_active;
 	}
-
 }

@@ -46,7 +46,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM2(J1939 *j1939, uint8_t DA)
 		j1939->this_ecu_tp_dt.data[0] = (j1939->this_dm.dm2.SAE_lamp_status_malfunction_indicator << 6) | (j1939->this_dm.dm2.SAE_lamp_status_red_stop << 4) | (j1939->this_dm.dm2.SAE_lamp_status_amber_warning << 2) | (j1939->this_dm.dm2.SAE_lamp_status_protect_lamp);
 		j1939->this_ecu_tp_dt.data[1] = (j1939->this_dm.dm2.SAE_flash_lamp_malfunction_indicator << 6) | (j1939->this_dm.dm2.SAE_flash_lamp_red_stop << 4) | (j1939->this_dm.dm2.SAE_flash_lamp_amber_warning << 2) | (j1939->this_dm.dm2.SAE_flash_lamp_protect_lamp);
 		/* Load DTCs into TP data package */
-		for (uint8_t i = 0; i < j1939->this_ecu_tp_cm.total_message_size; i=i++){
+		for (uint8_t i = 0; i < j1939->this_ecu_tp_cm.total_message_size; i++){
 			j1939->this_ecu_tp_dt.data[i*4 + 2] = j1939->this_dm.dm2.SPN[i];
 			j1939->this_ecu_tp_dt.data[i*4 + 3] = j1939->this_dm.dm2.SPN[i] >> 8;
 			j1939->this_ecu_tp_dt.data[i*4 + 4] = ((j1939->this_dm.dm2.SPN[i] >> 11) & 0b11100000) | j1939->this_dm.dm2.FMI[i];
