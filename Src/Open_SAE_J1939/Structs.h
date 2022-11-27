@@ -67,11 +67,11 @@ struct DM1 {
 	uint8_t SAE_flash_lamp_protect_lamp;
 
 	/* Fault location, problem and codes */
-	uint32_t SPN;									/* Location where the fault exist */
-	uint8_t FMI;									/* Type of problem */
-	uint8_t SPN_conversion_method;					/* If SPN_conversion_method = 1 that means Diagnostics Trouble Code are aligned using a newer conversion method. If SPN_conversion_method = 0 means one of the three Diagnostics Trouble Code conversion methods is used and ECU manufacture shall know which of the three methods is used */
-	uint8_t occurrence_count;						/* This tells how many times failure has occurred. Every time fault goes from inactive to active, the occurence_count is incremented by 1. If fault becomes active for more than 126 times the occurence_count remains 126 */
-	uint8_t from_ecu_address;						/* From which ECU came this message */
+	uint32_t SPN [10];									/* Location where the fault exist */
+	uint8_t FMI [10];									/* Type of problem */
+	uint8_t SPN_conversion_method [10];					/* If SPN_conversion_method = 1 that means Diagnostics Trouble Code are aligned using a newer conversion method. If SPN_conversion_method = 0 means one of the three Diagnostics Trouble Code conversion methods is used and ECU manufacture shall know which of the three methods is used */
+	uint8_t occurrence_count [10];						/* This tells how many times failure has occurred. Every time fault goes from inactive to active, the occurence_count is incremented by 1. If fault becomes active for more than 126 times the occurence_count remains 126 */
+	uint8_t from_ecu_address [10];						/* From which ECU came this message */
 };
 
 /* PGN: 0x00D800 - Storing the DM15 response from the reading process */
