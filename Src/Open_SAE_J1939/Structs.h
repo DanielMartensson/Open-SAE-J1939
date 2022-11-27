@@ -15,6 +15,9 @@
 /* This text name follows 8.3 filename standard - Important if you want to save to SD card */
 #define INFORMATION_THIS_ECU "ECUINFO.TXT"
 
+/* This is the maximum size for transfering data */
+#define MAX_TP_DT 1785
+
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {
 	uint8_t control_byte;							/* This indicates the status of the requested information about PGN: */
@@ -36,7 +39,7 @@ struct TP_CM {
 /* PGN: 0x00EB00 - Storing the Transport Protocol Data Transfer from the reading process */
 struct TP_DT {
 	uint8_t sequence_number;						/* When this sequence number is the same as number_of_packages from TP_CM, then we have our complete message */
-	uint8_t data[1785];								/* This is the collected data we are going to send. Also we are using this as a filler */
+	uint8_t data[MAX_TP_DT];						/* This is the collected data we are going to send. Also we are using this as a filler */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 

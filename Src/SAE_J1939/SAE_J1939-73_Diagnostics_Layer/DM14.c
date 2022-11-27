@@ -44,7 +44,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Read_Request_DM14(J1939 *j1939, uint8_t DA, ui
 
 	/* Load up the amount of bytes we want to send via DM16 */
 	uint8_t number_of_occurences = number_of_requested_bytes;
-	uint8_t raw_binary_data[number_of_requested_bytes];
+	uint8_t raw_binary_data[MAX_TP_DT];
 
 	/* Here we ask the flash, eeprom or ram and use pointers */
 	FLASH_EEPROM_RAM_Memory(&number_of_requested_bytes, pointer_type, &command, &pointer, &pointer_extension, &key, raw_binary_data);

@@ -31,7 +31,7 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	/* Our message are complete - Build it and call it complete_data[total_message_size] */
 	uint32_t PGN = j1939->from_other_ecu_tp_cm.PGN_of_the_packeted_message;
 	uint16_t total_message_size = j1939->from_other_ecu_tp_cm.total_message_size;
-	uint8_t complete_data[total_message_size];
+	uint8_t complete_data[MAX_TP_DT];
 	uint16_t inserted_bytes = 0;
 	for (uint8_t i = 0; i < j1939->from_other_ecu_tp_dt.sequence_number; i++)
 		for (uint8_t j = 0; j < 7; j++)

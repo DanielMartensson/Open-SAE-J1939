@@ -48,7 +48,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Response_DM15(J1939 *j1939, uint8_t DA, u
 void SAE_J1939_Read_Response_DM15(J1939 *j1939, uint8_t SA, uint8_t data[]);
 
 /* DM16 */
-ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t DA, uint8_t number_of_occurences, uint8_t raw_binary_data[]);
+ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t DA, const uint8_t number_of_occurences, uint8_t raw_binary_data[]);
 void SAE_J1939_Read_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t SA, uint8_t data[]);
 
 #ifdef __cplusplus
