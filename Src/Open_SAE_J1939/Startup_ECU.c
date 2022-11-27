@@ -13,7 +13,7 @@
 /* Load our ECU parameters into J1939 structure. Very useful if you want your ECU remember its NAME + address + identifications at startup. */
 bool Open_SAE_J1939_Startup_ECU(J1939* j1939) {
 	uint32_t ECU_information_length = sizeof(Information_this_ECU);
-	uint8_t ECU_information_data[ECU_information_length];
+	uint8_t ECU_information_data[sizeof(Information_this_ECU)];
 	memset(ECU_information_data, 0, ECU_information_length);
 	if(!Load_Struct(ECU_information_data, ECU_information_length, (char*)INFORMATION_THIS_ECU))
 		return false; /* Problems occurs */

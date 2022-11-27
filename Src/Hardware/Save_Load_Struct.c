@@ -28,7 +28,7 @@ bool Save_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 	/* Implement your memory handler function for the AVR platform */
 #else
 	/* Write a file */
-	FILE *file;
+	FILE *file = NULL;
 	file = fopen(file_name, "wb");
 	fwrite(data, 1, data_length, file);
 	fclose(file);
@@ -54,7 +54,7 @@ bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 	/* Implement your memory handler function for the AVR platform */
 #else
 	/* Read a file */
-	FILE *file;
+	FILE *file = NULL;
 	file = fopen(file_name, "rb");
 	if(file == NULL)
 		file = fopen(file_name, "wb");
