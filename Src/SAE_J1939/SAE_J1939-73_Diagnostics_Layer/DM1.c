@@ -98,9 +98,9 @@ void SAE_J1939_Read_Response_Request_DM1(J1939 *j1939, uint8_t SA, uint8_t data[
 
 	/* Check if we have no fault cause 
 	 * When there is a single DM1 code, and the SPN is 0, this signals all DM1 messages have cleared and no active messages are left */
-	if (errors_dm1_active == 1 && j1939->from_other_ecu_dm.dm1.SPN == 0) {
+	if (errors_dm1_active == 1 && j1939->from_other_ecu_dm.dm1.SPN[0] == 0) {
 		j1939->from_other_ecu_dm.errors_dm1_active = 0;
-	} else if (j1939->from_other_ecu_dm.errors_dm1_active > errors_dm1_active) {
+	} else if (j1939->from_other_ecu_dm.errors_dm1_active < errors_dm1_active) {
 		j1939->from_other_ecu_dm.errors_dm1_active = errors_dm1_active;
 	}
 }

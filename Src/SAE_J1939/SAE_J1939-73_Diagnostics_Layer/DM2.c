@@ -97,9 +97,9 @@ void SAE_J1939_Read_Response_Request_DM2(J1939 *j1939, uint8_t SA, uint8_t data[
 	}
 
 	/* Assign number of DTCs in previously active list */
-	if (errors_dm2_active == 1 && j1939->from_other_ecu_dm.dm2.SPN == 0) {
+	if (errors_dm2_active == 1 && j1939->from_other_ecu_dm.dm2.SPN[0] == 0) {
 		j1939->from_other_ecu_dm.errors_dm2_active = 0;
-	} else if (j1939->from_other_ecu_dm.errors_dm2_active > errors_dm2_active) {
+	} else if (j1939->from_other_ecu_dm.errors_dm2_active < errors_dm2_active) {
 		j1939->from_other_ecu_dm.errors_dm2_active = errors_dm2_active;
 	}
 }
