@@ -65,7 +65,7 @@ static void Internal_Receive(uint32_t *ID, uint8_t data[], bool *is_new_message)
 #endif
 
 ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[]) {
-	ENUM_J1939_STATUS_CODES status;
+	ENUM_J1939_STATUS_CODES status = STATUS_SEND_BUSY;
 	#if PROCESSOR_CHOICE == STM32
 	CAN_TxHeaderTypeDef TxHeader;
 	TxHeader.DLC = 8;											/* Here we are sending 8 bytes */
@@ -98,7 +98,7 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[]) {
  * PGN: 0x00EA00 (59904)
  */
 ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[]) {
-	ENUM_J1939_STATUS_CODES status;
+	ENUM_J1939_STATUS_CODES status = STATUS_SEND_BUSY;
 	#if PROCESSOR_CHOICE == STM32
 	CAN_TxHeaderTypeDef TxHeader;
 	TxHeader.DLC = 3;											/* Here we are only sending 3 bytes */
@@ -129,7 +129,7 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[]) {
 
 /* Read the current CAN-bus message. Returning false if the message has been read before, else true */
 bool CAN_Read_Message(uint32_t *ID, uint8_t data[]) {
-	bool is_new_message;
+	bool is_new_message = false;
 	#if PROCESSOR_CHOICE == STM32
 	STM32_PLC_CAN_Get_ID_Data(ID, data, &is_new_message);
 	#elif PROCESSOR_CHOICE == ARDUINO
