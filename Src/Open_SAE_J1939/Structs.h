@@ -15,8 +15,10 @@
 /* This text name follows 8.3 filename standard - Important if you want to save to SD card */
 #define INFORMATION_THIS_ECU "ECUINFO.TXT"
 
-/* This is the maximum size for transfering data */
+/* This is the maximum size for transferring data */
 #define MAX_TP_DT 1785
+#define MAX_IDENTIFICATION 30
+#define MAX_DM_FIELD 10
 
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {
@@ -70,11 +72,11 @@ struct DM1 {
 	uint8_t SAE_flash_lamp_protect_lamp;
 
 	/* Fault location, problem and codes */
-	uint32_t SPN [10];									/* Location where the fault exist */
-	uint8_t FMI [10];									/* Type of problem */
-	uint8_t SPN_conversion_method [10];					/* If SPN_conversion_method = 1 that means Diagnostics Trouble Code are aligned using a newer conversion method. If SPN_conversion_method = 0 means one of the three Diagnostics Trouble Code conversion methods is used and ECU manufacture shall know which of the three methods is used */
-	uint8_t occurrence_count [10];						/* This tells how many times failure has occurred. Every time fault goes from inactive to active, the occurence_count is incremented by 1. If fault becomes active for more than 126 times the occurence_count remains 126 */
-	uint8_t from_ecu_address [10];						/* From which ECU came this message */
+	uint32_t SPN [MAX_DM_FIELD];						/* Location where the fault exist */
+	uint8_t FMI [MAX_DM_FIELD];							/* Type of problem */
+	uint8_t SPN_conversion_method [MAX_DM_FIELD];		/* If SPN_conversion_method = 1 that means Diagnostics Trouble Code are aligned using a newer conversion method. If SPN_conversion_method = 0 means one of the three Diagnostics Trouble Code conversion methods is used and ECU manufacture shall know which of the three methods is used */
+	uint8_t occurrence_count [MAX_DM_FIELD];			/* This tells how many times failure has occurred. Every time fault goes from inactive to active, the occurence_count is incremented by 1. If fault becomes active for more than 126 times the occurence_count remains 126 */
+	uint8_t from_ecu_address [MAX_DM_FIELD];			/* From which ECU came this message */
 };
 
 /* PGN: 0x00D800 - Storing the DM15 response from the reading process */
@@ -108,27 +110,27 @@ struct DM {
 /* PGN: 0x00FEDA - Storing the software identification from the reading process */
 struct Software_identification {
 	uint8_t number_of_fields;						/* How many numbers contains in the identifications array */
-	uint8_t identifications[30];					/* This can be for example ASCII */
+	uint8_t identifications[MAX_IDENTIFICATION];	/* This can be for example ASCII */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00FDC5 - Storing the ECU identification from the reading process */
 struct ECU_identification {
 	uint8_t length_of_each_field;					/* The real length of the fields - Not part of J1939 standard, only for the user */
-	uint8_t ecu_part_number[30];					/* ASCII field */
-	uint8_t ecu_serial_number[30];					/* ASCII field */
-	uint8_t ecu_location[30];						/* ASCII field */
-	uint8_t ecu_type[30];							/* ASCII field */
+	uint8_t ecu_part_number[MAX_IDENTIFICATION];	/* ASCII field */
+	uint8_t ecu_serial_number[MAX_IDENTIFICATION];	/* ASCII field */
+	uint8_t ecu_location[MAX_IDENTIFICATION];		/* ASCII field */
+	uint8_t ecu_type[MAX_IDENTIFICATION];			/* ASCII field */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* PGN: 0x00FEEB - Storing the component identification from the reading process */
 struct Component_identification {
 	uint8_t length_of_each_field;					/* The real length of the fields - Not part of J1939 standard, only for the user  */
-	uint8_t component_product_date[30];				/* ASCII field */
-	uint8_t component_model_name[30];				/* ASCII field */
-	uint8_t component_serial_number[30];			/* ASCII field */
-	uint8_t component_unit_name[30];				/* ASCII field */
+	uint8_t component_product_date[MAX_IDENTIFICATION];	/* ASCII field */
+	uint8_t component_model_name[MAX_IDENTIFICATION];	/* ASCII field */
+	uint8_t component_serial_number[MAX_IDENTIFICATION];/* ASCII field */
+	uint8_t component_unit_name[MAX_IDENTIFICATION];	/* ASCII field */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
