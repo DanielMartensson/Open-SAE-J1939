@@ -43,7 +43,6 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Read_Request_DM14(J1939 *j1939, uint8_t DA, ui
 	uint16_t key = (data[7] << 8) | data[6];
 
 	/* Load up the amount of bytes we want to send via DM16 */
-	uint8_t number_of_occurences = number_of_requested_bytes;
 	uint8_t raw_binary_data[MAX_TP_DT];
 
 	/* Here we ask the flash, eeprom or ram and use pointers */
@@ -59,7 +58,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Read_Request_DM14(J1939 *j1939, uint8_t DA, ui
 
 	/* Check if our message was OK - Send DM16 binary data transfer */
 	if(status == STATUS_DM15_PROCEED) {
-		if(SAE_J1939_Send_Binary_Data_Transfer_DM16(j1939, DA, number_of_occurences, raw_binary_data) == STATUS_SEND_OK)
+		if(SAE_J1939_Send_Binary_Data_Transfer_DM16(j1939, DA, number_of_allowed_bytes, raw_binary_data) == STATUS_SEND_OK)
 			status = SAE_J1939_Send_Response_DM15(j1939, DA, number_of_allowed_bytes, STATUS_DM15_OPERATION_COMPLETED, EDC_parameter, EDCP_extention, seed);
 		else
 			status = SAE_J1939_Send_Response_DM15(j1939, DA, number_of_allowed_bytes, STATUS_DM15_OPERATION_FAILED, EDC_parameter, EDCP_extention, seed);

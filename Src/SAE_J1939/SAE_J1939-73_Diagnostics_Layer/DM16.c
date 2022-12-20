@@ -53,10 +53,9 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, u
 void SAE_J1939_Read_Binary_Data_Transfer_DM16(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	j1939->from_other_ecu_dm.dm16.number_of_occurences = data[0];
 	j1939->from_other_ecu_dm.dm16.from_ecu_address = SA;
-	for(uint8_t i = 0; i < 255; i++)
-		if(i < data[0])
-			j1939->from_other_ecu_dm.dm16.raw_binary_data[i] = data[i+1];
-		else
-			j1939->from_other_ecu_dm.dm16.raw_binary_data[i] = 0xFF;		/* No data */
+	memset(j1939->from_other_ecu_dm.dm16.raw_binary_data, 0, sizeof(j1939->from_other_ecu_dm.dm16.raw_binary_data));
+	for(uint8_t i = 0; i < data[0]; i++){
+		j1939->from_other_ecu_dm.dm16.raw_binary_data[i] = data[i+1];
+	}
 }
 
