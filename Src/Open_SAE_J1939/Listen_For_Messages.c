@@ -38,7 +38,8 @@ bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 			SAE_J1939_Read_Acknowledgement(j1939, SA, data);
 		else if (id0 == 0x18 && id1 == 0xD8 && DA == j1939->information_this_ECU.this_ECU_address)
 			SAE_J1939_Read_Response_DM15(j1939, SA, data);
-
+		else if(id0 == 0x18 && id1 == 0xD7 && DA == j1939->information_this_ECU.this_ECU_address)
+			SAE_J1939_Read_Binary_Data_Transfer_DM16(j1939, SA, data);
 
 		/* Read Transport Protocol information from other ECU */
 		else if(id0 == 0x1C && id1 == 0xEC && DA == j1939->information_this_ECU.this_ECU_address)

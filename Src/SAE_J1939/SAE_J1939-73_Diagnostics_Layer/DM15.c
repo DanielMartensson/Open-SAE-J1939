@@ -34,7 +34,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Response_DM15(J1939 *j1939, uint8_t DA, u
  * PGN: 0x00D800 (55296)
  */
 void SAE_J1939_Read_Response_DM15(J1939 *j1939, uint8_t SA, uint8_t data[]) {
-	j1939->from_other_ecu_dm.dm15.number_of_allowed_bytes = (data[1] >> 3) | data[0];
+	j1939->from_other_ecu_dm.dm15.number_of_allowed_bytes = ((data[1] & 0b11100000) << 3) | data[0];
 	j1939->from_other_ecu_dm.dm15.status = (data[1] >> 1) & 0b0000111;
 	j1939->from_other_ecu_dm.dm15.EDC_parameter = (data[4] << 16) | (data[3] << 8) | data[2];
 	j1939->from_other_ecu_dm.dm15.EDCP_extention = data[5];

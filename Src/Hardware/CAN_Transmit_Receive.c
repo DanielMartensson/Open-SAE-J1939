@@ -153,3 +153,27 @@ void CAN_Set_Callback_Functions(void (*Callback_Function_Send_)(uint32_t, uint8_
 	Callback_Function_Send = Callback_Function_Send_;
 	Callback_Function_Read = Callback_Function_Read_;
 }
+
+void CAN_Delay(uint8_t milliseconds) {
+	#if PROCESSOR_CHOICE == STM32
+
+	#elif PROCESSOR_CHOICE == ARDUINO
+
+	#elif PROCESSOR_CHOICE == PIC
+
+	#elif PROCESSOR_CHOICE == AVR
+
+	#elif PROCESSOR_CHOICE == QT_USB
+
+	#elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
+	/* Storing start time */
+	clock_t start_time = clock();
+
+	/* looping till required time is not achieved */
+	while (clock() < start_time + milliseconds) {
+		;
+	}
+	#else
+	/* Nothing */
+	#endif
+}

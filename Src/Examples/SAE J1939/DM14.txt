@@ -1,0 +1,60 @@
+/*
+ * Main.c
+ *
+ *  Created on: 16 juli 2021
+ *      Author: Daniel Mårtensson
+ */
+
+#include <stdlib.h>
+#include <stdio.h>
+
+/* Include Open SAE J1939 */
+#include "Open_SAE_J1939/Open_SAE_J1939.h"
+
+int main() {
+
+	/* Create our J1939 structure with two ECU */
+	J1939 j1939_1 = {0};
+	J1939 j1939_2 = {0};
+
+	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
+	for(uint8_t i = 0; i < 255; i++){
+		j1939_1.other_ECU_address[i] = 0xFF;
+		j1939_2.other_ECU_address[i] = 0xFF;
+	}
+
+	/* Set the ECU address */
+	j1939_1.information_this_ECU.this_ECU_address = 0x1;							/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0x2;
+
+	/* Send data from ECU 2 to ECU 1 */
+	uint8_t number_of_occurences = 37;												/* How many bytes to transfer */
+	uint8_t pointer_type = 1;														/* User defined */
+	uint8_t command = 0x7;															/* User defined */
+	uint32_t pointer = 0xFFFFFF;													/* User defined */
+	uint8_t pointer_extension = 0xFF; 												/* User defined */
+	uint16_t key = 0xFFFF;															/* User defined */
+
+	/* Send binary request to ECU 2 */
+	SAE_J1939_Send_Request_DM14(&j1939_1, 0x2, number_of_occurences, pointer_type, command, pointer, pointer_extension, key);
+
+	/* This is only here because we using the internal message buffer - In real CAN applications, this mess is not needed */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);									/* Read DM14 request, send DM15 response and DM16 in TP_CM_RTS, DM15 response */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);									/* Read DM15 response */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);									/* Read DM16 in TP_CM_RTS response and answer with DM16 in TP_CM_CTS response */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);									/* Read DM15 response */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);									/* Read DM16 in TP_CM_CTS response and start sending data */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);									/* Read DM16 data */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);									/* Read DM16 data */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);									/* Read DM16 data */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);									/* Read DM16 data */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);									/* Read DM16 data */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);									/* Read DM16 data */
+
+
+	/* Pick up the message */
+	printf("Message length: %i\n", j1939_1.from_other_ecu_dm.dm16.number_of_occurences);
+	printf("Message text: %s\n", (char*) j1939_1.from_other_ecu_dm.dm16.raw_binary_data);
+	printf("From ECU address: 0x%X", j1939_1.from_other_ecu_dm.dm16.from_ecu_address);
+	return 0;
+}
