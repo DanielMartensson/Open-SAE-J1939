@@ -29,10 +29,10 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM2(J1939 *j1939, uint8_t DA)
 		uint8_t data[8];
 		data[0] = (j1939->this_dm.dm2.SAE_lamp_status_malfunction_indicator << 6) | (j1939->this_dm.dm2.SAE_lamp_status_red_stop << 4) | (j1939->this_dm.dm2.SAE_lamp_status_amber_warning << 2) | (j1939->this_dm.dm2.SAE_lamp_status_protect_lamp);
 		data[1] = (j1939->this_dm.dm2.SAE_flash_lamp_malfunction_indicator << 6) | (j1939->this_dm.dm2.SAE_flash_lamp_red_stop << 4) | (j1939->this_dm.dm2.SAE_flash_lamp_amber_warning << 2) | (j1939->this_dm.dm2.SAE_flash_lamp_protect_lamp);
-		data[2] = j1939->this_dm.dm2.SPN[1];
-		data[3] = j1939->this_dm.dm2.SPN[1] >> 8;
-		data[4] = ((j1939->this_dm.dm2.SPN[1] >> 11) & 0b11100000) | j1939->this_dm.dm2.FMI[1];
-		data[5] = (j1939->this_dm.dm2.SPN_conversion_method[1] << 7) | j1939->this_dm.dm2.occurrence_count[1];
+		data[2] = j1939->this_dm.dm2.SPN[0];
+		data[3] = j1939->this_dm.dm2.SPN[0] >> 8;
+		data[4] = ((j1939->this_dm.dm2.SPN[0] >> 11) & 0b11100000) | j1939->this_dm.dm2.FMI[0];
+		data[5] = (j1939->this_dm.dm2.SPN_conversion_method[0] << 7) | j1939->this_dm.dm2.occurrence_count[0];
 		data[6] = 0xFF;													/* Reserved */
 		data[7] = 0xFF;													/* Reserved */
 		return CAN_Send_Message(ID, data);
@@ -72,7 +72,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM2(J1939 *j1939, uint8_t DA)
  * PGN: 0x00FECB (65227)
  */
 void SAE_J1939_Read_Response_Request_DM2(J1939 *j1939, uint8_t SA, uint8_t data[], uint8_t errors_dm2_active) {
-	/* iF there are fewer active DTCs than previous, clear the list so old DTCs do not remain after parsing the new ones */
+	/* If there are fewer active DTCs than previous, clear the list so old DTCs do not remain after parsing the new ones */
 	if (errors_dm2_active < j1939->from_other_ecu_dm.errors_dm2_active) {
 		memset(&j1939->from_other_ecu_dm.dm2.SPN, 0, sizeof(j1939->from_other_ecu_dm.dm2.SPN)); 	/* This set all fields of dm1 to 0 */
 	}
