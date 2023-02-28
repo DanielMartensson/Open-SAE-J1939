@@ -24,19 +24,19 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Software_Identification(J1939 *j1
  * PGN: 0x00FEDA (65242)
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Software_Identification(J1939* j1939, uint8_t DA) {
-	uint8_t number_of_fields = j1939->information_this_ECU.this_identifications.software_identification.number_of_fields;
+	uint8_t i, number_of_fields = j1939->information_this_ECU.this_identifications.software_identification.number_of_fields;
 	if (number_of_fields < 9) {
 		uint32_t ID = (0x18FEDA << 8) | j1939->information_this_ECU.this_ECU_address;
 		uint8_t data[8];
 		data[0] = number_of_fields;
-		for(uint8_t i = 0; i < 7; i++)
+		for(i = 0; i < 7; i++)
 			data[i+1] = j1939->information_this_ECU.this_identifications.software_identification.identifications[i];
 		return CAN_Send_Message(ID, data);
 	} else {
 		/* Multiple messages - Load data */
 		j1939->this_ecu_tp_cm.total_message_size = 0;
 		j1939->this_ecu_tp_dt.data[j1939->this_ecu_tp_cm.total_message_size++] = number_of_fields;
-		for(uint8_t i = 0; i < number_of_fields; i++)
+		for(i = 0; i < number_of_fields; i++)
 			j1939->this_ecu_tp_dt.data[j1939->this_ecu_tp_cm.total_message_size++] = j1939->information_this_ECU.this_identifications.software_identification.identifications[i];
 
 		/* Send TP CM */
@@ -61,6 +61,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Software_Identification(J1939
 void SAE_J1939_Read_Response_Request_Software_Identification(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	j1939->from_other_ecu_identifications.software_identification.number_of_fields = data[0];			 /* How many fields we have */
 	j1939->from_other_ecu_identifications.software_identification.from_ecu_address = SA;
-	for(uint8_t i = 0; i < data[0]; i++)
+	uint8_t i;
+	for(i = 0; i < data[0]; i++)
 		j1939->from_other_ecu_identifications.software_identification.identifications[i] = data[i+1];	 /* 1 for the number of fields */
 }

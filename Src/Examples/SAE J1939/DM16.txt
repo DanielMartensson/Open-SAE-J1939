@@ -18,7 +18,8 @@ int main() {
 	J1939 j1939_2 = {0};
 
 	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
-	for(uint8_t i = 0; i < 255; i++){
+	uint8_t i;
+	for(i = 0; i < 255; i++){
 		j1939_1.other_ECU_address[i] = 0xFF;
 		j1939_2.other_ECU_address[i] = 0xFF;
 	}
@@ -52,7 +53,7 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
 	/* Read binary data at ECU 2 - Ten times would be good enough to get all messages because this message above is multi-packet */
-	for(uint8_t i = 0; i < 10; i++)
+	for(i = 0; i < 10; i++)
 		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 
 	/* Pick up the message */

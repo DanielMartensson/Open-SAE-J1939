@@ -18,9 +18,7 @@
 #define PROCESSOR_CHOICE 0
 
 /* C Standard library */
-#include <stdbool.h>
-#include <stdint.h>
-#include <time.h>
+#include "../Open_SAE_J1939/C89_Library.h"
 
 /* Enums */
 #include "../SAE_J1939/SAE_J1939_Enums/Enum_DM14_DM15.h"

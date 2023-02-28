@@ -20,8 +20,8 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	/* Save the sequence data */
 	j1939->from_other_ecu_tp_dt.sequence_number = data[0];
 	j1939->from_other_ecu_tp_dt.from_ecu_address = SA;
-	uint8_t index = data[0] - 1;
-	for (uint8_t i = 1; i < 8; i++)
+	uint8_t i, j, index = data[0] - 1;
+	for (i = 1; i < 8; i++)
 		j1939->from_other_ecu_tp_dt.data[index*7 + i-1] = data[i]; /* For every package, we send 7 bytes of data where the first byte data[0] is the sequence number */
 
 	/* Check if we have completed our message - Return = Not completed */
@@ -33,8 +33,8 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	uint16_t total_message_size = j1939->from_other_ecu_tp_cm.total_message_size;
 	uint8_t complete_data[MAX_TP_DT];
 	uint16_t inserted_bytes = 0;
-	for (uint8_t i = 0; i < j1939->from_other_ecu_tp_dt.sequence_number; i++)
-		for (uint8_t j = 0; j < 7; j++)
+	for (i = 0; i < j1939->from_other_ecu_tp_dt.sequence_number; i++)
+		for (j = 0; j < 7; j++)
 			if (inserted_bytes < total_message_size)
 				complete_data[inserted_bytes++] = j1939->from_other_ecu_tp_dt.data[i*7 + j];
 
@@ -79,12 +79,12 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t DA){
 	uint32_t ID = (0x1CEB << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
-	uint8_t package[8];
+	uint8_t i, j, package[8];
 	uint16_t bytes_sent = 0;
 	ENUM_J1939_STATUS_CODES status = STATUS_SEND_OK;
-	for(uint8_t i = 1; i <= j1939->this_ecu_tp_cm.number_of_packages; i++) {
+	for(i = 1; i <= j1939->this_ecu_tp_cm.number_of_packages; i++) {
 		package[0] = i; 																	/* Number of package */
-		for(uint8_t j = 0; j < 7; j++)
+		for(j = 0; j < 7; j++)
 			if(bytes_sent < j1939->this_ecu_tp_cm.total_message_size)
 				package[j+1] = j1939->this_ecu_tp_dt.data[bytes_sent++];					/* Data that we have collected */
 			 else

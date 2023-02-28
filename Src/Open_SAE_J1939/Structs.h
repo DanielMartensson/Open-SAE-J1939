@@ -8,9 +8,7 @@
 #ifndef OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_
 #define OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_
 
-/* The C standard library */
-#include <stdint.h>
-#include <stdbool.h>
+#include "C89_Library.h"
 
 /* This text name follows 8.3 filename standard - Important if you want to save to SD card */
 #define INFORMATION_THIS_ECU "ECUINFO.TXT"

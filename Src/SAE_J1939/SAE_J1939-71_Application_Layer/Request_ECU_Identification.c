@@ -42,7 +42,8 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_ECU_Identification(J1939* j19
 	} else {
 		/* Multiple messages - Load data */
 		j1939->this_ecu_tp_cm.total_message_size = 0;
-		for(uint8_t i = 0; i < length_of_each_field; i++) {
+		uint8_t i;
+		for(i = 0; i < length_of_each_field; i++) {
 			j1939->this_ecu_tp_dt.data[i] = j1939->information_this_ECU.this_identifications.ecu_identification.ecu_part_number[i];
 			j1939->this_ecu_tp_dt.data[length_of_each_field + i] = j1939->information_this_ECU.this_identifications.ecu_identification.ecu_serial_number[i];
 			j1939->this_ecu_tp_dt.data[length_of_each_field*2 + i] = j1939->information_this_ECU.this_identifications.ecu_identification.ecu_location[i];
@@ -71,8 +72,8 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_ECU_Identification(J1939* j19
  */
 void SAE_J1939_Read_Response_Request_ECU_Identification(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	/* ECU identification have 6 fixed fields in the J1939 struct */
-	uint8_t length_of_each_field = j1939->from_other_ecu_identifications.ecu_identification.length_of_each_field;
-	for(uint8_t i = 0; i < length_of_each_field; i++) {
+	uint8_t i, length_of_each_field = j1939->from_other_ecu_identifications.ecu_identification.length_of_each_field;
+	for(i = 0; i < length_of_each_field; i++) {
 		j1939->from_other_ecu_identifications.ecu_identification.ecu_part_number[i] = data[i];
 		j1939->from_other_ecu_identifications.ecu_identification.ecu_serial_number[i] = data[i + length_of_each_field];
 		j1939->from_other_ecu_identifications.ecu_identification.ecu_location[i] = data[i + length_of_each_field*2];

@@ -1,10 +1,4 @@
 eclipse.preferences.version=1
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.280892246/MINGW_HOME/delimiter=;
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.280892246/MINGW_HOME/operation=replace
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.280892246/MINGW_HOME/value=C\:\\minGW\\mingw64
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.280892246/PATH/delimiter=;
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.280892246/PATH/operation=replace
-environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.280892246/PATH/value=${MINGW_HOME}\\bin;${MSYS_HOME}\\bin;${MSYS_HOME}\\usr\\bin;C\:/Program Files/eclipse//plugins/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_15.0.2.v20210201-0955/jre/bin/server;C\:/Program Files/eclipse//plugins/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_15.0.2.v20210201-0955/jre/bin;C\:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C\:\\WINDOWS\\system32;C\:\\WINDOWS;C\:\\WINDOWS\\System32\\Wbem;C\:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C\:\\WINDOWS\\System32\\OpenSSH\\;C\:\\MinGW64\\mingw32\\bin;C\:\\Program Files\\dotnet\\;C\:\\Program Files (x86)\\dotnet\\;C\:\\Program Files (x86)\\CODESYS\\APInstaller\\;C\:\\Program Files\\Git\\cmd;C\:\\Program Files\\MySQL\\MySQL Shell 8.0\\bin\\;C\:\\Users\\danie\\AppData\\Local\\Microsoft\\WindowsApps;C\:\\Program Files\\eclipse
 environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.280892246/append=true
 environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.280892246/appendContributed=true
 environment/project/cdt.managedbuild.config.gnu.mingw.exe.release.1306552510/MINGW_HOME/delimiter=;

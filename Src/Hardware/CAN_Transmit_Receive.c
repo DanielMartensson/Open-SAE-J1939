@@ -35,7 +35,8 @@ static uint8_t buffer_index_receive = 0;
 static ENUM_J1939_STATUS_CODES Internal_Transmit(uint32_t ID, uint8_t data[], uint8_t DLC) {
 	internal_ID[buffer_index_transmit] = ID;
 	internal_DLC[buffer_index_transmit] = DLC;
-	for(uint8_t i = 0; i < 8; i++)
+	uint8_t i;
+	for(i = 0; i < 8; i++)
 		if(i < DLC)
 			internal_data[buffer_index_transmit*8 + i] = data[i];
 		else
@@ -53,7 +54,8 @@ static void Internal_Receive(uint32_t *ID, uint8_t data[], bool *is_new_message)
 	}
 
 	*ID = internal_ID[buffer_index_receive];
-	for(uint8_t i = 0; i < 8; i++)
+	uint8_t i;
+	for(i = 0; i < 8; i++)
 		if(i < internal_DLC[buffer_index_receive])
 			data[i] = internal_data[buffer_index_receive*8 + i];
 	*is_new_message = internal_new_message[buffer_index_receive];

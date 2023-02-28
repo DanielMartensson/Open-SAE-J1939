@@ -63,7 +63,8 @@ void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, u
 	j1939->from_other_ecu_name.from_ecu_address = SA;
 	/* Remember the source address of the ECU */
 	bool exist = false;
-	for (uint8_t i = 0; i < j1939->number_of_other_ECU; i++)
+	uint8_t i;
+	for (i = 0; i < j1939->number_of_other_ECU; i++)
 		if (j1939->other_ECU_address[i] == SA)
 			exist = true;
 	if (!exist)
