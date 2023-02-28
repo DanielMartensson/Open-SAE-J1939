@@ -21,27 +21,31 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	j1939->from_other_ecu_tp_dt.sequence_number = data[0];
 	j1939->from_other_ecu_tp_dt.from_ecu_address = SA;
 	uint8_t i, j, index = data[0] - 1;
-	for (i = 1; i < 8; i++)
+	for (i = 1; i < 8; i++){
 		j1939->from_other_ecu_tp_dt.data[index*7 + i-1] = data[i]; /* For every package, we send 7 bytes of data where the first byte data[0] is the sequence number */
-
+	}
 	/* Check if we have completed our message - Return = Not completed */
-	if (j1939->from_other_ecu_tp_cm.number_of_packages != j1939->from_other_ecu_tp_dt.sequence_number || j1939->from_other_ecu_tp_cm.number_of_packages == 0)
+	if (j1939->from_other_ecu_tp_cm.number_of_packages != j1939->from_other_ecu_tp_dt.sequence_number || j1939->from_other_ecu_tp_cm.number_of_packages == 0){
 		return;
+	}
 
 	/* Our message are complete - Build it and call it complete_data[total_message_size] */
 	uint32_t PGN = j1939->from_other_ecu_tp_cm.PGN_of_the_packeted_message;
 	uint16_t total_message_size = j1939->from_other_ecu_tp_cm.total_message_size;
 	uint8_t complete_data[MAX_TP_DT];
 	uint16_t inserted_bytes = 0;
-	for (i = 0; i < j1939->from_other_ecu_tp_dt.sequence_number; i++)
-		for (j = 0; j < 7; j++)
-			if (inserted_bytes < total_message_size)
+	for (i = 0; i < j1939->from_other_ecu_tp_dt.sequence_number; i++){
+		for (j = 0; j < 7; j++){
+			if (inserted_bytes < total_message_size){
 				complete_data[inserted_bytes++] = j1939->from_other_ecu_tp_dt.data[i*7 + j];
+			}
+		}
+	}
 
 	/* Send an end of message ACK back */
-	if(j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS)
+	if(j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS){
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_TP_CM_EndOfMsgACK, GROUP_FUNCTION_VALUE_NORMAL, PGN);
-
+	}
 	/* Check what type of function that message want this ECU to do */
 	switch (PGN) {
 	case PGN_COMMANDED_ADDRESS:
@@ -84,16 +88,18 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j
 	ENUM_J1939_STATUS_CODES status = STATUS_SEND_OK;
 	for(i = 1; i <= j1939->this_ecu_tp_cm.number_of_packages; i++) {
 		package[0] = i; 																	/* Number of package */
-		for(j = 0; j < 7; j++)
-			if(bytes_sent < j1939->this_ecu_tp_cm.total_message_size)
+		for(j = 0; j < 7; j++){
+			if(bytes_sent < j1939->this_ecu_tp_cm.total_message_size){
 				package[j+1] = j1939->this_ecu_tp_dt.data[bytes_sent++];					/* Data that we have collected */
-			 else
+			}else{
 				package[j+1] = 0xFF; 														/* Reserved */
-
+			}
+		}
 		status = CAN_Send_Message(ID, package);
 		CAN_Delay(100);																		/* Important CAN delay according to standard */
-		if(status != STATUS_SEND_OK)
+		if(status != STATUS_SEND_OK){
 			return status;
+		}
 	}
 	return status;
 }

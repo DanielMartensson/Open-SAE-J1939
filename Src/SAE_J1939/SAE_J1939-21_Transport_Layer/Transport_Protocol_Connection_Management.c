@@ -26,8 +26,9 @@ void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8
 	}
 
 	/* When we answer with CTS, it means we are going to send the Transport Protocol Data Transfer package */
-	if(j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_CTS)
+	if(j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_CTS){
 		SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, SA);
+	}
 }
 
 /*

@@ -14,9 +14,9 @@
 #define INFORMATION_THIS_ECU "ECUINFO.TXT"
 
 /* This is the maximum size for transferring data */
-#define MAX_TP_DT 1785
-#define MAX_IDENTIFICATION 30
-#define MAX_DM_FIELD 10
+#define MAX_TP_DT 1785U
+#define MAX_IDENTIFICATION 30U
+#define MAX_DM_FIELD 10U
 
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {

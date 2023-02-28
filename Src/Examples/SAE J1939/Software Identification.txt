@@ -5,7 +5,6 @@
  *      Author: Daniel Mårtensson
  */
 
-#include <stdlib.h>
 #include <stdio.h>
 
 /* Include Open SAE J1939 */
@@ -31,9 +30,9 @@ int main() {
 	/* Set the Software Identification */
 	j1939_1.information_this_ECU.this_identifications.software_identification.number_of_fields = 15;
 	char text[15] = "SAE J1939!!!";
-	for(i = 0; i < 15; i++)
+	for(i = 0; i < 15; i++){
 		j1939_1.information_this_ECU.this_identifications.software_identification.identifications[i] = (uint8_t) text[i];
-
+	}
 	/* Request Software Identification from ECU 2 to ECU 1 */
 	SAE_J1939_Send_Request(&j1939_2, 0xA2, PGN_SOFTWARE_IDENTIFICATION);
 
@@ -43,9 +42,9 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
 	/* Read response request from ECU 1 to ECU 2 */
-	for(i = 0; i < 5; i++)
+	for(i = 0; i < 5; i++){
 		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
-
+	}
 	/* Display what ECU 2 got */
 	printf("Number of fields = %i\nIdentifications = %s\nFrom ECU address = 0x%X", j1939_2.from_other_ecu_identifications.software_identification.number_of_fields, j1939_2.from_other_ecu_identifications.software_identification.identifications, j1939_2.from_other_ecu_identifications.software_identification.from_ecu_address);
 

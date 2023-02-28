@@ -5,7 +5,6 @@
  *      Author: Daniel Mårtensson
  */
 
-#include <stdlib.h>
 #include <stdio.h>
 
 /* Include Open SAE J1939 */
@@ -65,9 +64,9 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1); /* Listen for the CTS message and start sending data */
 
 	/* Read response request from ECU 1 to ECU 2 */
-	for (i = 0; i < 15; i++)
+	for (i = 0; i < 15; i++){
 		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
-
+	}
 	/* Display what ECU 2 got */
 	printf("Active DTCs = %i\n", j1939_2.from_other_ecu_dm.errors_dm2_active);
 	printf("SAE lamp status malfunction indicator = %i\nSAE lamp status red stop = %i\nSAE lamp status amber warning = %i\nSAE lamp status protect lamp = %i\nSAE flash lamp malfunction indicator = %i\nSAE flash lamp_red stop = %i\nSAE flash lamp amber warning = %i\nSAE flash lamp protect lamp = %i\n",

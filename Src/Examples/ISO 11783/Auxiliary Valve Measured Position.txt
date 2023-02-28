@@ -5,7 +5,6 @@
  *      Author: Daniel Mårtensson
  */
 
-#include <stdlib.h>
 #include <stdio.h>
 
 /* Include Open SAE J1939 */

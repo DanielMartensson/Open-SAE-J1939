@@ -36,11 +36,13 @@ static ENUM_J1939_STATUS_CODES Internal_Transmit(uint32_t ID, uint8_t data[], ui
 	internal_ID[buffer_index_transmit] = ID;
 	internal_DLC[buffer_index_transmit] = DLC;
 	uint8_t i;
-	for(i = 0; i < 8; i++)
-		if(i < DLC)
+	for(i = 0; i < 8; i++){
+		if(i < DLC){
 			internal_data[buffer_index_transmit*8 + i] = data[i];
-		else
+		}else{
 			internal_data[buffer_index_transmit*8 + i] = 0x0;
+		}
+	}
 	internal_new_message[buffer_index_transmit] = true;
 	buffer_index_transmit++;									/* When this is 256, then it will be come 0 again */
 	return STATUS_SEND_OK;
@@ -55,9 +57,11 @@ static void Internal_Receive(uint32_t *ID, uint8_t data[], bool *is_new_message)
 
 	*ID = internal_ID[buffer_index_receive];
 	uint8_t i;
-	for(i = 0; i < 8; i++)
-		if(i < internal_DLC[buffer_index_receive])
+	for(i = 0; i < 8; i++){
+		if(i < internal_DLC[buffer_index_receive]){
 			data[i] = internal_data[buffer_index_receive*8 + i];
+		}
+	}
 	*is_new_message = internal_new_message[buffer_index_receive];
 	/* Reset */
 	internal_new_message[buffer_index_receive] = false;

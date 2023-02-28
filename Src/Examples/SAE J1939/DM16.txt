@@ -5,7 +5,6 @@
  *      Author: Daniel Mårtensson
  */
 
-#include <stdlib.h>
 #include <stdio.h>
 
 /* Include Open SAE J1939 */
@@ -53,9 +52,9 @@ int main() {
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
 	/* Read binary data at ECU 2 - Ten times would be good enough to get all messages because this message above is multi-packet */
-	for(i = 0; i < 10; i++)
+	for(i = 0; i < 10; i++){
 		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
-
+	}
 	/* Pick up the message */
 	printf("Message length: %i\n", j1939_2.from_other_ecu_dm.dm16.number_of_occurences);
 	printf("Message text: %s\n", (char*) j1939_2.from_other_ecu_dm.dm16.raw_binary_data);

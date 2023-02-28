@@ -47,8 +47,9 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Address_Claimed(J1939 *j1939)
  */
 void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	/* Check if it's the same address */
-	if(j1939->information_this_ECU.this_ECU_address == SA)
+	if(j1939->information_this_ECU.this_ECU_address == SA){
 		SAE_J1939_Send_Address_Not_Claimed(j1939);
+	}
 
 	/* If not, then store the temporary information */
 	j1939->from_other_ecu_name.identity_number = ((data[2] & 0b00011111) << 16) | (data[1] << 8) | data[0];
@@ -64,9 +65,12 @@ void SAE_J1939_Read_Response_Request_Address_Claimed(J1939 *j1939, uint8_t SA, u
 	/* Remember the source address of the ECU */
 	bool exist = false;
 	uint8_t i;
-	for (i = 0; i < j1939->number_of_other_ECU; i++)
-		if (j1939->other_ECU_address[i] == SA)
+	for (i = 0; i < j1939->number_of_other_ECU; i++){
+		if (j1939->other_ECU_address[i] == SA){
 			exist = true;
-	if (!exist)
+		}
+	}
+	if (!exist){
 		j1939->other_ECU_address[j1939->number_of_other_ECU++] = SA;	/* For every new ECU address, count how many ECU */
+	}
 }

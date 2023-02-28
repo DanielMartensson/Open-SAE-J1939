@@ -36,7 +36,6 @@ That's the debugging mode for internal CAN feedback.
  - Step 4: Use the `Examples -> Open SAE J1939 -> Startup.txt` example as your initial starting code for a SAE J1939 project.
  
 ```c
-#include <stdlib.h>
 #include <stdio.h>
 
 /* Include Open SAE J1939 */
