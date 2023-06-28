@@ -68,6 +68,15 @@ See the examples in `Examples -> SAE J1939` how to change the address, NAME or i
 
 ![a](https://raw.githubusercontent.com/DanielMartensson/Open-SAE-J1939/main/Src/Documentation/Pictures/Project%20structure.png)
 
+# How the Open SAE J1939 working
+
+This flow chart in code how this Open SAE J1939 library working. This example demonstrates how to send a request and get an answer.
+
+- Step 1: `ECU X` is going to send a `PGN` to `ECU Y`. Interpret `PGN` as a function code
+  Example: https://github.com/DanielMartensson/Open-SAE-J1939/blob/4297cff44107e5278f120243cb9a611eafe8c42f/Src/SAE_J1939/SAE_J1939-71_Application_Layer/Request_ECU_Identification.c#L18-L20
+- Step 2: `ECU Y` is going to read that `PGN` message 
+  Example: https://github.com/DanielMartensson/Open-SAE-J1939/blob/4297cff44107e5278f120243cb9a611eafe8c42f/Src/Open_SAE_J1939/Listen_For_Messages.c#L18-L32
+
 # SAE J1939 functionality
  - SAE J1939:21 Transport Layer
  	- Acknowledgement
