@@ -79,13 +79,22 @@ This flow chart in code how this Open SAE J1939 library working. This example de
 - Step 3: The `PGN` function code will be interpreted
   https://github.com/DanielMartensson/Open-SAE-J1939/blob/678473c13cb7eb5fe46d5aac30a53efad4ccefd9/Src/SAE_J1939/SAE_J1939-21_Transport_Layer/Request.c#L20-L52
 - Step 4: The `PGN` function code is now interpreted as `ECU Identification`. Then `ECU Y` is going to end the `ECU Identification` to `ECU X`
-  - Step 4.1: For 1 package message:
+  - Step 4.1.1: For 1 package message, `ECU Y` is sending the `ECU Identification` to `ECU X`. 
     https://github.com/DanielMartensson/Open-SAE-J1939/blob/678473c13cb7eb5fe46d5aac30a53efad4ccefd9/Src/SAE_J1939/SAE_J1939-71_Application_Layer/Request_ECU_Identification.c#L26-L42
-  - Step 4.2: For Multi Package Message, the control byte can either be BAM or RTS. BAM is only used if you send to all `ECUs` e.g address `0xFF = 255`. But if the control byte is RTS, e.g address is not `0xFF`, then Open SAE J1939 is going to send a RTS and listen for a CTS response.
+  - Step 4.1.2: `ECU X` read the response from `ECU Y`
+    https://github.com/DanielMartensson/Open-SAE-J1939/blob/8faf1a542b291cb2ff71f20fceb941bb6113127b/Src/Open_SAE_J1939/Listen_For_Messages.c#L61-L62
+  - Step 4.2.1: For Multi Package Message, the control byte can either be BAM or RTS. BAM is only used if you send to all `ECUs` e.g address `0xFF = 255`. But if the control byte is RTS, e.g address is not `0xFF`, then Open SAE J1939 is going to send a RTS and listen for a CTS response.
     https://github.com/DanielMartensson/Open-SAE-J1939/blob/678473c13cb7eb5fe46d5aac30a53efad4ccefd9/Src/SAE_J1939/SAE_J1939-71_Application_Layer/Request_ECU_Identification.c#L44-L58
-    - Step 4.3: If `ECU Y` is sending a RTS, then `ECU X` will read the RTS and response with CTS back to `ECU Y`
+    - Step 4.2.2: If `ECU Y` is sending a RTS, then `ECU X` will read the RTS and response with CTS back to `ECU Y`
       https://github.com/DanielMartensson/Open-SAE-J1939/blob/678473c13cb7eb5fe46d5aac30a53efad4ccefd9/Src/SAE_J1939/SAE_J1939-21_Transport_Layer/Transport_Protocol_Connection_Management.c#L22-L26
-    - EC
+    - Step 4.2.3: Once `ECU Y` has received the CTS, then it going to send the data message, in this case `ECU Identification`, back to `ECU X`
+      https://github.com/DanielMartensson/Open-SAE-J1939/blob/678473c13cb7eb5fe46d5aac30a53efad4ccefd9/Src/SAE_J1939/SAE_J1939-21_Transport_Layer/Transport_Protocol_Connection_Management.c#L29-L31
+    - Step 4.2.3: Once `ECU Y` is sending package after package
+      https://github.com/DanielMartensson/Open-SAE-J1939/blob/8faf1a542b291cb2ff71f20fceb941bb6113127b/Src/SAE_J1939/SAE_J1939-21_Transport_Layer/Transport_Protocol_Data_Transfer.c#L84-L105
+    - Step 4.2.4: Then `ECU X` is recieving each package and building up the message 
+      https://github.com/DanielMartensson/Open-SAE-J1939/blob/8faf1a542b291cb2ff71f20fceb941bb6113127b/Src/SAE_J1939/SAE_J1939-21_Transport_Layer/Transport_Protocol_Data_Transfer.c#L19-L48
+      And then finally implement the message
+      https://github.com/DanielMartensson/Open-SAE-J1939/blob/8faf1a542b291cb2ff71f20fceb941bb6113127b/Src/SAE_J1939/SAE_J1939-21_Transport_Layer/Transport_Protocol_Data_Transfer.c#L66-L68
 
 # SAE J1939 functionality
  - SAE J1939:21 Transport Layer
