@@ -68,7 +68,7 @@ See the examples in `Examples -> SAE J1939` how to change the address, NAME or i
 
 ![a](https://raw.githubusercontent.com/DanielMartensson/Open-SAE-J1939/main/Src/Documentation/Pictures/Project%20structure.png)
 
-# How the Open SAE J1939 working
+# Working example how the structure of Open SAE J1939
 
 This flow chart in code how this Open SAE J1939 library working. This example demonstrates how to send a request and get an answer.
 
