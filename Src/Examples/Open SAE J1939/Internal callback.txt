@@ -48,7 +48,7 @@ int main() {
 	j1939_1.information_this_ECU.this_ECU_address = 0x80; /* From 0 to 253 because 254 = error address and 255 = broadcast address */
 
 	/* Set the callback functions for the hardware */
-	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read);
+	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read, NULL);
 
 	/* Set NAME for ECU 2 by using Commanded Address. Also change the ECU address from 0x90 to 0x91 */
 	SAE_J1939_Send_Commanded_Address(&j1939_1, 0x90, 0x91, 5000, 500, 30, 5, FUNCTION_AUXILIARY_VALVES_CONTROL, 50, 0, INDUSTRY_GROUP_AGRICULTURAL_AND_FORESTRY, 15);

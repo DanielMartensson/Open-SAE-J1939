@@ -9,8 +9,9 @@
 #include "Hardware.h"
 
 /* This is a call back function e.g listener, that will be called once SAE J1939 data is going to be sent */
-static void (*Callback_Function_Send)(uint32_t, uint8_t, uint8_t[]);
-static void (*Callback_Function_Read)(uint32_t*, uint8_t[], bool*);
+static void (*Callback_Function_Send)(uint32_t, uint8_t, uint8_t[]) = NULL;
+static void (*Callback_Function_Read)(uint32_t*, uint8_t[], bool*) = NULL;
+static void (*Callback_Function_Traffic)(uint32_t, uint8_t, uint8_t[], bool) = NULL;
 
 /* Platform independent library headers for CAN */
 #if PROCESSOR_CHOICE == STM32
@@ -97,6 +98,12 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[]) {
 	/* If no processor are used, use internal feedback for debugging */
 	status = Internal_Transmit(ID, data, 8);
 	#endif
+
+	/* Display traffic */
+	if (Callback_Function_Traffic != NULL) {
+		Callback_Function_Traffic(ID, 8, data, true); /* ID, 8 bytes of data, data array, TX = true */
+	}
+
 	return status;
 }
 
@@ -130,6 +137,12 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[]) {
 	/* If no processor are used, use internal feedback for debugging */
 	status = Internal_Transmit(ID, PGN, 3);
 	#endif
+
+	/* Display traffic */
+	if (Callback_Function_Traffic != NULL) {
+		Callback_Function_Traffic(ID, 3, PGN, true); /* ID, 3 bytes of data, PGN array, TX = true */
+	}
+
 	return status;
 }
 
@@ -152,12 +165,19 @@ bool CAN_Read_Message(uint32_t *ID, uint8_t data[]) {
 	/* If no processor are used, use internal feedback for debugging */
 	Internal_Receive(ID, data, &is_new_message);
 	#endif
+
+	/* Display traffic */
+	if (Callback_Function_Traffic != NULL) {
+		Callback_Function_Traffic(*ID, 8, data, false); /* ID, 8 bytes of data, data array, TX = false */
+	}
+
 	return is_new_message;
 }
 
-void CAN_Set_Callback_Functions(void (*Callback_Function_Send_)(uint32_t, uint8_t, uint8_t[]), void (*Callback_Function_Read_)(uint32_t*, uint8_t[], bool*)){
+void CAN_Set_Callback_Functions(void (*Callback_Function_Send_)(uint32_t, uint8_t, uint8_t[]), void (*Callback_Function_Read_)(uint32_t*, uint8_t[], bool*), void (*Callback_Function_Traffic_)(uint32_t, uint8_t, uint8_t[], bool)){
 	Callback_Function_Send = Callback_Function_Send_;
 	Callback_Function_Read = Callback_Function_Read_;
+	Callback_Function_Traffic = Callback_Function_Traffic_;
 }
 
 void CAN_Delay(uint8_t milliseconds) {
