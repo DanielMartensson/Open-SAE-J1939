@@ -37,7 +37,7 @@ void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(J1939 *j1939, uint8_t DA) {
 	uint32_t ID = (0x1CEC << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
-	uint8_t data[8];
+	uint8_t data[8] = { 0 };
 	data[0] = j1939->this_ecu_tp_cm.control_byte;
 	data[1] = j1939->this_ecu_tp_cm.total_message_size;
 	data[2] = j1939->this_ecu_tp_cm.total_message_size >> 8;
