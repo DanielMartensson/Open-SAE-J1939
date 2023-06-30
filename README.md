@@ -54,7 +54,7 @@ That's the debugging mode for internal CAN feedback.
 void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]) {
 	/* Apply your transmit layer here, e.g:
 	 * uint32_t TxMailbox;
-     * static CAN_HandleTypeDef can_handler;
+     	 * static CAN_HandleTypeDef can_handler;
 	 * This function transmit ID, DLC and data[] as the CAN-message.
 	 * HardWareLayerCAN_TX(&can_handler, ID, DLC, data, &TxMailbox);
 	 * 
