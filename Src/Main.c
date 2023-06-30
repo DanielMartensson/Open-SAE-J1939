@@ -13,6 +13,53 @@
 /* Include ISO 11783 */
 #include "ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
 
+void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]) {
+	/* Apply your transmit layer here, e.g:
+	 * uint32_t TxMailbox;
+     * static CAN_HandleTypeDef can_handler;
+	 * This function transmit ID, DLC and data[] as the CAN-message.
+	 * HardWareLayerCAN_TX(&can_handler, ID, DLC, data, &TxMailbox);
+	 * 
+	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
+	 */
+}
+
+void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
+	/* Apply your receive layer here, e.g:
+	 * CAN_RxHeaderTypeDef rxHeader = {0};
+	 * static CAN_HandleTypeDef can_handler;
+	 * This function read CAN RX and give the data to ID and data[] as the CAN-message.
+	 * if (HardWareLayerCAN_RX(can_handler, &rxHeader, ID, data) == STATUS_OK){
+	 *	*is_new_data = true;
+	 * }
+	 * 
+	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
+	 */
+}
+
+/* This function reads the CAN traffic */
+void Callback_Function_Traffic(uint32_t ID, uint8_t DLC, uint8_t data[], bool is_TX) {
+	/* Print if it is TX or RX */
+	printf("%s\t", is_TX ? "TX" : "RX");
+
+	/* Print ID as hex */
+	printf("%08X\t", ID);
+
+	/* Print the data */
+	uint8_t i;
+	for (i = 0U; i < DLC; i++) {
+		printf("%X\t", data[i]);
+	}
+
+	/* Print the non-data */
+	for (i = DLC; i < 8U; i++) {
+		printf("%X\t", 0U);
+	}
+
+	/* New line */
+	printf("\n");
+}
+
 int main() {
 
 	/* Create our J1939 structure */
@@ -20,6 +67,14 @@ int main() {
 
 	/* Load your ECU information */
 	Open_SAE_J1939_Startup_ECU(&j1939);
+
+	/*
+	 * Callbacks can be used if you want to pass a specific CAN-function into the hardware layer.
+	 * All you need to do is to enable INTERNAL_CALLLBACK inside hardware.h
+	 * If you don't want to have the traffic callback, just set the argument as NULL.
+	 * If you don't want any callback at all, you can write your own hardware layer by selecting a specific procesor choice at hardware.h
+	 */
+	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read, Callback_Function_Traffic);
 
 	while (1) {
 		/* Read incoming messages */
