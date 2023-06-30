@@ -28,7 +28,7 @@ void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
          * static CAN_HandleTypeDef can_handler;
          * This function read CAN RX and give the data to ID and data[] as the CAN-message.
 	 * if (HardWareLayerCAN_RX(can_handler, &rxHeader, ID, data) == STATUS_OK){
-	 *	is_new_data = true;
+	 *	*is_new_data = true;
          * }
          */
 }
