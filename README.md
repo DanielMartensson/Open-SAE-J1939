@@ -54,13 +54,12 @@ That's the debugging mode for internal CAN feedback.
 void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]) {
 	/* Apply your transmit layer here, e.g:
 	 * uint32_t TxMailbox;
-     * static CAN_HandleTypeDef can_handler;
+         * static CAN_HandleTypeDef can_handler;
 	 * This function transmit ID, DLC and data[] as the CAN-message.
 	 * HardWareLayerCAN_TX(&can_handler, ID, DLC, data, &TxMailbox);
 	 * 
 	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
 	 */
-	int b = 5;
 }
 
 void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
@@ -74,7 +73,6 @@ void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
 	 * 
 	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
 	 */
-	int a = 3;
 }
 
 /* This function reads the CAN traffic */

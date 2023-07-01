@@ -22,7 +22,6 @@ void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]) {
 	 * 
 	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
 	 */
-	int b = 5;
 }
 
 void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
@@ -36,7 +35,6 @@ void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
 	 * 
 	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
 	 */
-	int a = 3;
 }
 
 /* This function reads the CAN traffic */
