@@ -54,12 +54,13 @@ That's the debugging mode for internal CAN feedback.
 void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]) {
 	/* Apply your transmit layer here, e.g:
 	 * uint32_t TxMailbox;
-     	 * static CAN_HandleTypeDef can_handler;
+     * static CAN_HandleTypeDef can_handler;
 	 * This function transmit ID, DLC and data[] as the CAN-message.
 	 * HardWareLayerCAN_TX(&can_handler, ID, DLC, data, &TxMailbox);
 	 * 
 	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
 	 */
+	int b = 5;
 }
 
 void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
@@ -73,6 +74,7 @@ void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
 	 * 
 	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
 	 */
+	int a = 3;
 }
 
 /* This function reads the CAN traffic */
@@ -103,9 +105,6 @@ int main() {
 	/* Create our J1939 structure */
 	J1939 j1939 = { 0 };
 
-	/* Load your ECU information */
-	Open_SAE_J1939_Startup_ECU(&j1939);
-
 	/*
 	 * Callbacks can be used if you want to pass a specific CAN-function into the hardware layer.
 	 * All you need to do is to enable INTERNAL_CALLLBACK inside hardware.h
@@ -114,9 +113,13 @@ int main() {
 	 */
 	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read, Callback_Function_Traffic);
 
+	/* Load your ECU information */
+	Open_SAE_J1939_Startup_ECU(&j1939);
+
 	while (1) {
 		/* Read incoming messages */
 		Open_SAE_J1939_Listen_For_Messages(&j1939);
+
 		/* Your application code here */
 
 	}

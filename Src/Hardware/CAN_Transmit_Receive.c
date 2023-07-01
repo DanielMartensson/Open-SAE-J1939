@@ -192,11 +192,14 @@ void CAN_Delay(uint8_t milliseconds) {
 	#elif PROCESSOR_CHOICE == QT_USB
 
 	#elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
-	/* Storing start time */
+	/* Get start time */
 	clock_t start_time = clock();
 
-	/* looping till required time is not achieved */
-	while (clock() < start_time + milliseconds) {
+	/* Compute desired duration */
+	clock_t desired_duration = (clock_t)(CLOCKS_PER_SEC * milliseconds / 1000);
+
+	/* Wait */
+	while ((clock() - start_time) < desired_duration) {
 		;
 	}
 	#else
