@@ -8,7 +8,13 @@
 #ifndef OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_
 #define OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_
 
+ /* For the C89 standard ints */
 #include "C89_Library.h"
+
+/* For the C++ standard ints */
+#ifdef __cplusplus
+#include <cstdint>
+#endif
 
 /* This text name follows 8.3 filename standard - Important if you want to save to SD card */
 #define INFORMATION_THIS_ECU "ECUINFO.TXT"
