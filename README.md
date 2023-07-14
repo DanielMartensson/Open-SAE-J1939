@@ -8,13 +8,13 @@ To learn to build on this project, you need first to understand SAE J1939. I hav
 
 With this library, you can communicate with valves, engines, actuators, machinery, hardware and all other things that are suitable for heavy industrial mobile applications. I have build up a basic structure of the project and I hope that other users will send pull request of their `C` code for extra functionality to SAE J1939 standard because SAE J1939 is a huge standard. 
 
-Looking for CANopen library?
-https://github.com/DanielMartensson/Easy-CANopen/
+Looking for C CANopen library for embedded systems?
+https://github.com/DanielMartensson/Easy-CANopen
 
-Looking for a QT C++ framework implementation with Open SAE J1939 over USB? 
-https://github.com/DanielMartensson/OpenSourceLogger
+Looking for a C++ GUI framework that uses Open SAE J1939 over the USB?
+https://github.com/DanielMartensson/GoobySoft
 
-Logging for a STM32 project with Open SAE J1939?
+Logging for a C STM32 project with Open SAE J1939?
 https://github.com/DanielMartensson/STM32-PLC
 
 # Getting started
