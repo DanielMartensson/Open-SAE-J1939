@@ -149,6 +149,9 @@
     <ClInclude Include="ISO_11783\ISO_11783_Enums\Enum_Valves.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Open_SAE_J1939\C89_Library.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
