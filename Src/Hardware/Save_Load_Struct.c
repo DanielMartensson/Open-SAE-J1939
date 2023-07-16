@@ -63,7 +63,9 @@ bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 	file = fopen(file_name, "rb");
 	if(file == NULL){
 		file = fopen(file_name, "wb");
-		return false;
+		if (file == NULL) {
+			return false;
+		}
 	}
 	fread(data, 1, data_length, file);
 	fclose(file);
