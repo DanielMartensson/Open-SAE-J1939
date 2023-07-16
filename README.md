@@ -54,7 +54,7 @@ That's the debugging mode for internal CAN feedback.
 void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]) {
 	/* Apply your transmit layer here, e.g:
 	 * uint32_t TxMailbox;
-         * static CAN_HandleTypeDef can_handler;
+     * static CAN_HandleTypeDef can_handler;
 	 * This function transmit ID, DLC and data[] as the CAN-message.
 	 * HardWareLayerCAN_TX(&can_handler, ID, DLC, data, &TxMailbox);
 	 * 
@@ -114,13 +114,21 @@ int main() {
 	/* Load your ECU information */
 	Open_SAE_J1939_Startup_ECU(&j1939);
 
-	while (1) {
+	/* SAE J1939 process */
+	bool run = true;
+	while (run) {
 		/* Read incoming messages */
 		Open_SAE_J1939_Listen_For_Messages(&j1939);
 
 		/* Your application code here */
 
 	}
+
+	/* Save the Information_this_ECU struct */
+	uint32_t ECU_information_length = sizeof(Information_this_ECU);
+	uint8_t dataJ1939[sizeof(Information_this_ECU)];
+	memcpy(dataJ1939, &j1939.information_this_ECU, ECU_information_length);
+	Save_Struct(dataJ1939, ECU_information_length, (char*)INFORMATION_THIS_ECU);
 
 	return 0;
 }
