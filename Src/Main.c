@@ -16,10 +16,10 @@
 void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]) {
 	/* Apply your transmit layer here, e.g:
 	 * uint32_t TxMailbox;
-     * static CAN_HandleTypeDef can_handler;
+	 * static CAN_HandleTypeDef can_handler;
 	 * This function transmit ID, DLC and data[] as the CAN-message.
 	 * HardWareLayerCAN_TX(&can_handler, ID, DLC, data, &TxMailbox);
-	 * 
+	 *
 	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
 	 */
 }
@@ -32,7 +32,7 @@ void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
 	 * if (HardWareLayerCAN_RX(can_handler, &rxHeader, ID, data) == STATUS_OK){
 	 *	*is_new_data = true;
 	 * }
-	 * 
+	 *
 	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
 	 */
 }
@@ -76,13 +76,18 @@ int main() {
 	/* Load your ECU information */
 	Open_SAE_J1939_Startup_ECU(&j1939);
 
-	while (1) {
+	/* SAE J1939 process */
+	bool run = true;
+	while (run) {
 		/* Read incoming messages */
 		Open_SAE_J1939_Listen_For_Messages(&j1939);
 
 		/* Your application code here */
 
 	}
+
+	/* Save your ECU information */
+	Open_SAE_J1939_Closedown_ECU(&j1939);
 
 	return 0;
 }

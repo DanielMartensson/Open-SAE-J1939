@@ -33,7 +33,7 @@ That's the debugging mode for internal CAN feedback.
  - Step 1: Download this repository
  - Step 2: Go to `Hardware -> Hardware.h` and select your processor, if it's not available, please write code for it and send me a pull request
  - Step 3: Copy over the `Src` folder to your project folder inside your IDE. Rename `Src` to for example `Open SAE J1939`. That's a good name.
- - Step 4: Use the `Examples -> Open SAE J1939 -> Startup.txt` example as your initial starting code for a SAE J1939 project.
+ - Step 4: Use the `Examples -> Open SAE J1939 -> Main.txt` example as your initial starting code for a SAE J1939 project.
  
 ```c
 /*
@@ -54,7 +54,7 @@ That's the debugging mode for internal CAN feedback.
 void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]) {
 	/* Apply your transmit layer here, e.g:
 	 * uint32_t TxMailbox;
-     * static CAN_HandleTypeDef can_handler;
+     	 * static CAN_HandleTypeDef can_handler;
 	 * This function transmit ID, DLC and data[] as the CAN-message.
 	 * HardWareLayerCAN_TX(&can_handler, ID, DLC, data, &TxMailbox);
 	 * 
@@ -124,11 +124,8 @@ int main() {
 
 	}
 
-	/* Save the Information_this_ECU struct */
-	uint32_t ECU_information_length = sizeof(Information_this_ECU);
-	uint8_t dataJ1939[sizeof(Information_this_ECU)];
-	memcpy(dataJ1939, &j1939.information_this_ECU, ECU_information_length);
-	Save_Struct(dataJ1939, ECU_information_length, (char*)INFORMATION_THIS_ECU);
+	/* Save your ECU information */
+	Open_SAE_J1939_Closedown_ECU(&j1939);
 
 	return 0;
 }
