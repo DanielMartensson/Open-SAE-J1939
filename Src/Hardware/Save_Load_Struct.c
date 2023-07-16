@@ -31,6 +31,9 @@ bool Save_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 	/* Write a file */
 	FILE *file = NULL;
 	file = fopen(file_name, "wb");
+	if (file == NULL) {
+		return false;
+	}
 	fwrite(data, 1, data_length, file);
 	fclose(file);
 	return true;
@@ -60,6 +63,7 @@ bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 	file = fopen(file_name, "rb");
 	if(file == NULL){
 		file = fopen(file_name, "wb");
+		return false;
 	}
 	fread(data, 1, data_length, file);
 	fclose(file);
