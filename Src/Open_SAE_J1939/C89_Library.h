@@ -33,7 +33,7 @@ typedef uint8_t bool;
 #else
 /* C99 and above */
 #include <stdbool.h>					/* For bool datatype */
-#include <stdint.h>						/* For uint8_t, uint16_t and uint16_t */
+#include <stdint.h>						/* For uint8_t, uint16_t and uint32_t */
 #endif
 
 #endif
