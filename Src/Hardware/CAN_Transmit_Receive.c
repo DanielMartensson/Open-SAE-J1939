@@ -167,7 +167,7 @@ bool CAN_Read_Message(uint32_t *ID, uint8_t data[]) {
 	#endif
 
 	/* Display traffic */
-	if (Callback_Function_Traffic != NULL) {
+	if (Callback_Function_Traffic != NULL && is_new_message) {
 		Callback_Function_Traffic(*ID, 8, data, false); /* ID, 8 bytes of data, data array, TX = false */
 	}
 
