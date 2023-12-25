@@ -52,6 +52,8 @@ void SAE_J1939_Read_Request(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 		SAE_J1939_Response_Request_ECU_Identification(j1939, SA);
 	} else if (PGN == PGN_COMPONENT_IDENTIFICATION) {
 		SAE_J1939_Response_Request_Component_Identification(j1939, SA);
+	} else if (PGN == PGN_PROPRIETARY_A) {
+		SAE_J1939_Response_Request_Proprietary_A(j1939, SA);
 	} else {
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_NOT_SUPPORTED, GROUP_FUNCTION_VALUE_NO_CAUSE, PGN);
 	}

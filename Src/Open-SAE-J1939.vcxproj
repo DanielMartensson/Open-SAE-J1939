@@ -33,6 +33,7 @@
     <ClCompile Include="Open_SAE_J1939\Listen_For_Messages.c" />
     <ClCompile Include="Open_SAE_J1939\Startup_ECU.c" />
     <ClCompile Include="SAE_J1939\SAE_J1939-21_Transport_Layer\Acknowledgement.c" />
+    <ClCompile Include="SAE_J1939\SAE_J1939-71_Application_Layer\Request_Proprietary.c" />
     <ClCompile Include="SAE_J1939\SAE_J1939-21_Transport_Layer\Request.c" />
     <ClCompile Include="SAE_J1939\SAE_J1939-21_Transport_Layer\Transport_Protocol_Connection_Management.c" />
     <ClCompile Include="SAE_J1939\SAE_J1939-21_Transport_Layer\Transport_Protocol_Data_Transfer.c" />
@@ -57,7 +58,6 @@
     <ClInclude Include="Open_SAE_J1939\C89_Library.h" />
     <ClInclude Include="Open_SAE_J1939\Open_SAE_J1939.h" />
     <ClInclude Include="Open_SAE_J1939\Structs.h" />
-    <ClInclude Include="Open_SAE_J1939\Manufacturer_Specific\Structs_Manufacturer_Specific.h" />
     <ClInclude Include="SAE_J1939\SAE_J1939-21_Transport_Layer\Transport_Layer.h" />
     <ClInclude Include="SAE_J1939\SAE_J1939-71_Application_Layer\Application_Layer.h" />
     <ClInclude Include="SAE_J1939\SAE_J1939-73_Diagnostics_Layer\Diagnostics_Layer.h" />

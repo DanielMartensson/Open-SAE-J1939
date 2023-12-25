@@ -11,9 +11,6 @@
  /* For the C89 standard ints */
 #include "C89_Library.h"
 
-/* For manufacturer specific */
-#include "Manufacturer_Specific/Structs_Manufacturer_Specific.h"
-
 /* For the C++ standard ints */
 #ifdef __cplusplus
 #include <cstdint>
@@ -26,11 +23,6 @@
 #define MAX_TP_DT 1785U
 #define MAX_IDENTIFICATION 30U
 #define MAX_DM_FIELD 10U
-
-/* PGN: 0x00EF00 - Proprietary A where the data is manufacturer specific */
-struct Proprietary_A {
-	struct Vecmocon_Sync_FUP vecmocon_sync_fup;
-};
 
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {
@@ -69,6 +61,18 @@ struct Name {
 	uint8_t industry_group;							/* Specify the group where this ECU is located - 0 to 7 */
 	uint8_t vehicle_system_instance;				/* Specify the vehicle system number - 0 to 15 */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
+};
+
+/* PGN: 0x00EF00 - Proprietary A where the data is manufacturer specific */
+struct Proprietary_A {
+	uint16_t total_bytes;							/* Length of the data */
+	uint8_t data[MAX_TP_DT];						/* This is the collected data */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
+};
+
+/* This struct holds manufacturer specific data */
+struct Proprietary {
+	struct Proprietary_A proprietary_A;
 };
 
 /* PGN: 0x00FECA - Storing the DM1 Active diagnostic trouble codes from the reading process */
@@ -226,6 +230,7 @@ typedef struct {
 	struct TP_DT from_other_ecu_tp_dt;
 	struct DM from_other_ecu_dm;
 	struct Identifications from_other_ecu_identifications;
+	struct Proprietary from_other_ecu_proprietary;
 
 	/* Temporary hold this values for this ECU when we are going to send data */
 	struct TP_CM this_ecu_tp_cm;
@@ -241,6 +246,7 @@ typedef struct {
 	/* For ID information about this ECU - SAE J1939 */
 	Information_this_ECU information_this_ECU;
 	struct DM this_dm;
+	struct Proprietary this_proprietary;
 
 	/* For valve information about this ECU - ISO 11783-7 */
 	struct Auxiliary_valve_estimated_flow this_auxiliary_valve_estimated_flow[16];
