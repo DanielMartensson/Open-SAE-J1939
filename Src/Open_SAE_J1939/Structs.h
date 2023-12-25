@@ -19,10 +19,11 @@
 /* This text name follows 8.3 filename standard - Important if you want to save to SD card */
 #define INFORMATION_THIS_ECU "ECUINFO.TXT"
 
-/* This is the maximum size for transferring data */
+/* This is the maximum size for transferring data and these can be changed on your own interest */
 #define MAX_TP_DT 1785U
 #define MAX_IDENTIFICATION 30U
 #define MAX_DM_FIELD 10U
+#define MAX_PROPRIETARY 15U
 
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {
@@ -66,7 +67,7 @@ struct Name {
 /* PGN: 0x00EF00 - Proprietary A where the data is manufacturer specific */
 struct Proprietary_A {
 	uint16_t total_bytes;							/* Length of the data */
-	uint8_t data[MAX_TP_DT];						/* This is the collected data */
+	uint8_t data[MAX_PROPRIETARY];					/* This is the collected data */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 

@@ -19,45 +19,154 @@
  */
 void SAE_J1939_Read_Request(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 	uint32_t PGN = (data[2] << 16) | (data[1] << 8) | data[0];
-	if (PGN == PGN_ACKNOWLEDGEMENT) {
+	switch (PGN) {
+	case PGN_ACKNOWLEDGEMENT:
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
-	} else if (PGN == PGN_ADDRESS_CLAIMED){
+		break;
+	case PGN_ADDRESS_CLAIMED:
 		SAE_J1939_Response_Request_Address_Claimed(j1939);
-	} else if (PGN == PGN_COMMANDED_ADDRESS) {
+		break;
+	case PGN_COMMANDED_ADDRESS:
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
-	} else if (PGN == PGN_ADDRESS_DELETE) {
+		break;
+	case PGN_ADDRESS_DELETE:
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN); /* Not SAE J1939 standard */
-	} else if (PGN == PGN_DM1) {
+		break;
+	case PGN_DM1:
 		SAE_J1939_Response_Request_DM1(j1939, SA);
-	} else if (PGN == PGN_DM2) {
+		break;
+	case PGN_DM2:
 		SAE_J1939_Response_Request_DM2(j1939, SA);
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
-	} else if (PGN == PGN_DM3) {
+		break;
+	case PGN_DM3:
 		SAE_J1939_Response_Request_DM3(j1939, SA);
-	} else if (PGN == PGN_REQUEST) {
+		break;
+	case PGN_REQUEST:
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
-	} else if (PGN == PGN_TP_CM) {
+		break;
+	case PGN_TP_CM:
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
-	} else if (PGN == PGN_TP_DT) {
+		break;
+	case PGN_TP_DT:
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_SUPPORTED, GROUP_FUNCTION_VALUE_NORMAL, PGN);
-	} else if (PGN >= PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_0 && PGN <= PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_15) {
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_0:
 		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
-	} else if (PGN == PGN_GENERAL_PURPOSE_VALVE_ESTIMATED_FLOW){
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_1:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_2:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_3:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_4:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_5:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_6:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_7:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_8:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_9:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_10:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_11:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_12:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_13:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_14:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_15:
+		ISO_11783_Response_Request_Auxiliary_Valve_Estimated_Flow(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_GENERAL_PURPOSE_VALVE_ESTIMATED_FLOW:
 		ISO_11783_Response_Request_General_Purpose_Valve_Estimated_Flow(j1939, SA);
-	} else if (PGN >= PGN_AUXILIARY_VALVE_MEASURED_POSITION_0 && PGN <= PGN_AUXILIARY_VALVE_MEASURED_POSITION_15) {
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_0:
 		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
-	} else if (PGN == PGN_SOFTWARE_IDENTIFICATION) {
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_1:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_2:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_3:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_4:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_5:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_6:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_7:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_8:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_9:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_10:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_11:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_12:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_13:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_14:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_AUXILIARY_VALVE_MEASURED_POSITION_15:
+		ISO_11783_Response_Request_Auxiliary_Valve_Measured_Position(j1939, PGN & 0xF); /* PGN & 0xF = valve_number */
+		break;
+	case PGN_SOFTWARE_IDENTIFICATION:
 		SAE_J1939_Response_Request_Software_Identification(j1939, SA);
-	} else if (PGN == PGN_ECU_IDENTIFICATION) {
+		break;
+	case PGN_ECU_IDENTIFICATION:
 		SAE_J1939_Response_Request_ECU_Identification(j1939, SA);
-	} else if (PGN == PGN_COMPONENT_IDENTIFICATION) {
+		break;
+	case PGN_COMPONENT_IDENTIFICATION:
 		SAE_J1939_Response_Request_Component_Identification(j1939, SA);
-	} else if (PGN == PGN_PROPRIETARY_A) {
+		break;
+	case PGN_PROPRIETARY_A:
 		SAE_J1939_Response_Request_Proprietary_A(j1939, SA);
-	} else {
+		break;
+		/* Add more else if statements here for more read request */
+	default:
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_NOT_SUPPORTED, GROUP_FUNCTION_VALUE_NO_CAUSE, PGN);
+		break;
 	}
-	/* Add more else if statements here for more read request */
 }
 
 /*

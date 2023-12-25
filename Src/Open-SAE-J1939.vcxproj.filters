@@ -162,7 +162,4 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="Examples\Open SAE J1939\CAN Traffic.txt" />
-  </ItemGroup>
 </Project>

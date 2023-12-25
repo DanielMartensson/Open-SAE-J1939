@@ -174,6 +174,7 @@ This flow chart in code how Open SAE J1939 library is working. This example demo
  	- Request Component Identification
  	- Request ECU Identification
  	- Request Software Identification
+	- Request Proprietary A
  - SAE J1939:73 Diagnostics Layer
  	- DM1
  	- DM2

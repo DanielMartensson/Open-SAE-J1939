@@ -8,10 +8,13 @@
 #ifndef OPEN_SAE_J1939_C89_LIBRARY_H_
 #define OPEN_SAE_J1939_C89_LIBRARY_H_
 
+/* C standard library */
+#include <time.h>
+#include <string.h>
+
 #ifndef __cplusplus
 
 /* In ANSI C (C89), the __STDC_VERSION__ is not defined */
-#include <time.h>
 #ifndef __STDC_VERSION__
 #define __STDC_VERSION__ 199409L		/* STDC version of C89 standard */
 #endif
@@ -35,7 +38,6 @@ typedef uint8_t bool;
 #include <stdbool.h>					/* For bool datatype */
 #include <stdint.h>						/* For uint8_t, uint16_t and uint32_t */
 #endif
-
 #endif
 
 #endif /* OPEN_SAE_J1939_C89_LIBRARY_H_ */

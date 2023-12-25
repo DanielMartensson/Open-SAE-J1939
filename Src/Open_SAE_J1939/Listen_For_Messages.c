@@ -48,9 +48,11 @@ bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 			SAE_J1939_Read_Transport_Protocol_Data_Transfer(j1939, SA, data);
 
 		/* Read response request from other ECU - This are response request. They are responses from other ECU about request from this ECU */
+		}else if (id0 == 0x14 && id1 == 0xEF && DA == 0x23) {
+			SAE_J1939_Read_Response_Request_Proprietary_A(j1939, SA, data);										/* Manufacturer specific data */
 		}else if (id0 == 0x18 && id1 == 0xEE && DA == 0xFF && SA != 0xFE){
 			SAE_J1939_Read_Response_Request_Address_Claimed(j1939, SA, data);									/* This is a broadcast response request */
-		}else if (id0 == 0x18 && id1 == 0xEE && DA == 0xFF && SA == 0xFE){
+		}else if (id0 == 0x18 && id1 == 0xEE && DA == 0xFF && SA == 0xFE) {
 			SAE_J1939_Read_Address_Not_Claimed(j1939, SA, data);												/* This is error */
 		}else if (id0 == 0x18 && id1 == 0xFE && DA == 0xCA){
 			SAE_J1939_Read_Response_Request_DM1(j1939, SA, data, 1); 											/* Assume that errors_dm1_active = 1 */
@@ -66,9 +68,9 @@ bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 			ISO_11783_Read_Response_Request_Auxiliary_Estimated_Flow(j1939, SA, DA & 0xF, data);				/* DA & 0xF = Valve number. Total 16 valves from 0 to 15 */
 		}else if (id0 == 0x0C && id1 == 0xC6 && DA == j1939->information_this_ECU.this_ECU_address){
 			ISO_11783_Read_Response_Request_General_Purpose_Valve_Estimated_Flow(j1939, SA, data);
-		}else if (id0 == 0x0C && id1 == 0xFF && DA >= 0x20 && DA <= 0x2F){
+		}else if (id0 == 0x0C && id1 == 0xFF && DA >= 0x20 && DA <= 0x2F) {
 			ISO_11783_Read_Response_Request_Auxiliary_Valve_Measured_Position(j1939, SA, DA & 0xF, data); 		/* DA & 0xF = Valve number. Total 16 valves from 0 to 15 */
-
+		
 		/* Read command from other ECU */
 		}else if (id0 == 0x0C && id1 == 0xFE && DA >= 0x30 && DA <= 0x3F){
 			ISO_11783_Read_Auxiliary_Valve_Command(j1939, SA, DA & 0xF, data); 									/* DA & 0xF = Valve number. Total 16 valves from 0 to 15 */
