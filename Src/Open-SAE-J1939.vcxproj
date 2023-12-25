@@ -57,6 +57,7 @@
     <ClInclude Include="Open_SAE_J1939\C89_Library.h" />
     <ClInclude Include="Open_SAE_J1939\Open_SAE_J1939.h" />
     <ClInclude Include="Open_SAE_J1939\Structs.h" />
+    <ClInclude Include="Open_SAE_J1939\Manufacturer_Specific\Structs_Manufacturer_Specific.h" />
     <ClInclude Include="SAE_J1939\SAE_J1939-21_Transport_Layer\Transport_Layer.h" />
     <ClInclude Include="SAE_J1939\SAE_J1939-71_Application_Layer\Application_Layer.h" />
     <ClInclude Include="SAE_J1939\SAE_J1939-73_Diagnostics_Layer\Diagnostics_Layer.h" />
@@ -145,7 +146,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>

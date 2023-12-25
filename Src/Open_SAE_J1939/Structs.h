@@ -11,6 +11,9 @@
  /* For the C89 standard ints */
 #include "C89_Library.h"
 
+/* For manufacturer specific */
+#include "Manufacturer_Specific/Structs_Manufacturer_Specific.h"
+
 /* For the C++ standard ints */
 #ifdef __cplusplus
 #include <cstdint>
@@ -23,6 +26,11 @@
 #define MAX_TP_DT 1785U
 #define MAX_IDENTIFICATION 30U
 #define MAX_DM_FIELD 10U
+
+/* PGN: 0x00EF00 - Property A where the data is manufacturer specific */
+struct Property_A {
+	struct Vecmocon_Sync_FUP vecmocon_sync_fup;
+};
 
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {

@@ -155,6 +155,9 @@
     <ClInclude Include="Open_SAE_J1939\C89_Library.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Open_SAE_J1939\Manufacturer_Specific\Structs_Manufacturer_Specific.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
