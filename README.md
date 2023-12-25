@@ -19,7 +19,7 @@ https://github.com/DanielMartensson/STM32-PLC
 
 # Getting started
 
-The first thing you need to know is to read my own document of (Open SAE J1939.pdf)[https://github.com/DanielMartensson/Open-SAE-J1939/blob/main/Src/Documentation/Open%20SAE%20J1939.pdf] inside the `Documentation` folder.
+The first thing you need to know is to read my own document of (Open SAE J1939.pdf)[https://github.com/DanielMartensson/Open-SAE-J1939/blob/main/Src/Documentation/Open%20SAE%20J1939.pdf "Document of Open SAE J1939"] inside the `Documentation` folder.
 Learn the structure of the project, else you won't be able to understand SAE J1939. 
 After you have got a basic understanding of the project, you are able to build on it. Keep it simple and follow the 
 SAE J1939 standard!
