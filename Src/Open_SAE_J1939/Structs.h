@@ -27,8 +27,8 @@
 #define MAX_IDENTIFICATION 30U
 #define MAX_DM_FIELD 10U
 
-/* PGN: 0x00EF00 - Property A where the data is manufacturer specific */
-struct Property_A {
+/* PGN: 0x00EF00 - Proprietary A where the data is manufacturer specific */
+struct Proprietary_A {
 	struct Vecmocon_Sync_FUP vecmocon_sync_fup;
 };
 
