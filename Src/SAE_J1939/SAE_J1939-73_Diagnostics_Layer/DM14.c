@@ -19,7 +19,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_DM14(J1939 *j1939, uint8_t DA, ui
 	uint32_t ID = (0x18D9 << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t data[8];
 	data[0] = number_of_requested_bytes;
-	data[1] = (number_of_requested_bytes >> 3) | (pointer_type << 4) | (command << 1) | 0b1;
+	data[1] = ((number_of_requested_bytes >> 3)&0xE0) | (pointer_type << 4) | (command << 1) | 0b1;
 	data[2] = pointer;
 	data[3] = pointer >> 8;
 	data[4] = pointer >> 16;
