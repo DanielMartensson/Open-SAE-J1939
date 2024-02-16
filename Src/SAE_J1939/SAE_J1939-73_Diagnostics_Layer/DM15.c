@@ -19,7 +19,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Response_DM15(J1939 *j1939, uint8_t DA, u
 	uint32_t ID = (0x18D8 << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t response_data[8];
 	response_data[0] = number_of_allowed_bytes;
-	response_data[1] = (number_of_allowed_bytes >> 3) | (0b1 << 4) | (status << 1) | 0b1;	 /* bit 5 and 1 are reserved */
+	response_data[1] = ((number_of_allowed_bytes >> 3)&0xE0)   | (0b1 << 4) | (status << 1) | 0b1;	 /* bit 5 and 1 are reserved */
 	response_data[2] = EDC_parameter;
 	response_data[3] = EDC_parameter >> 8;
 	response_data[4] = EDC_parameter >> 16;
