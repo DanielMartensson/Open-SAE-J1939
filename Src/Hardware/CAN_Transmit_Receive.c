@@ -12,6 +12,7 @@
 static void (*Callback_Function_Send)(uint32_t, uint8_t, uint8_t[]) = NULL;
 static void (*Callback_Function_Read)(uint32_t*, uint8_t[], bool*) = NULL;
 static void (*Callback_Function_Traffic)(uint32_t, uint8_t, uint8_t[], bool) = NULL;
+static void (*Callback_Function_Delay_ms)(uint8_t) = NULL;
 
 /* Platform independent library headers for CAN */
 #if PROCESSOR_CHOICE == STM32
@@ -160,7 +161,7 @@ bool CAN_Read_Message(uint32_t *ID, uint8_t data[]) {
     #elif PROCESSOR_CHOICE == QT_USB
     QT_USB_Get_ID_Data(ID, data, &is_new_message);
 	#elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
-    Callback_Function_Read(ID, data, &is_new_message);
+	Callback_Function_Read(ID, data, &is_new_message);
 	#else
 	/* If no processor are used, use internal feedback for debugging */
 	Internal_Receive(ID, data, &is_new_message);
@@ -174,10 +175,15 @@ bool CAN_Read_Message(uint32_t *ID, uint8_t data[]) {
 	return is_new_message;
 }
 
-void CAN_Set_Callback_Functions(void (*Callback_Function_Send_)(uint32_t, uint8_t, uint8_t[]), void (*Callback_Function_Read_)(uint32_t*, uint8_t[], bool*), void (*Callback_Function_Traffic_)(uint32_t, uint8_t, uint8_t[], bool)){
+void CAN_Set_Callback_Functions(void (*Callback_Function_Send_)(uint32_t, uint8_t, uint8_t[]), 
+								void (*Callback_Function_Read_)(uint32_t*, uint8_t[], bool*), 
+								void (*Callback_Function_Traffic_)(uint32_t, uint8_t, uint8_t[], bool),
+								void (*Callback_Function_Delay_ms_)(uint8_t)
+								){
 	Callback_Function_Send = Callback_Function_Send_;
 	Callback_Function_Read = Callback_Function_Read_;
 	Callback_Function_Traffic = Callback_Function_Traffic_;
+	Callback_Function_Delay_ms = Callback_Function_Delay_ms_;
 }
 
 void CAN_Delay(uint8_t milliseconds) {
@@ -192,16 +198,7 @@ void CAN_Delay(uint8_t milliseconds) {
 	#elif PROCESSOR_CHOICE == QT_USB
 
 	#elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
-	/* Get start time */
-	clock_t start_time = clock();
-
-	/* Compute desired duration */
-	clock_t desired_duration = (clock_t)(CLOCKS_PER_SEC * milliseconds / 1000);
-
-	/* Wait */
-	while ((clock() - start_time) < desired_duration) {
-		;
-	}
+	Callback_Function_Delay_ms(milliseconds);
 	#else
 	/* Nothing */
 	#endif
