@@ -74,7 +74,7 @@ int main() {
 	 * Callbacks can be used if you want to pass a specific CAN-function into the hardware layer.
 	 * All you need to do is to enable INTERNAL_CALLLBACK inside hardware.h
 	 * If you don't want to have the traffic callback, just set the argument as NULL.
-	 * If you don't want any callback at all, you can write your own hardware layer by selecting a specific procesor choice at hardware.h
+	 * If you don't want any callback at all, you can write your own hardware layer by selecting a specific processor choice at hardware.h
 	 */
 	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read, Callback_Function_Traffic, Callback_Function_Delay);
 
