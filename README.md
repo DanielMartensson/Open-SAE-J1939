@@ -54,10 +54,10 @@ That's the debugging mode for internal CAN feedback.
 void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]) {
 	/* Apply your transmit layer here, e.g:
 	 * uint32_t TxMailbox;
-     	 * static CAN_HandleTypeDef can_handler;
+	 * static CAN_HandleTypeDef can_handler;
 	 * This function transmit ID, DLC and data[] as the CAN-message.
 	 * HardWareLayerCAN_TX(&can_handler, ID, DLC, data, &TxMailbox);
-	 * 
+	 *
 	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
 	 */
 }
@@ -70,7 +70,7 @@ void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
 	 * if (HardWareLayerCAN_RX(can_handler, &rxHeader, ID, data) == STATUS_OK){
 	 *	*is_new_data = true;
 	 * }
-	 * 
+	 *
 	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
 	 */
 }
@@ -98,6 +98,11 @@ void Callback_Function_Traffic(uint32_t ID, uint8_t DLC, uint8_t data[], bool is
 	printf("\n");
 }
 
+void Callback_Function_Delay(uint8_t uint8)
+{
+	/* Apply your delay here */
+}
+
 int main() {
 
 	/* Create our J1939 structure */
@@ -109,7 +114,7 @@ int main() {
 	 * If you don't want to have the traffic callback, just set the argument as NULL.
 	 * If you don't want any callback at all, you can write your own hardware layer by selecting a specific procesor choice at hardware.h
 	 */
-	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read, Callback_Function_Traffic);
+	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read, Callback_Function_Traffic, Callback_Function_Delay);
 
 	/* Load your ECU information */
 	Open_SAE_J1939_Startup_ECU(&j1939);
@@ -129,6 +134,7 @@ int main() {
 
 	return 0;
 }
+
 ```
 See the examples in `Examples -> SAE J1939` how to change the address, NAME or identifications for your ECU.
 
