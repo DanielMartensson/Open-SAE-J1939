@@ -60,6 +60,11 @@ void Callback_Function_Traffic(uint32_t ID, uint8_t DLC, uint8_t data[], bool is
 	printf("\n");
 }
 
+void Callback_Function_Delay(uint8_t uint8)
+{
+	/* Apply your delay here */
+}
+
 int main() {
 
 	/* Create our J1939 structure */
@@ -69,9 +74,9 @@ int main() {
 	 * Callbacks can be used if you want to pass a specific CAN-function into the hardware layer.
 	 * All you need to do is to enable INTERNAL_CALLLBACK inside hardware.h
 	 * If you don't want to have the traffic callback, just set the argument as NULL.
-	 * If you don't want any callback at all, you can write your own hardware layer by selecting a specific procesor choice at hardware.h
+	 * If you don't want any callback at all, you can write your own hardware layer by selecting a specific processor choice at hardware.h
 	 */
-	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read, Callback_Function_Traffic);
+	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read, Callback_Function_Traffic, Callback_Function_Delay);
 
 	/* Load your ECU information */
 	Open_SAE_J1939_Startup_ECU(&j1939);
