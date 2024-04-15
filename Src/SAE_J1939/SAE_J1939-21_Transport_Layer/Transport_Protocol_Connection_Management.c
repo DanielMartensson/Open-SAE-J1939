@@ -39,10 +39,19 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(
 	uint32_t ID = (0x1CEC << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
 	uint8_t data[8] = { 0 };
 	data[0] = j1939->this_ecu_tp_cm.control_byte;
-	data[1] = j1939->this_ecu_tp_cm.total_message_size;
-	data[2] = j1939->this_ecu_tp_cm.total_message_size >> 8;
-	data[3] = j1939->this_ecu_tp_cm.number_of_packages;
-	data[4] = 0xFF; 															/* Reserved */
+	if (j1939->this_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_CTS)
+	{
+		data[1] = j1939->this_ecu_tp_cm.number_of_packages;
+		data[2] = 0x01;
+		data[3] = 0xFF; /* Reserved */
+	}
+	else // CONTROL_BYTE_TP_CM_RTS
+	{
+		data[1] = j1939->this_ecu_tp_cm.total_message_size;
+		data[2] = j1939->this_ecu_tp_cm.total_message_size >> 8;
+		data[3] = j1939->this_ecu_tp_cm.number_of_packages;
+	}
+	data[4] = 0xFF; /* Reserved */
 	data[5] = j1939->this_ecu_tp_cm.PGN_of_the_packeted_message;
 	data[6] = j1939->this_ecu_tp_cm.PGN_of_the_packeted_message >> 8;
 	data[7] = j1939->this_ecu_tp_cm.PGN_of_the_packeted_message >> 16;
