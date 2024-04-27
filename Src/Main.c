@@ -60,9 +60,9 @@ void Callback_Function_Traffic(uint32_t ID, uint8_t DLC, uint8_t data[], bool is
 	printf("\n");
 }
 
-void Callback_Function_Delay(uint8_t uint8)
-{
-	/* Apply your delay here */
+/* Apply your delay here */
+void Callback_Function_Delay(uint8_t delay){
+	/* Place your hardware delay here e.g HAL_Delay(delay); for STM32 */
 }
 
 int main() {
