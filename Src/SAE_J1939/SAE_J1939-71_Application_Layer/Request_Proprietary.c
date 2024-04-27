@@ -35,11 +35,11 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Proprietary_A(J1939* j1939, u
 	}
 	else {
 		/* Multiple messages - Load data */
-		j1939->this_ecu_tp_cm.total_message_size = length_of_each_field;
+		j1939->this_ecu_tp_cm.total_message_size_being_transmitted = length_of_each_field;
 		memcpy(j1939->this_ecu_tp_dt.data, j1939->this_proprietary.proprietary_A.data, length_of_each_field);
 		
 		/* Send TP CM */
-		j1939->this_ecu_tp_cm.number_of_packages = j1939->this_ecu_tp_cm.total_message_size % 8 > 0 ? j1939->this_ecu_tp_cm.total_message_size / 8 + 1 : j1939->this_ecu_tp_cm.total_message_size / 8; /* Rounding up */
+		j1939->this_ecu_tp_cm.number_of_packages_beging_transmitted = j1939->this_ecu_tp_cm.total_message_size_being_transmitted % 8 > 0 ? j1939->this_ecu_tp_cm.total_message_size_being_transmitted / 8 + 1 : j1939->this_ecu_tp_cm.total_message_size_being_transmitted / 8; /* Rounding up */
 		j1939->this_ecu_tp_cm.PGN_of_the_packeted_message = PGN_PROPRIETARY_A;
 		j1939->this_ecu_tp_cm.control_byte = DA == 0xFF ? CONTROL_BYTE_TP_CM_BAM : CONTROL_BYTE_TP_CM_RTS; /* If broadcast, then use BAM control byte */
 		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA);
@@ -47,8 +47,9 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Proprietary_A(J1939* j1939, u
 			return status;
 		}
 
-		/* Check if we are going to send it directly (BAM) - Else, the TP CM will send a RTS control byte to the other ECU and the ECU will answer with control byte CTS */
+		/* Check if we are going to send it directly (BAM) */
 		if (j1939->this_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_BAM) {
+			j1939->from_other_ecu_tp_cm.control_byte = j1939->this_ecu_tp_cm.control_byte;
 			return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA);
 		}
 		return status;

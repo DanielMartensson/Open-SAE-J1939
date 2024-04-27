@@ -36,9 +36,25 @@ struct Acknowledgement {
 
 /* PGN: 0x00EC00 - Storing the Transport Protocol Connection Management from the reading process */
 struct TP_CM {
+	/* General */
 	uint8_t control_byte;							/* What type of message are we going to send */
-	uint16_t total_message_size;					/* Total bytes our complete message includes - 9 to 1785 */
-	uint8_t number_of_packages;						/* How many times we are going to send packages via TP_DT - 2 to 224 because 1785/8 is 224 rounded up */
+	
+	/* RTS */
+	uint16_t total_message_size_being_transmitted;	/* Total bytes our complete message includes - 9 to 1785 */
+	uint8_t number_of_packages_beging_transmitted;	/* How many times we are going to send packages via TP_DT - 2 to 224 because 1785/8 is 224 rounded up */
+	
+	/* CTS */
+	uint8_t total_number_of_packages_transmitted;	/* Total packages we have received */
+	uint8_t next_packet_number_transmitted;			/* Next packet number we want to have from the transmitter */
+
+	/* EOM */
+	uint16_t total_number_of_bytes_received;		/* Total bytes we are have got */
+	uint8_t total_number_of_packages_received;		/* Total number of packages received */
+
+	/* Abort */
+	uint8_t connecting_abort_reason;				/* Given a massage about the reason */
+
+	/* General */
 	uint32_t PGN_of_the_packeted_message;			/* Our message is going to activate a PGN */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };

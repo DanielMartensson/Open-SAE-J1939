@@ -98,9 +98,9 @@ void Callback_Function_Traffic(uint32_t ID, uint8_t DLC, uint8_t data[], bool is
 	printf("\n");
 }
 
-void Callback_Function_Delay(uint8_t uint8)
-{
-	/* Apply your delay here */
+/* Apply your delay here */
+void Callback_Function_Delay(uint8_t delay){
+	/* Place your hardware delay here e.g HAL_Delay(delay); for STM32 */
 }
 
 int main() {
@@ -112,7 +112,7 @@ int main() {
 	 * Callbacks can be used if you want to pass a specific CAN-function into the hardware layer.
 	 * All you need to do is to enable INTERNAL_CALLLBACK inside hardware.h
 	 * If you don't want to have the traffic callback, just set the argument as NULL.
-	 * If you don't want any callback at all, you can write your own hardware layer by selecting a specific procesor choice at hardware.h
+	 * If you don't want any callback at all, you can write your own hardware layer by selecting a specific processor choice at hardware.h
 	 */
 	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read, Callback_Function_Traffic, Callback_Function_Delay);
 
@@ -134,7 +134,6 @@ int main() {
 
 	return 0;
 }
-
 ```
 See the examples in `Examples -> SAE J1939` how to change the address, NAME or identifications for your ECU.
 
@@ -174,7 +173,7 @@ This flow chart in code how Open SAE J1939 library is working. This example demo
  - SAE J1939:21 Transport Layer
  	- Acknowledgement
  	- Request
- 	- Transport Protocol Connection Management
+ 	- Transport Protocol Connection Management with BAM, CTS, RTS and EOM
  	- Transport Protocol Data Transfer
  - SAE J1939:71 Application Layer
  	- Request Component Identification

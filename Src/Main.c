@@ -10,89 +10,45 @@
  /* Include Open SAE J1939 */
 #include "Open_SAE_J1939/Open_SAE_J1939.h"
 
-/* Include ISO 11783 */
-#include "ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
-
-void Callback_Function_Send(uint32_t ID, uint8_t DLC, uint8_t data[]) {
-	/* Apply your transmit layer here, e.g:
-	 * uint32_t TxMailbox;
-	 * static CAN_HandleTypeDef can_handler;
-	 * This function transmit ID, DLC and data[] as the CAN-message.
-	 * HardWareLayerCAN_TX(&can_handler, ID, DLC, data, &TxMailbox);
-	 *
-	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
-	 */
-}
-
-void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
-	/* Apply your receive layer here, e.g:
-	 * CAN_RxHeaderTypeDef rxHeader = {0};
-	 * static CAN_HandleTypeDef can_handler;
-	 * This function read CAN RX and give the data to ID and data[] as the CAN-message.
-	 * if (HardWareLayerCAN_RX(can_handler, &rxHeader, ID, data) == STATUS_OK){
-	 *	*is_new_data = true;
-	 * }
-	 *
-	 * You can use TCP/IP, USB, CAN etc. as hardware layers for SAE J1939
-	 */
-}
-
-/* This function reads the CAN traffic */
-void Callback_Function_Traffic(uint32_t ID, uint8_t DLC, uint8_t data[], bool is_TX) {
-	/* Print if it is TX or RX */
-	printf("%s\t", is_TX ? "TX" : "RX");
-
-	/* Print ID as hex */
-	printf("%08X\t", ID);
-
-	/* Print the data */
-	uint8_t i;
-	for (i = 0U; i < DLC; i++) {
-		printf("%X\t", data[i]);
-	}
-
-	/* Print the non-data */
-	for (i = DLC; i < 8U; i++) {
-		printf("%X\t", 0U);
-	}
-
-	/* New line */
-	printf("\n");
-}
-
-/* Apply your delay here */
-void Callback_Function_Delay(uint8_t delay){
-	/* Place your hardware delay here e.g HAL_Delay(delay); for STM32 */
-}
-
 int main() {
 
-	/* Create our J1939 structure */
-	J1939 j1939 = { 0 };
+	/* Create our J1939 structure with two ECU */
+	J1939 j1939_1 = { 0 };
+	J1939 j1939_2 = { 0 };
 
-	/*
-	 * Callbacks can be used if you want to pass a specific CAN-function into the hardware layer.
-	 * All you need to do is to enable INTERNAL_CALLLBACK inside hardware.h
-	 * If you don't want to have the traffic callback, just set the argument as NULL.
-	 * If you don't want any callback at all, you can write your own hardware layer by selecting a specific processor choice at hardware.h
-	 */
-	CAN_Set_Callback_Functions(Callback_Function_Send, Callback_Function_Read, Callback_Function_Traffic, Callback_Function_Delay);
-
-	/* Load your ECU information */
-	Open_SAE_J1939_Startup_ECU(&j1939);
-
-	/* SAE J1939 process */
-	bool run = true;
-	while (run) {
-		/* Read incoming messages */
-		Open_SAE_J1939_Listen_For_Messages(&j1939);
-
-		/* Your application code here */
-
+	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
+	uint8_t i;
+	for (i = 0; i < 255; i++) {
+		j1939_1.other_ECU_address[i] = 0xFF;
+		j1939_2.other_ECU_address[i] = 0xFF;
 	}
 
-	/* Save your ECU information */
-	Open_SAE_J1939_Closedown_ECU(&j1939);
+	/* Set the ECU address */
+	j1939_1.information_this_ECU.this_ECU_address = 0xA2;											/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0x90;
+
+	/* Set the Software Identification */
+	j1939_1.information_this_ECU.this_identifications.software_identification.number_of_fields = 15;
+	char text[15] = "SAE J1939!!!";
+	for (i = 0; i < 15; i++) {
+		j1939_1.information_this_ECU.this_identifications.software_identification.identifications[i] = (uint8_t)text[i];
+	}
+	/* Request Software Identification from ECU 2 to ECU 1 */
+	SAE_J1939_Send_Request(&j1939_2, 0xA2, PGN_SOFTWARE_IDENTIFICATION);
+
+	/* Response request from ECU 1 perspective - Don't worry, in real CAN applications you don't need this mess. */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+
+	/* Read response request from ECU 1 to ECU 2 */
+	for (i = 0; i < 15; i++) {
+		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+		Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+	}
+
+	/* Display what ECU 2 got */
+	printf("Number of fields = %i\nIdentifications = %s\nFrom ECU address = 0x%X", j1939_2.from_other_ecu_identifications.software_identification.number_of_fields, j1939_2.from_other_ecu_identifications.software_identification.identifications, j1939_2.from_other_ecu_identifications.software_identification.from_ecu_address);
 
 	return 0;
 }

@@ -25,13 +25,20 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 		j1939->from_other_ecu_tp_dt.data[index*7 + i-1] = data[i]; /* For every package, we send 7 bytes of data where the first byte data[0] is the sequence number */
 	}
 	/* Check if we have completed our message - Return = Not completed */
-	if (j1939->from_other_ecu_tp_cm.number_of_packages != j1939->from_other_ecu_tp_dt.sequence_number || j1939->from_other_ecu_tp_cm.number_of_packages == 0){
+	if (j1939->from_other_ecu_tp_cm.number_of_packages_beging_transmitted != j1939->from_other_ecu_tp_dt.sequence_number || j1939->from_other_ecu_tp_cm.number_of_packages_beging_transmitted == 0){
+		if (j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS) {
+			/* Send new CTS */
+			j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_CTS;
+			j1939->this_ecu_tp_cm.total_number_of_packages_transmitted++;
+			j1939->this_ecu_tp_cm.next_packet_number_transmitted++;
+			SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
+		}
 		return;
 	}
 
 	/* Our message are complete - Build it and call it complete_data[total_message_size] */
 	uint32_t PGN = j1939->from_other_ecu_tp_cm.PGN_of_the_packeted_message;
-	uint16_t total_message_size = j1939->from_other_ecu_tp_cm.total_message_size;
+	uint16_t total_message_size = j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted;
 	uint8_t complete_data[MAX_TP_DT];
 	uint16_t inserted_bytes = 0;
 	for (i = 0; i < j1939->from_other_ecu_tp_dt.sequence_number; i++){
@@ -44,7 +51,10 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 
 	/* Send an end of message ACK back */
 	if(j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS){
-		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_TP_CM_EndOfMsgACK, GROUP_FUNCTION_VALUE_NORMAL, PGN);
+		j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_EndOfMsgACK;
+		j1939->this_ecu_tp_cm.total_number_of_bytes_received = j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted;
+		j1939->this_ecu_tp_cm.total_number_of_packages_received = j1939->from_other_ecu_tp_dt.sequence_number;
+		SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
 	}
 	/* Check what type of function that message want this ECU to do */
 	switch (PGN) {
@@ -89,20 +99,43 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j
 	uint8_t i, j, package[8];
 	uint16_t bytes_sent = 0;
 	ENUM_J1939_STATUS_CODES status = STATUS_SEND_OK;
-	for(i = 1; i <= j1939->this_ecu_tp_cm.number_of_packages; i++) {
-		package[0] = i; 																	/* Number of package */
-		for(j = 0; j < 7; j++){
-			if(bytes_sent < j1939->this_ecu_tp_cm.total_message_size){
-				package[j+1] = j1939->this_ecu_tp_dt.data[bytes_sent++];					/* Data that we have collected */
-			}else{
-				package[j+1] = 0xFF; 														/* Reserved */
+	switch (j1939->from_other_ecu_tp_cm.control_byte) {
+	case CONTROL_BYTE_TP_CM_BAM:
+		for (i = 1; i <= j1939->this_ecu_tp_cm.number_of_packages_beging_transmitted; i++) {
+			package[0] = i; 																	/* Number of package */
+			for (j = 0; j < 7; j++) {
+				if (bytes_sent < j1939->this_ecu_tp_cm.total_message_size_being_transmitted) {
+					package[j + 1] = j1939->this_ecu_tp_dt.data[bytes_sent++];					/* Data that we have collected */
+				}
+				else {
+					package[j + 1] = 0xFF; 														/* Reserved */
+				}
+			}
+
+			/* Transmitt message */
+			status = CAN_Send_Message(ID, package);
+			CAN_Delay(100);																		/* Important CAN delay according to standard */
+			if (status != STATUS_SEND_OK) {
+				break;
 			}
 		}
-		status = CAN_Send_Message(ID, package);
-		CAN_Delay(100);																		/* Important CAN delay according to standard */
-		if(status != STATUS_SEND_OK){
-			return status;
+		break;
+	case CONTROL_BYTE_TP_CM_CTS:
+		package[0] = j1939->from_other_ecu_tp_cm.next_packet_number_transmitted + 1;				/* Next number of package */
+		bytes_sent = j1939->from_other_ecu_tp_cm.total_number_of_packages_transmitted * 7;
+		for (j = 0; j < 7; j++) {
+			if (bytes_sent < j1939->this_ecu_tp_cm.total_message_size_being_transmitted) {
+				package[j + 1] = j1939->this_ecu_tp_dt.data[bytes_sent++];						/* Data that we have collected */
+			}
+			else {
+				package[j + 1] = 0xFF; 															/* Reserved */
+			}
 		}
+
+		/* Transmitt message */
+		status = CAN_Send_Message(ID, package);
+		break;
 	}
+	
 	return status;
 }

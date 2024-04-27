@@ -17,8 +17,8 @@
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Commanded_Address(J1939 *j1939, uint8_t DA, uint8_t new_ECU_address, uint32_t identity_number, uint16_t manufacturer_code, uint8_t function_instance, uint8_t ECU_instance, uint8_t function, uint8_t vehicle_system, uint8_t arbitrary_address_capable, uint8_t industry_group, uint8_t vehicle_system_instance) {
 	/* Multiple messages - Load data */
-	j1939->this_ecu_tp_cm.number_of_packages = 2;
-	j1939->this_ecu_tp_cm.total_message_size = 9;
+	j1939->this_ecu_tp_cm.number_of_packages_beging_transmitted = 2;
+	j1939->this_ecu_tp_cm.total_message_size_being_transmitted = 9;
 	j1939->this_ecu_tp_dt.data[0] = identity_number;
 	j1939->this_ecu_tp_dt.data[1] = identity_number >> 8;
 	j1939->this_ecu_tp_dt.data[2] = (identity_number >> 16) |  (manufacturer_code << 5);
@@ -37,8 +37,9 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Commanded_Address(J1939 *j1939, uint8_t D
 		return status;
 	}
 
-	/* Check if we are going to send it directly (BAM) - Else, the TP CM will send a RTS control byte to the other ECU and the ECU will answer with control byte CTS */
+	/* Check if we are going to send it directly (BAM) */
 	if(j1939->this_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_BAM){
+		j1939->from_other_ecu_tp_cm.control_byte = j1939->this_ecu_tp_cm.control_byte;
 		return SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, DA);
 	}
 	return status;
