@@ -31,9 +31,9 @@ void Callback_Function_Read(uint32_t* ID, uint8_t data[], bool* is_new_data) {
 	*is_new_data = true;
 }
 
-void Callback_Function_Delay(uint8_t uint8)
-{
-	/* Apply your delay here */
+/* Apply your delay here */
+void Callback_Function_Delay(uint8_t delay){
+	/* Place your hardware delay here e.g HAL_Delay(delay); for STM32 */
 }
 
 int main() {
