@@ -7,18 +7,18 @@
 
 #include <stdio.h>
 
-/* Include Open SAE J1939 */
+ /* Include Open SAE J1939 */
 #include "Open_SAE_J1939/Open_SAE_J1939.h"
 
 int main() {
 
 	/* Create our J1939 structure with two ECU */
-	J1939 j1939_1 = {0};
-	J1939 j1939_2 = {0};
+	J1939 j1939_1 = { 0 };
+	J1939 j1939_2 = { 0 };
 
 	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
 	uint8_t i;
-	for(i = 0; i < 255; i++){
+	for (i = 0; i < 255; i++) {
 		j1939_1.other_ECU_address[i] = 0xFF;
 		j1939_2.other_ECU_address[i] = 0xFF;
 	}
@@ -45,19 +45,20 @@ int main() {
 	raw_binary_data[12] = 0;														/* NULL termination (Important for C-string) */
 
 	/* Send binary data to ECU 2 */
+	uint8_t DA = 0x6A; 
 	SAE_J1939_Send_Binary_Data_Transfer_DM16(&j1939_1, 0x6A, number_of_occurences, raw_binary_data);
 
 	/* This is only here because we using the internal message buffer - In real CAN applications, this mess is not needed */
 	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
 	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
 
-	/* Read binary data at ECU 2 - Ten times would be good enough to get all messages because this message above is multi-packet */
-	for(i = 0; i < 10; i++){
-		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
-	}
 	/* Pick up the message */
 	printf("Message length: %i\n", j1939_2.from_other_ecu_dm.dm16.number_of_occurences);
-	printf("Message text: %s\n", (char*) j1939_2.from_other_ecu_dm.dm16.raw_binary_data);
+	printf("Message text: %s\n", (char*)j1939_2.from_other_ecu_dm.dm16.raw_binary_data);
 	printf("From ECU address: 0x%X", j1939_2.from_other_ecu_dm.dm16.from_ecu_address);
 	return 0;
 }

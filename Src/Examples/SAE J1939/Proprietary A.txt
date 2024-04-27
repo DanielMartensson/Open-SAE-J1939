@@ -51,13 +51,11 @@ int main() {
 	/* ECU 2 sending a request to ECU 1 about Proprietary A - which contains manufacturer specific data */
 	SAE_J1939_Send_Request(&j1939_2, 0x80, PGN_PROPRIETARY_A);
 
-	/* Listen for messages - The reason why it looks like this is because ECU 1 and ECU 2 shares the same CAN-bus buffer - In CAN bus application, you don't need this mess */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_1); /* ECU 1 is reading the request from ECU 2 */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_2); /* ECU 2 read the response from ECU 1 and send back TP_CM with CTS */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_1); /* ECU 1 read the TP_CM with CTS and send a RTS back with data */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_2); /* ECU 2 read the TP_DT data */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_2); /* ECU 2 read the TP_DT data */
-	Open_SAE_J1939_Listen_For_Messages(&j1939_1); /* ECU 1 read the ACK from ECU 2 when ECU 2 has read the complete TP_DT message */
+	/* Listen for messages */
+	for (i = 0; i < 10; i++) {
+		Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+	}
 
 	/* Print the result */
 	printf("%s", (char*)j1939_2.from_other_ecu_proprietary.proprietary_A.data);
