@@ -50,10 +50,10 @@ ENUM_J1939_RX_MSG Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 			rx_msg = RX_MSG_DM16;
 
 		/* Read Transport Protocol information from other ECU */
-		}else if(id0 == 0x1C && id1 == 0xEC && DA == j1939->information_this_ECU.this_ECU_address){
+		}else if(id0 == 0x1C && id1 == 0xEC && (DA == j1939->information_this_ECU.this_ECU_address || DA == 0xFF)){
 			SAE_J1939_Read_Transport_Protocol_Connection_Management(j1939, SA, data);
 			rx_msg = RX_MSG_TP_CONN_MANAGEMENT;
-		}else if (id0 == 0x1C && id1 == 0xEB && DA == j1939->information_this_ECU.this_ECU_address){
+		}else if (id0 == 0x1C && id1 == 0xEB && (DA == j1939->information_this_ECU.this_ECU_address || DA == 0xFF)){
 			SAE_J1939_Read_Transport_Protocol_Data_Transfer(j1939, SA, data);
 			rx_msg = RX_MSG_TP_CONN_DATA_TRANSFER;
 
