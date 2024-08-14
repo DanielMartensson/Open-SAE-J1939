@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>led_ex1_blinky</name>
+	<name>Open-SAE-J1939</name>
 	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
+			<triggers>clean,full,incremental,</triggers>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -18,39 +19,8 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>com.ti.ccstudio.core.ccsNature</nature>
 		<nature>org.eclipse.cdt.core.cnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
-		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>driverlib.lib</name>
-			<type>1</type>
-			<locationURI>COM_TI_C2000WARE_SOFTWARE_PACKAGE_INSTALL_DIR/driverlib/f2838x/driverlib/ccs/Debug/driverlib.lib</locationURI>
-		</link>
-	</linkedResources>
-	<variableList>
-		<variable>
-			<name>C2000WARE_DLIB_ROOT</name>
-			<value>$%7BCOM_TI_C2000WARE_SOFTWARE_PACKAGE_INSTALL_DIR%7D/driverlib/f2838x/driverlib</value>
-		</variable>
-		<variable>
-			<name>C2000WARE_ROOT</name>
-			<value>$%7BCOM_TI_C2000WARE_SOFTWARE_PACKAGE_INSTALL_DIR%7D</value>
-		</variable>
-		<variable>
-			<name>CLB_SIM_COMPILER</name>
-			<value>file:/C:/TDM-GCC-64/bin</value>
-		</variable>
-		<variable>
-			<name>CLB_SYSCFG_ROOT</name>
-			<value>$%7BCOM_TI_C2000WARE_SOFTWARE_PACKAGE_INSTALL_DIR%7D/utilities/clb_tool/clb_syscfg</value>
-		</variable>
-		<variable>
-			<name>SYSTEMC_INSTALL</name>
-			<value>$%7BCOM_TI_C2000WARE_SOFTWARE_PACKAGE_INSTALL_DIR%7D/utilities/clb_tool/clb_syscfg/systemc-2.3.3</value>
-		</variable>
-	</variableList>
 </projectDescription>

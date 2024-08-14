@@ -1,0 +1,45 @@
+/*
+ * Main.c
+ *
+ *  Created on: 16 juli 2021
+ *      Author: Daniel Mårtensson
+ */
+
+#include <stdio.h>
+
+/* Include Open SAE J1939 */
+#include "Open_SAE_J1939/Open_SAE_J1939.h"
+
+int main() {
+
+	/* Create our J1939 structure with two ECU */
+	J1939 j1939_1 = {0};
+	J1939 j1939_2 = {0};
+
+	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
+	uint8_t i;
+	for(i = 0; i < 255; i++){
+		j1939_1.other_ECU_address[i] = 0xFF;
+		j1939_2.other_ECU_address[i] = 0xFF;
+	}
+
+	/* Set the ECU address */
+	j1939_1.information_this_ECU.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0x90;
+
+	/* Send an acknowledgement from ECU 1 to ECU 2 where we say that the PGN function is busy because of time out */
+	SAE_J1939_Send_Acknowledgement(&j1939_1, 0x90, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_BUSY, GROUP_FUNCTION_VALUE_ABORT_TIME_OUT, PGN_AUXILIARY_VALVE_ESTIMATED_FLOW_0);
+
+	/* Read the acknowledgement at ECU 2 */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+
+	/* Check what acknowledgement we have */
+	printf("Control byte = %i\nGroup function value = %i\nPGN of requested info = %i\nAddress(Which is the same as the source address of the ECU) = 0x%X\nFrom where came the message = 0x%X"
+			, j1939_2.from_other_ecu_acknowledgement.control_byte
+			, j1939_2.from_other_ecu_acknowledgement.group_function_value
+			, j1939_2.from_other_ecu_acknowledgement.PGN_of_requested_info
+			, j1939_2.from_other_ecu_acknowledgement.address
+			, j1939_2.from_other_ecu_acknowledgement.from_ecu_address);
+
+	return 0;
+}

@@ -1,0 +1,84 @@
+/*
+ * CAN.c
+ *
+ *  Created on: Jun 14, 2021
+ *      Author: Daniel Mårtensson
+ */
+
+#include "Functions.h"
+
+static CAN_HandleTypeDef *can_handler;
+static J1939 *j1939_handler;
+static void Create_CAN_Filter(CAN_HandleTypeDef *hcan);
+static void Create_CAN_Interrupt(CAN_HandleTypeDef *hcan);
+
+void STM32_PLC_Start_CAN(CAN_HandleTypeDef *hcan, J1939 *j1939) {
+	can_handler = hcan;
+	j1939_handler = j1939;
+	Create_CAN_Filter(hcan);
+	if (HAL_CAN_Start(hcan) != HAL_OK)
+		Error_Handler();
+	Create_CAN_Interrupt(hcan);
+}
+
+HAL_StatusTypeDef STM32_PLC_CAN_Transmit(uint8_t TxData[], CAN_TxHeaderTypeDef *TxHeader) {
+	uint32_t TxMailbox;
+	return HAL_CAN_AddTxMessage(can_handler, TxHeader, TxData, &TxMailbox);
+}
+
+/* Returns true if the message data is new */
+void STM32_PLC_CAN_Get_ID_Data(uint32_t* ID, uint8_t data[], bool* is_new_message) {
+	CAN_RxHeaderTypeDef RxHeader = {0};
+	uint8_t RxData[8] = {0};
+	HAL_StatusTypeDef status = HAL_CAN_GetRxMessage(can_handler, CAN_RX_FIFO0, &RxHeader, RxData);
+	if (status != HAL_OK)
+		Error_Handler();
+
+	/* Check the length of the data */
+	if(RxHeader.DLC == 0){
+		*is_new_message = false;
+		return;
+	}
+
+	/* Read ID */
+	if(RxHeader.IDE == CAN_ID_STD)
+		*ID = RxHeader.StdId;
+	else
+		*ID = RxHeader.ExtId;
+
+	/* Read data */
+	memcpy(data, RxData, 8);
+
+	/* Leave the function by saying that the message is new */
+	*is_new_message = true;
+}
+
+/* Interrupt handler that read message */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
+	Open_SAE_J1939_Listen_For_Messages(j1939_handler);
+}
+
+
+static void Create_CAN_Interrupt(CAN_HandleTypeDef *hcan) {
+	/* Don't forget to check NVIC in CAN -> NVIC Settings -> CAN RX0 interrupt */
+	if (HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+			Error_Handler();
+}
+
+
+static void Create_CAN_Filter(CAN_HandleTypeDef *hcan) {
+	CAN_FilterTypeDef sFilterConfig;
+	sFilterConfig.FilterBank = 0;
+	sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
+	sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
+	sFilterConfig.FilterIdHigh = 0x0000;
+	sFilterConfig.FilterIdLow = 0x0000;
+	sFilterConfig.FilterMaskIdHigh = 0x0000;
+	sFilterConfig.FilterMaskIdLow = 0x0000;
+	sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
+	sFilterConfig.FilterActivation = ENABLE;
+	sFilterConfig.SlaveStartFilterBank = 14;
+
+	if (HAL_CAN_ConfigFilter(hcan, &sFilterConfig) != HAL_OK)
+		Error_Handler();
+}

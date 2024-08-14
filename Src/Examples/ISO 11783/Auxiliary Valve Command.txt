@@ -1,0 +1,48 @@
+/*
+ * Main.c
+ *
+ *  Created on: 16 juli 2021
+ *      Author: Daniel Mårtensson
+ */
+
+#include <stdio.h>
+
+/* Include Open SAE J1939 */
+#include "Open_SAE_J1939/Open_SAE_J1939.h"
+
+/* Include ISO 11783 */
+#include "ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
+
+int main() {
+
+	/* Create our J1939 structure with two ECU */
+	J1939 j1939_1 = {0};
+	J1939 j1939_2 = {0};
+
+	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
+	uint8_t i;
+	for(i = 0; i < 255; i++){
+		j1939_1.other_ECU_address[i] = 0xFF;
+		j1939_2.other_ECU_address[i] = 0xFF;
+	}
+
+	/* Set the ECU address */
+	j1939_1.information_this_ECU.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0xFD;
+
+	/* Broadcast a command from ECU 1 */
+	uint8_t valve_number = 1;
+	ISO_11783_Send_Auxiliary_Valve_Command(&j1939_1, valve_number, 100, FAIL_SAFE_MODE_ACTIVATED, VALVE_STATE_INITIALISATION);
+
+	/* Read the command for ECU 2 */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+
+	/* Display what we got */
+	printf("Standard flow = %i\nValve state = %i\nFail safe mode = %i\nFrom ECU address = 0x%X"
+			,j1939_2.from_other_ecu_auxiliary_valve_command[valve_number].standard_flow
+			,j1939_2.from_other_ecu_auxiliary_valve_command[valve_number].valve_state
+			,j1939_2.from_other_ecu_auxiliary_valve_command[valve_number].fail_safe_mode
+			,j1939_2.from_other_ecu_auxiliary_valve_command[valve_number].from_ecu_address);
+
+	return 0;
+}

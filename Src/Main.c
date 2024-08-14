@@ -1,0 +1,54 @@
+/*
+ * Main.c
+ *
+ *  Created on: 16 juli 2021
+ *      Author: Daniel Mårtensson
+ */
+
+#include <stdio.h>
+
+ /* Include Open SAE J1939 */
+#include "Open_SAE_J1939/Open_SAE_J1939.h"
+
+int main() {
+
+	/* Create our J1939 structure with two ECU */
+	J1939 j1939_1 = { 0 };
+	J1939 j1939_2 = { 0 };
+
+	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
+	uint8_t i;
+	for (i = 0; i < 255; i++) {
+		j1939_1.other_ECU_address[i] = 0xFF;
+		j1939_2.other_ECU_address[i] = 0xFF;
+	}
+
+	/* Set the ECU address */
+	j1939_1.information_this_ECU.this_ECU_address = 0xA2;											/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0x90;
+
+	/* Set the Software Identification */
+	j1939_1.information_this_ECU.this_identifications.software_identification.number_of_fields = 15;
+	char text[15] = "SAE J1939!!!";
+	for (i = 0; i < 15; i++) {
+		j1939_1.information_this_ECU.this_identifications.software_identification.identifications[i] = (uint8_t)text[i];
+	}
+	/* Request Software Identification from ECU 2 to ECU 1 */
+	SAE_J1939_Send_Request(&j1939_2, 0xA2, PGN_SOFTWARE_IDENTIFICATION);
+
+	/* Response request from ECU 1 perspective - Don't worry, in real CAN applications you don't need this mess. */
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+	Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+
+	/* Read response request from ECU 1 to ECU 2 */
+	for (i = 0; i < 15; i++) {
+		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+		Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+	}
+
+	/* Display what ECU 2 got */
+	printf("Number of fields = %i\nIdentifications = %s\nFrom ECU address = 0x%X", j1939_2.from_other_ecu_identifications.software_identification.number_of_fields, j1939_2.from_other_ecu_identifications.software_identification.identifications, j1939_2.from_other_ecu_identifications.software_identification.from_ecu_address);
+
+	return 0;
+}
