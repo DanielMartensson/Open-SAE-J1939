@@ -14,7 +14,7 @@ https://github.com/DanielMartensson/Easy-CANopen
 Looking for a C++ GUI framework that uses Open SAE J1939 over the USB?
 https://github.com/DanielMartensson/GoobySoft
 
-Logging for a C STM32 project with Open SAE J1939?
+Looking for a C STM32 project with Open SAE J1939?
 https://github.com/DanielMartensson/STM32-PLC
 
 # Getting started
@@ -212,16 +212,16 @@ This flow chart in code how Open SAE J1939 library is working. This example demo
  - Q: Do I need to install the library for to use the library?
  	- A: No, just copy over the `.c` and `.h` files to your project and compile. I have used this with QT framework.
  - Q: This project is quite old now and not so much updates, is it still worth to use it?
- 	- A: Yes, this library only updates when I or other includes more functionality from SAE J1939. The reason why I wrote this in `ANSI C (C89)` is because it's an industry standard and will you will always be able to compile this library and use it on all systems.
+ 	- A: Yes, this library only updates when I or other includes more functionality from SAE J1939. The reason why I wrote this in `ANSI C (C89)` is because it's an industry standard and you will always be able to compile this library and use it on all systems.
  - Q: What is your plan with the library?
  	- A: To make SAE J1939 available for everybody
  - Q: I don't have CAN-bus, but can I use this library anyway with UART, USB, WiFi etc?
  	- A: Yes. This is only a way to shape a message in a specific way.
  - Q: Can I send data with this library, even if I don't have CAN-bus?
  	- A: Yes. There are something called DM14 transmit request, DM15 status response and DM16 binary transfer. Use that if you want to transfer data in an industrial way.
- - Q: Can I send multi package messages from from multiple ECU:s to one ECU at the same time?
- 	- A: No. If you starting to send multipackages from multiple ECU:s to another ECU, then that ECU cannot understand the message. Transmit only multipackage messages one at the time if the destination address is the same.
- - Q: I don't want to use 'ANSI C (C89)' with Open SAE J1939. Can I use the latest C standard with Open SAE J1939?
+ - Q: Can I send multi package messages from multiple ECU's to one ECU at the same time?
+ 	- A: No. If you starting to send multipackages from multiple ECU's to another ECU, then that ECU cannot understand the message. Transmit only multipackage messages one at the time if the destination address is the same.
+ - Q: I don't want to use `ANSI C (C89)` with Open SAE J1939. Can I use the latest C standard with Open SAE J1939?
     - Yes, you can use the latest C standard with this library.
  - Q: Is it possible to compile this library onto a Windows MS-DOS or Windows 95 machine?
     - A C89 compatible compiler and an IDE and it should not be any problem
