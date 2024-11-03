@@ -250,3 +250,11 @@ paket-files/
 
 # FAKE - F# Make
 .fake/
+
+# CMake
+CMake
+CMakeFiles
+.vscode
+CMakeCache.txt
+cmake_install.cmake
+Makefile
