@@ -60,7 +60,7 @@ ENUM_J1939_RX_MSG Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 		/* Read response request from other ECU - This are response request. They are responses from other ECU about request from this ECU */
 		}else if (id0 == 0x14 && id1 == 0xEF && DA == 0x23) {
 			SAE_J1939_Read_Response_Request_Proprietary_A(j1939, SA, data);										/* Manufacturer specific data */
-			rx_msg = RX_MSG_RESP_REQ_PROPRIETRATY_A;
+			rx_msg = RX_MSG_RESP_REQ_PROPRIETARY_A;
 		}else if (id0 == 0x18 && id1 == 0xEE && DA == 0xFF && SA != 0xFE){
 			SAE_J1939_Read_Response_Request_Address_Claimed(j1939, SA, data);									/* This is a broadcast response request */
 			rx_msg = RX_MSG_RESP_REQ_ADDR_CLAIMED;
