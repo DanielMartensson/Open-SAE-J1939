@@ -28,6 +28,8 @@ ENUM_J1939_RX_MSG Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 		uint8_t DA = ID >> 8; 	/* Destination address which is this ECU. if DA = 0xFF = broadcast to all ECU. Sometimes DA can be an ID number too */
 		uint8_t SA = ID; 		/* Source address of the ECU that we got the message from */
 
+		uint16_t PGN = (id0 << 8) & id1;
+
 		rx_msg = RX_MSG_NOT_SUPPORTED;
 
 		/* Read request from other ECU */
@@ -61,6 +63,11 @@ ENUM_J1939_RX_MSG Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 		}else if (id0 == 0x14 && id1 == 0xEF && DA == 0x23) {
 			SAE_J1939_Read_Response_Request_Proprietary_A(j1939, SA, data);										/* Manufacturer specific data */
 			rx_msg = RX_MSG_RESP_REQ_PROPRIETARY_A;
+		}else if (((PGN > PGN_PROPRIETARY_B_START) && (PGN < PGN_PROPRIETARY_B_END)) || 
+				  ((PGN > PGN_PROPRIETARY_B2_START) && (PGN < PGN_PROPRIETARY_B2_END))
+			 && (DA == j1939->information_this_ECU.this_ECU_address || DA == 0xFF)) {
+			SAE_J1939_Read_Response_Request_Proprietary_B(j1939, SA, PGN, data);								/* Manufacturer specific data (B) */
+			rx_msg = RX_MSG_RESP_REQ_PROPRIETARY_B;
 		}else if (id0 == 0x18 && id1 == 0xEE && DA == 0xFF && SA != 0xFE){
 			SAE_J1939_Read_Response_Request_Address_Claimed(j1939, SA, data);									/* This is a broadcast response request */
 			rx_msg = RX_MSG_RESP_REQ_ADDR_CLAIMED;

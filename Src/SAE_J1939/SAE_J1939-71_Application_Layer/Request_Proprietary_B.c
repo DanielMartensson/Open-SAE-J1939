@@ -20,13 +20,13 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Proprietary_B(J1939* j1939, uint8
 }
 
  // IMPORTANT: This function can return NULL if given PGN is not expected in this ECU
-struct Proprietary_B * Get_Proprietary_B_Struct(J1939 * j1939, uint16_t PGN)
+struct Proprietary_B * Get_Proprietary_B_Struct(struct Proprietary * proprietary, uint16_t PGN)
 {
 	for (int i = 0; i < MAX_PROPRIETARY_B_PGNS; ++i)
 	{
-		if (j1939->from_other_ecu_proprietary.proprietary_B[i].expected_pgn == PGN)
+		if (proprietary->proprietary_B[i].expected_pgn == PGN)
 		{
-			return &j1939->from_other_ecu_proprietary.proprietary_B[i];
+			return &proprietary->proprietary_B[i];
 		}
 	}
 	return NULL;
@@ -37,8 +37,8 @@ struct Proprietary_B * Get_Proprietary_B_Struct(J1939 * j1939, uint16_t PGN)
  * PGN: 0x00FF00 <-> 0x00FFFF
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Proprietary_B(J1939* j1939, uint8_t DA, uint16_t PGN, bool * is_supported) {
-	struct Proprietary_B * proprietary_B = Get_Proprietary_B_Struct(j1939, PGN);
-	if (proprietary_B == NULL)
+	struct Proprietary_B * proprietary_B = Get_Proprietary_B_Struct(&j1939->this_proprietary, PGN);
+	if (proprietary_B == NULL) /* This PGN is not implemented on this ECU, can't send reply */
 	{
 		*is_supported = false;
 		return STATUS_SEND_ERROR;
@@ -82,7 +82,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Proprietary_B(J1939* j1939, u
  * PGN: 0x00FF00 <-> 0x00FFFF
  */
 void SAE_J1939_Read_Response_Request_Proprietary_B(J1939* j1939, uint8_t SA, uint16_t PGN, uint8_t data[]) {
-	struct Proprietary_B * proprietary_B = Get_Proprietary_B_Struct(j1939, PGN);
+	struct Proprietary_B * proprietary_B = Get_Proprietary_B_Struct(&j1939->from_other_ecu_proprietary, PGN);
 
 	if (proprietary_B == NULL) /* Proprietary B is not expected, don't fill the data anywhere */
 	{
