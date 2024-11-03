@@ -96,7 +96,12 @@ typedef enum {
 	PGN_DASH_DISPLAY_65276 = 0x00FEFCU,
 	PGN_DIRECT_LAMP_CONTROL_COMMAND_1_64775 = 0x00FD07U,
 	PGN_TORQUE_SPEED_CONTROL_1_0 = 0x000000U,
-	PGN_ELECTRONIC_BRAKE_CONTROLLER_1_61441 = 0x00F001U
+	PGN_ELECTRONIC_BRAKE_CONTROLLER_1_61441 = 0x00F001U,
+	PGN_PROPRIETARY_B_START= 0x00FF00U,
+	PGN_PROPRIETARY_B_END= 0x00FFFFU,
+	// Same as proprietary B but with DP (data page = 1)
+	PGN_PROPRIETARY_B2_START= 0x01FF00U, /* This range is not officially support by the standard */
+	PGN_PROPRIETARY_B2_END= 0x01FFFFU	 /* but it is very commonly used, so it's supported here */
 	
 	/* Add more here */
 }ENUM_PGN_CODES;
