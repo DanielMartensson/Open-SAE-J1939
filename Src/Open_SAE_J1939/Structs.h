@@ -92,7 +92,7 @@ struct Proprietary_A {
 
 /* PGN: 0x00FF00 <-> 0x00FFFF - Proprietary B PGN range, where the data is manufacturer specific */
 struct Proprietary_B {
-	uint16_t pgn;									/* The PGN that the ECU will be aware of, a value should be set to be able to send/receive this PGN */
+	uint32_t pgn;									/* The PGN that the ECU will be aware of, a value should be set to be able to send/receive this PGN */
 	uint16_t total_bytes;							/* Length of the data */
 	uint8_t data[MAX_PROPRIETARY_B];				/* This is the collected data */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
