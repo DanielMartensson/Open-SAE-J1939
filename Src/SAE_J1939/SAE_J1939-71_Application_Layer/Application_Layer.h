@@ -46,6 +46,7 @@ void SAE_J1939_Read_Response_Request_Proprietary_A(J1939* j1939, uint8_t SA, uin
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Proprietary_B(J1939* j1939, uint8_t DA, uint16_t PGN);
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Proprietary_B(J1939* j1939, uint8_t DA, uint16_t PGN, bool * is_supported);
 void SAE_J1939_Read_Response_Request_Proprietary_B(J1939* j1939, uint8_t SA, uint16_t PGN, uint8_t data[]);
+struct Proprietary_B * Get_Proprietary_B_By_PGN(struct Proprietary * proprietary, uint16_t PGN);
 
 #ifdef __cplusplus
 }

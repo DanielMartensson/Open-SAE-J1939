@@ -82,7 +82,13 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	case PGN_PROPRIETARY_A:
 		SAE_J1939_Read_Response_Request_Proprietary_A(j1939, SA, complete_data);
 		break;
-		/* Add more here */
+	/* Add more here */
+	default:
+		if (((PGN >= PGN_PROPRIETARY_B_START) && (PGN <= PGN_PROPRIETARY_B_END)) || 
+		    ((PGN >= PGN_PROPRIETARY_B2_START) && (PGN <= PGN_PROPRIETARY_B2_END))) {
+			SAE_J1939_Read_Response_Request_Proprietary_B(j1939, SA, PGN, complete_data);
+			}
+		break;
 	}
 
 	/* Delete TP DT and TP CM */

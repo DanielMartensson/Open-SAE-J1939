@@ -165,8 +165,8 @@ void SAE_J1939_Read_Request(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 		/* Add more else if statements here for more read request */
 	default:
 		// Check if PGN is in the Proprietary B PGN range
-		if (((PGN > PGN_PROPRIETARY_B_START) && (PGN < PGN_PROPRIETARY_B_END)) ||
-			((PGN > PGN_PROPRIETARY_B2_START) && (PGN < PGN_PROPRIETARY_B2_END)))
+		if (((PGN >= PGN_PROPRIETARY_B_START) && (PGN <= PGN_PROPRIETARY_B_END)) ||
+			((PGN >= PGN_PROPRIETARY_B2_START) && (PGN <= PGN_PROPRIETARY_B2_END)))
 		{
 			bool is_supported = false;
 			SAE_J1939_Response_Request_Proprietary_B(j1939, SA, PGN, &is_supported);

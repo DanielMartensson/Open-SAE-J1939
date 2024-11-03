@@ -20,11 +20,11 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Proprietary_B(J1939* j1939, uint8
 }
 
  // IMPORTANT: This function can return NULL if given PGN is not expected in this ECU
-struct Proprietary_B * Get_Proprietary_B_Struct(struct Proprietary * proprietary, uint16_t PGN)
+struct Proprietary_B * Get_Proprietary_B_By_PGN(struct Proprietary * proprietary, uint16_t PGN)
 {
 	for (int i = 0; i < MAX_PROPRIETARY_B_PGNS; ++i)
 	{
-		if (proprietary->proprietary_B[i].expected_pgn == PGN)
+		if (proprietary->proprietary_B[i].pgn == PGN)
 		{
 			return &proprietary->proprietary_B[i];
 		}
@@ -37,7 +37,7 @@ struct Proprietary_B * Get_Proprietary_B_Struct(struct Proprietary * proprietary
  * PGN: 0x00FF00 <-> 0x00FFFF
  */
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Proprietary_B(J1939* j1939, uint8_t DA, uint16_t PGN, bool * is_supported) {
-	struct Proprietary_B * proprietary_B = Get_Proprietary_B_Struct(&j1939->this_proprietary, PGN);
+	struct Proprietary_B * proprietary_B = Get_Proprietary_B_By_PGN(&j1939->this_proprietary, PGN);
 	if (proprietary_B == NULL) /* This PGN is not implemented on this ECU, can't send reply */
 	{
 		*is_supported = false;
@@ -49,7 +49,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Proprietary_B(J1939* j1939, u
 	uint16_t length_of_each_field = proprietary_B->total_bytes;
 	if (length_of_each_field < 9) {
 		/* If each field have the length 8 or less, then we can send Proprietary B as it was a normal message */
-		uint32_t ID = (PGN << 8) | j1939->information_this_ECU.this_ECU_address;
+		uint32_t ID = (PGN << 16) | (DA << 8) | j1939->information_this_ECU.this_ECU_address;
 		uint8_t data[8];
 		memcpy(data, proprietary_B->data, length_of_each_field);
 		return CAN_Send_Message(ID, data);
@@ -82,7 +82,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Proprietary_B(J1939* j1939, u
  * PGN: 0x00FF00 <-> 0x00FFFF
  */
 void SAE_J1939_Read_Response_Request_Proprietary_B(J1939* j1939, uint8_t SA, uint16_t PGN, uint8_t data[]) {
-	struct Proprietary_B * proprietary_B = Get_Proprietary_B_Struct(&j1939->from_other_ecu_proprietary, PGN);
+	struct Proprietary_B * proprietary_B = Get_Proprietary_B_By_PGN(&j1939->from_other_ecu_proprietary, PGN);
 
 	if (proprietary_B == NULL) /* Proprietary B is not expected, don't fill the data anywhere */
 	{
