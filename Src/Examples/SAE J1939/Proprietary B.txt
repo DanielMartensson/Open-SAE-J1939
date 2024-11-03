@@ -1,0 +1,96 @@
+/*
+ * Main.c
+ *
+ *  Created on: 03 November 2024
+ *      Author: Guillermo Rodríguez
+ */
+
+#include <stdio.h>
+
+ /* Include Open SAE J1939 */
+#include "Open_SAE_J1939/Open_SAE_J1939.h"
+
+int main() {
+	/* Create our J1939 structure with two ECU */
+	J1939 j1939_1 = { 0 };
+	J1939 j1939_2 = { 0 };
+
+	/* Important to sent all non-address to 0xFF - Else we cannot use ECU address 0x0 */
+	uint8_t i;
+	for (i = 0; i < 255; i++) {
+		j1939_1.other_ECU_address[i] = 0xFF;
+		j1939_2.other_ECU_address[i] = 0xFF;
+	}
+
+	/* Set the ECU address */
+	j1939_1.information_this_ECU.this_ECU_address = 0x80;												/* From 0 to 253 because 254 = error address and 255 = broadcast address */
+	j1939_2.information_this_ECU.this_ECU_address = 0x90;
+
+	/* Set the supported PGNs IDs */
+	// ECU 0x80 will send PGNs 0xFF00 and 0xFF01 and will receive PGNs 0xFFFE and 0xFFFF
+	// ECU 0x90 will send PGNs 0xFFFE and 0xFFFF anb will receive PGNs 0xFF00 and 0xFF01
+	j1939_1.this_proprietary.proprietary_B[0].pgn = 0xFF00;
+	j1939_1.this_proprietary.proprietary_B[1].pgn = 0xFF01;
+	j1939_1.from_other_ecu_proprietary.proprietary_B[0].pgn = 0xFFFE;
+	j1939_1.from_other_ecu_proprietary.proprietary_B[1].pgn = 0xFFFF;
+	j1939_2.this_proprietary.proprietary_B[0].pgn = 0xFFFE;
+	j1939_2.this_proprietary.proprietary_B[1].pgn = 0xFFFF;
+	j1939_2.from_other_ecu_proprietary.proprietary_B[0].pgn = 0xFF00;
+	j1939_2.from_other_ecu_proprietary.proprietary_B[1].pgn = 0xFF01;
+
+	// Set PGN 0xFF00 data content (< 8 bytes) on ECU 1
+	char pgn_B_0_content[] = "0xFF00";
+	memcpy(j1939_1.this_proprietary.proprietary_B[0].data, pgn_B_0_content, sizeof(pgn_B_0_content));
+	j1939_1.this_proprietary.proprietary_B[0].total_bytes = sizeof(pgn_B_0_content);
+	j1939_2.from_other_ecu_proprietary.proprietary_B[0].total_bytes = sizeof(pgn_B_0_content); // Don't forget to set expected length of the PGN to receive it
+	 // Set PGN 0xFF01 data content (> 8 bytes) on ECU 1
+	char pgn_B_1_content[] = "This is PGN 0xFF01 content ...";
+	memcpy(j1939_1.this_proprietary.proprietary_B[1].data, pgn_B_1_content, sizeof(pgn_B_1_content));
+	j1939_1.this_proprietary.proprietary_B[1].total_bytes = sizeof(pgn_B_1_content);
+	j1939_2.from_other_ecu_proprietary.proprietary_B[1].total_bytes = sizeof(pgn_B_1_content); // Don't forget to set expected length of the PGN to receive it
+
+	// Set PGN 0xFFFE data content on ECU 2
+	char pgn_B_FE_content[] = "This is PGN 0xFFFE content  .......";
+	memcpy(j1939_2.this_proprietary.proprietary_B[0].data, pgn_B_FE_content, sizeof(pgn_B_FE_content));
+	j1939_2.this_proprietary.proprietary_B[0].total_bytes = sizeof(pgn_B_FE_content);
+	j1939_1.from_other_ecu_proprietary.proprietary_B[0].total_bytes = sizeof(pgn_B_FE_content); // Don't forget to set expected length of the PGN to receive it
+	// Set PGN 0xFFFF data content on ECU 2
+	char pgn_B_FF_content[] = "This is PGN 0xFFFF content       ..........";
+	memcpy(j1939_2.this_proprietary.proprietary_B[1].data, pgn_B_FF_content, sizeof(pgn_B_FF_content));
+	j1939_2.this_proprietary.proprietary_B[1].total_bytes = sizeof(pgn_B_FF_content);
+	j1939_1.from_other_ecu_proprietary.proprietary_B[1].total_bytes = sizeof(pgn_B_FF_content); // Don't forget to set expected length of the PGN to receive it
+
+	SAE_J1939_Send_Request(&j1939_2, 0x80, 0xFF00);
+	// Listen for messages
+	for (i = 0; i < 100; i++) {
+		Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+	}
+	printf("%s\n", (char*)j1939_2.from_other_ecu_proprietary.proprietary_B[0].data);
+
+	SAE_J1939_Send_Request(&j1939_2, 0x80, 0xFF01);
+	// Listen for messages
+	for (i = 0; i < 100; i++) {
+		Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+	}
+	printf("%s\n", (char*)j1939_2.from_other_ecu_proprietary.proprietary_B[1].data);
+
+	SAE_J1939_Send_Request(&j1939_1, 0x90, 0xFFFE);
+	// Listen for messages
+	for (i = 0; i < 100; i++) {
+		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+		Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+	}
+	printf("%s\n", (char*)j1939_1.from_other_ecu_proprietary.proprietary_B[0].data);
+
+	SAE_J1939_Send_Request(&j1939_1, 0x90, 0xFFFF);
+	// Listen for messages
+	for (i = 0; i < 100; i++) {
+		Open_SAE_J1939_Listen_For_Messages(&j1939_2);
+		Open_SAE_J1939_Listen_For_Messages(&j1939_1);
+	}
+	printf("%s\n", (char*)j1939_1.from_other_ecu_proprietary.proprietary_B[1].data);
+
+	return 0;
+}
