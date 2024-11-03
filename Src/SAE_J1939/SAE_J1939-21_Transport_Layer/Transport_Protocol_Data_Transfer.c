@@ -25,7 +25,7 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 		j1939->from_other_ecu_tp_dt.data[index*7 + i-1] = data[i]; /* For every package, we send 7 bytes of data where the first byte data[0] is the sequence number */
 	}
 	/* Check if we have completed our message - Return = Not completed */
-	if (j1939->from_other_ecu_tp_cm.number_of_packages_beging_transmitted != j1939->from_other_ecu_tp_dt.sequence_number || j1939->from_other_ecu_tp_cm.number_of_packages_beging_transmitted == 0){
+	if (j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted != j1939->from_other_ecu_tp_dt.sequence_number || j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted == 0){
 		if (j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS) {
 			/* Send new CTS */
 			j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_CTS;
@@ -101,7 +101,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j
 	ENUM_J1939_STATUS_CODES status = STATUS_SEND_OK;
 	switch (j1939->from_other_ecu_tp_cm.control_byte) {
 	case CONTROL_BYTE_TP_CM_BAM:
-		for (i = 1; i <= j1939->this_ecu_tp_cm.number_of_packages_beging_transmitted; i++) {
+		for (i = 1; i <= j1939->this_ecu_tp_cm.number_of_packages_being_transmitted; i++) {
 			package[0] = i; 																	/* Number of package */
 			for (j = 0; j < 7; j++) {
 				if (bytes_sent < j1939->this_ecu_tp_cm.total_message_size_being_transmitted) {

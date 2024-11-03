@@ -39,9 +39,9 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM2(J1939 *j1939, uint8_t DA)
 	} else {
 		/* Multiple messages - Load data */
 		j1939->this_ecu_tp_cm.total_message_size_being_transmitted = (j1939->this_dm.errors_dm2_active *4) +2 ;				/* set total message size where each DTC is 4 btyes, plus 2 bytes for the lamp code */
-		j1939->this_ecu_tp_cm.number_of_packages_beging_transmitted = (j1939->this_ecu_tp_cm.total_message_size_being_transmitted)/7;			/* set number of packages, where each package will transmit up to 7 bytes */
+		j1939->this_ecu_tp_cm.number_of_packages_being_transmitted = (j1939->this_ecu_tp_cm.total_message_size_being_transmitted)/7;			/* set number of packages, where each package will transmit up to 7 bytes */
 		if (j1939->this_ecu_tp_cm.total_message_size_being_transmitted % 7 > 0) {
-			j1939->this_ecu_tp_cm.number_of_packages_beging_transmitted++;	/* add extra frame if data rolls over */
+			j1939->this_ecu_tp_cm.number_of_packages_being_transmitted++;	/* add extra frame if data rolls over */
 		}
 
 		/* Load lamp data to first two bytes */

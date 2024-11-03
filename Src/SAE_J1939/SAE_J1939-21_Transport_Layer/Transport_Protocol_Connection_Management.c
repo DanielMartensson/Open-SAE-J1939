@@ -26,7 +26,7 @@ void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8
 	case CONTROL_BYTE_TP_CM_RTS:
 		/* Set the RTS values */
 		j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted = (data[2] << 8) | data[1];
-		j1939->from_other_ecu_tp_cm.number_of_packages_beging_transmitted = data[3];
+		j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted = data[3];
 
 		/* Send CTS */
 		j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_CTS;
@@ -42,7 +42,7 @@ void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8
 		break;
 	case CONTROL_BYTE_TP_CM_BAM:
 		j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted = (data[2] << 8) | data[1];
-		j1939->from_other_ecu_tp_cm.number_of_packages_beging_transmitted = data[3];
+		j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted = data[3];
 		SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, SA);
 		break;
 	case CONTROL_BYTE_TP_CM_EndOfMsgACK:
@@ -67,7 +67,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(
 	case CONTROL_BYTE_TP_CM_RTS:
 		data[1] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted;
 		data[2] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted >> 8;
-		data[3] = j1939->this_ecu_tp_cm.number_of_packages_beging_transmitted;
+		data[3] = j1939->this_ecu_tp_cm.number_of_packages_being_transmitted;
 		data[4] = 0xFF; 															/* Reserved */
 		break;
 	case CONTROL_BYTE_TP_CM_CTS:
@@ -79,7 +79,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(
 	case CONTROL_BYTE_TP_CM_BAM:
 		data[1] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted;
 		data[2] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted >> 8;
-		data[3] = j1939->this_ecu_tp_cm.number_of_packages_beging_transmitted;
+		data[3] = j1939->this_ecu_tp_cm.number_of_packages_being_transmitted;
 		data[4] = 0xFF; 															/* Reserved */
 		break;
 	case CONTROL_BYTE_TP_CM_EndOfMsgACK:

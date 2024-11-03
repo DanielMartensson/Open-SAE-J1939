@@ -41,7 +41,7 @@ struct TP_CM {
 	
 	/* RTS */
 	uint16_t total_message_size_being_transmitted;	/* Total bytes our complete message includes - 9 to 1785 */
-	uint8_t number_of_packages_beging_transmitted;	/* How many times we are going to send packages via TP_DT - 2 to 224 because 1785/8 is 224 rounded up */
+	uint8_t number_of_packages_being_transmitted;	/* How many times we are going to send packages via TP_DT - 2 to 224 because 1785/8 is 224 rounded up */
 	
 	/* CTS */
 	uint8_t total_number_of_packages_transmitted;	/* Total packages we have received */
