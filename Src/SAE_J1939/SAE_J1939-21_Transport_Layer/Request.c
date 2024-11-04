@@ -164,6 +164,14 @@ void SAE_J1939_Read_Request(J1939 *j1939, uint8_t SA, uint8_t data[]) {
 		break;
 		/* Add more else if statements here for more read request */
 	default:
+		// Check if PGN is in the Proprietary B PGN range
+		if (((PGN >= PGN_PROPRIETARY_B_START) && (PGN <= PGN_PROPRIETARY_B_END)) ||
+			((PGN >= PGN_PROPRIETARY_B2_START) && (PGN <= PGN_PROPRIETARY_B2_END)))
+		{
+			bool is_supported = false;
+			SAE_J1939_Response_Request_Proprietary_B(j1939, SA, PGN, &is_supported);
+			if (is_supported) break; // Do not send PGN NOT supported ACK frame
+		}
 		SAE_J1939_Send_Acknowledgement(j1939, SA, CONTROL_BYTE_ACKNOWLEDGEMENT_PGN_NOT_SUPPORTED, GROUP_FUNCTION_VALUE_NO_CAUSE, PGN);
 		break;
 	}

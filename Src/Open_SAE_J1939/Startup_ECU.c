@@ -27,8 +27,13 @@ bool Open_SAE_J1939_Startup_ECU(J1939* j1939) {
 	j1939->from_other_ecu_identifications.component_identification.length_of_each_field = MAX_IDENTIFICATION;
 
 	/* If we are going to send and receive Proprietary, we need to specify the size of them */
-	j1939->this_proprietary.proprietary_A.total_bytes = MAX_PROPRIETARY;
-	j1939->from_other_ecu_proprietary.proprietary_A.total_bytes = MAX_PROPRIETARY;
+	j1939->this_proprietary.proprietary_A.total_bytes = MAX_PROPRIETARY_A;
+	j1939->from_other_ecu_proprietary.proprietary_A.total_bytes = MAX_PROPRIETARY_A;
+	for (int i = 0; i < MAX_PROPRIETARY_B_PGNS; ++i)
+	{
+		j1939->this_proprietary.proprietary_B[i].total_bytes = MAX_PROPRIETARY_B;
+		j1939->from_other_ecu_proprietary.proprietary_B[i].total_bytes = MAX_PROPRIETARY_B;
+	}
 
 	/* Clear other ECU addresses by setting the broadcast address to them */
 	memset(j1939->other_ECU_address, 0xFF, 0xFF);
@@ -44,4 +49,3 @@ bool Open_SAE_J1939_Startup_ECU(J1939* j1939) {
 	/* OK */
 	return true;
 }
-

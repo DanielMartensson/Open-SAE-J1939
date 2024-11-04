@@ -23,7 +23,10 @@
 #define MAX_TP_DT 1785U
 #define MAX_IDENTIFICATION 30U
 #define MAX_DM_FIELD 10U
-#define MAX_PROPRIETARY 15U
+#define MAX_PROPRIETARY_A 15U
+#define MAX_PROPRIETARY_B 60U
+#define MAX_PROPRIETARY_B_PGNS 2U					/* The maximum number of PGNs that the ECUs will be aware of. 
+													 * If proprietary B PGNs are not used, set this to 0 to save memory */
 
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {
@@ -41,7 +44,7 @@ struct TP_CM {
 	
 	/* RTS */
 	uint16_t total_message_size_being_transmitted;	/* Total bytes our complete message includes - 9 to 1785 */
-	uint8_t number_of_packages_beging_transmitted;	/* How many times we are going to send packages via TP_DT - 2 to 224 because 1785/8 is 224 rounded up */
+	uint8_t number_of_packages_being_transmitted;	/* How many times we are going to send packages via TP_DT - 2 to 224 because 1785/8 is 224 rounded up */
 	
 	/* CTS */
 	uint8_t total_number_of_packages_transmitted;	/* Total packages we have received */
@@ -83,13 +86,22 @@ struct Name {
 /* PGN: 0x00EF00 - Proprietary A where the data is manufacturer specific */
 struct Proprietary_A {
 	uint16_t total_bytes;							/* Length of the data */
-	uint8_t data[MAX_PROPRIETARY];					/* This is the collected data */
+	uint8_t data[MAX_PROPRIETARY_A];				/* This is the collected data */
+	uint8_t from_ecu_address;						/* From which ECU came this message */
+};
+
+/* PGN: 0x00FF00 <-> 0x00FFFF - Proprietary B PGN range, where the data is manufacturer specific */
+struct Proprietary_B {
+	uint32_t pgn;									/* The PGN that the ECU will be aware of, a value should be set to be able to send/receive this PGN */
+	uint16_t total_bytes;							/* Length of the data */
+	uint8_t data[MAX_PROPRIETARY_B];				/* This is the collected data */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
 };
 
 /* This struct holds manufacturer specific data */
 struct Proprietary {
 	struct Proprietary_A proprietary_A;
+	struct Proprietary_B proprietary_B[MAX_PROPRIETARY_B_PGNS];
 };
 
 /* PGN: 0x00FECA - Storing the DM1 Active diagnostic trouble codes from the reading process */
