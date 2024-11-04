@@ -226,8 +226,8 @@ This flow chart in code how Open SAE J1939 library is working. This example demo
     - Yes, you can use the latest C standard with this library.
  - Q: Is it possible to compile this library onto a Windows MS-DOS or Windows 95 machine?
     - A C89 compatible compiler and an IDE and it should not be any problem
- - Q: Can I decrease the memory occupied by the program?
-    - A: Yes, you can adjust the defines `MAX_PROPRIETARY_A`, `MAX_PROPRIETARY_B` and `MAX_PROPRIETARY_B_PGNS` in the file `Structs.h` according to your use case. A 'sane' default value is provided, but you can set them to the minimum if proprietary PGNs support is not needed.
+ - Q: Can I adjust the memory occupied by the program?
+    - A: Yes, you can adjust the defines `MAX_PROPRIETARY_A`, `MAX_PROPRIETARY_B` and `MAX_PROPRIETARY_B_PGNS` in the file `Structs.h` according to your use case. A 'sane' default value is provided, but you can set them to the minimum if proprietary PGNs support is not needed or increase it if more PGNs need to be used.
 # Issues and answers
 
 - I: I cannot compile this library. I'm using `Keil Microvision`.
