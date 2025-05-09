@@ -30,13 +30,13 @@ void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8
 
 		/* Send CTS */
 		j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_CTS;
-		j1939->this_ecu_tp_cm.total_number_of_packages_transmitted = 0;
+		j1939->this_ecu_tp_cm.number_of_packets_to_be_transmitted = 1;
 		j1939->this_ecu_tp_cm.next_packet_number_transmitted = 0;
 		j1939->this_ecu_tp_cm.PGN_of_the_packeted_message = (data[7] << 16) | (data[6] << 8) | data[5];
 		SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
 		break;
 	case CONTROL_BYTE_TP_CM_CTS:
-		j1939->from_other_ecu_tp_cm.total_number_of_packages_transmitted = data[1];
+		j1939->from_other_ecu_tp_cm.number_of_packets_to_be_transmitted = data[1];
 		j1939->from_other_ecu_tp_cm.next_packet_number_transmitted = data[2];
 		SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, SA);
 		break;
@@ -68,10 +68,10 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(
 		data[1] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted;
 		data[2] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted >> 8;
 		data[3] = j1939->this_ecu_tp_cm.number_of_packages_being_transmitted;
-		data[4] = 0xFF; 															/* Reserved */
+		data[4] = 0x01; 															/* Max number of packages to be transmitted at once */
 		break;
 	case CONTROL_BYTE_TP_CM_CTS:
-		data[1] = j1939->this_ecu_tp_cm.total_number_of_packages_transmitted;
+		data[1] = j1939->this_ecu_tp_cm.number_of_packets_to_be_transmitted;
 		data[2] = j1939->this_ecu_tp_cm.next_packet_number_transmitted;
 		data[3] = 0xFF; 															/* Reserved */
 		data[4] = 0xFF; 															/* Reserved */

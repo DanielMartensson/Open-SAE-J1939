@@ -29,7 +29,6 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 		if (j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS) {
 			/* Send new CTS */
 			j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_CTS;
-			j1939->this_ecu_tp_cm.total_number_of_packages_transmitted++;
 			j1939->this_ecu_tp_cm.next_packet_number_transmitted++;
 			SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
 		}
@@ -127,8 +126,8 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j
 		}
 		break;
 	case CONTROL_BYTE_TP_CM_CTS:
-		package[0] = j1939->from_other_ecu_tp_cm.next_packet_number_transmitted + 1;				/* Next number of package */
-		bytes_sent = j1939->from_other_ecu_tp_cm.total_number_of_packages_transmitted * 7;
+		package[0] = j1939->from_other_ecu_tp_cm.next_packet_number_transmitted;				/* Next number of package */
+		bytes_sent = (j1939->from_other_ecu_tp_cm.next_packet_number_transmitted -1) * 7;
 		for (j = 0; j < 7; j++) {
 			if (bytes_sent < j1939->this_ecu_tp_cm.total_message_size_being_transmitted) {
 				package[j + 1] = j1939->this_ecu_tp_dt.data[bytes_sent++];						/* Data that we have collected */
