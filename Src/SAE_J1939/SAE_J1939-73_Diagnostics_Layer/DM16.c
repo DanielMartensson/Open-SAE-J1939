@@ -34,7 +34,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Binary_Data_Transfer_DM16(J1939 *j1939, u
 			j1939->this_ecu_tp_dt.data[j1939->this_ecu_tp_cm.total_message_size_being_transmitted++] = raw_binary_data[i];				/* When i = 0, then total_message_size = 1 */
 		}
 		/* Send TP CM */
-		j1939->this_ecu_tp_cm.number_of_packages_being_transmitted = j1939->this_ecu_tp_cm.total_message_size_being_transmitted % 8 > 0 ? j1939->this_ecu_tp_cm.total_message_size_being_transmitted/8 + 1 : j1939->this_ecu_tp_cm.total_message_size_being_transmitted/8; /* Rounding up */
+		j1939->this_ecu_tp_cm.number_of_packages_being_transmitted = SAE_J1939_Transport_Protocol_GetNumberOfPackages(j1939->this_ecu_tp_cm.total_message_size_being_transmitted);
 		j1939->this_ecu_tp_cm.PGN_of_the_packeted_message = PGN_DM16;
 		j1939->this_ecu_tp_cm.control_byte = DA == 0xFF ? CONTROL_BYTE_TP_CM_BAM : CONTROL_BYTE_TP_CM_RTS; /* If broadcast, then use BAM control byte */
 		ENUM_J1939_STATUS_CODES status = SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, DA);

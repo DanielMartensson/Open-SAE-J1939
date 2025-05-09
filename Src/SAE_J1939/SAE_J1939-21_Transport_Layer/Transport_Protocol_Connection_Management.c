@@ -31,7 +31,7 @@ void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8
 		/* Send CTS */
 		j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_CTS;
 		j1939->this_ecu_tp_cm.number_of_packets_to_be_transmitted = 1;
-		j1939->this_ecu_tp_cm.next_packet_number_transmitted = 0;
+		j1939->this_ecu_tp_cm.next_packet_number_transmitted = 1;
 		j1939->this_ecu_tp_cm.PGN_of_the_packeted_message = (data[7] << 16) | (data[6] << 8) | data[5];
 		SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
 		break;
