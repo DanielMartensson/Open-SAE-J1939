@@ -47,7 +47,7 @@ struct TP_CM {
 	uint8_t number_of_packages_being_transmitted;	/* How many times we are going to send packages via TP_DT - 2 to 224 because 1785/8 is 224 rounded up */
 	
 	/* CTS */
-	uint8_t total_number_of_packages_transmitted;	/* Total packages we have received */
+	uint8_t number_of_packets_to_be_transmitted;	/* number of packages which has to be transmitted */
 	uint8_t next_packet_number_transmitted;			/* Next packet number we want to have from the transmitter */
 
 	/* EOM */

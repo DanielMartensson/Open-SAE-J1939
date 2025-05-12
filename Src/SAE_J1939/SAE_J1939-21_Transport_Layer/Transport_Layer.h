@@ -42,6 +42,10 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(
 void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, uint8_t data[]);
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t DA);
 
+static SAE_J1939_INLINE uint8_t SAE_J1939_Transport_Protocol_GetNumberOfPackages(uint16_t total_message_size_being_transmitted) {
+	return total_message_size_being_transmitted % 7 > 0 ? total_message_size_being_transmitted / 7 + 1 : total_message_size_being_transmitted / 7; /* Rounding up */
+}
+
 #ifdef __cplusplus
 }
 #endif
