@@ -33,10 +33,16 @@ typedef signed int int32_t;
 typedef uint8_t bool;
 #define true 1
 #define false 0
+
+#define SAE_J1939_INLINE
+
 #else
 /* C99 and above */
 #include <stdbool.h>					/* For bool datatype */
 #include <stdint.h>						/* For uint8_t, uint16_t and uint32_t */
+
+#define SAE_J1939_INLINE inline
+
 #endif
 #endif
 
