@@ -16,7 +16,9 @@
 #define AVR 4
 #define QT_USB 5
 #define INTERNAL_CALLBACK 6
+#ifndef PROCESSOR_CHOICE
 #define PROCESSOR_CHOICE NO_PROCESSOR
+#endif
 
 /* C Standard library */
 #include "../Open_SAE_J1939/C89_Library.h"
