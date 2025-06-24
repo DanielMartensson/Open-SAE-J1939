@@ -44,6 +44,11 @@ typedef uint8_t bool;
 #define SAE_J1939_INLINE inline
 
 #endif
+
+#else
+
+#define SAE_J1939_INLINE inline
+
 #endif
 
 #endif /* OPEN_SAE_J1939_C89_LIBRARY_H_ */
