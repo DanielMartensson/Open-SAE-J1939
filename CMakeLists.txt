@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16.0)
 
 project(Open-SAE-J1939 C)
 
-# Default value if not set externally
+# Default value for PROCESSOR_CHOICE if not set externally
 if(NOT DEFINED PROCESSOR_CHOICE)
     set(PROCESSOR_CHOICE NO_PROCESSOR)
 endif()
@@ -15,7 +15,7 @@ file(GLOB_RECURSE ALL_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Src/*.c")
 set(MAIN_SRC "${CMAKE_CURRENT_SOURCE_DIR}/Src/Main.c")
 list(REMOVE_ITEM ALL_SOURCE_FILES ${MAIN_SRC})
 
-# remove SocketCAN_Transmit_Receive.c if not SOCKETCAN
+# remove translation unit "SocketCAN_Transmit_Receive.c" if not SOCKETCAN
 if(NOT "${PROCESSOR_CHOICE}" STREQUAL "SOCKETCAN")
     list(REMOVE_ITEM ALL_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Src/Hardware/SocketCAN_Transmit_Receive.c")
 endif()
