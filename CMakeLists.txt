@@ -7,13 +7,18 @@ if(NOT DEFINED PROCESSOR_CHOICE)
     set(PROCESSOR_CHOICE NO_PROCESSOR)
 endif()
 
-# Make processor choice a compile definition
+# Make it a compile definition
 add_compile_definitions(PROCESSOR_CHOICE=${PROCESSOR_CHOICE})
 
 # Collect sources
 file(GLOB_RECURSE ALL_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Src/*.c")
 set(MAIN_SRC "${CMAKE_CURRENT_SOURCE_DIR}/Src/Main.c")
 list(REMOVE_ITEM ALL_SOURCE_FILES ${MAIN_SRC})
+
+# remove SocketCAN_Transmit_Receive.c if not SOCKETCAN
+if(NOT "${PROCESSOR_CHOICE}" STREQUAL "SOCKETCAN")
+    list(REMOVE_ITEM ALL_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Src/Hardware/SocketCAN_Transmit_Receive.c")
+endif()
 
 # Library
 add_library(opensaej1939 STATIC ${ALL_SOURCE_FILES})
