@@ -24,6 +24,8 @@ static void (*Callback_Function_Delay_ms)(uint8_t) = NULL;
 #include "CAN_to_USB/can_to_usb.h"
 #elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
 /* Nothing here because else statement should not be running */
+#elif PROCESSOR_CHOICE == SOCKETCAN
+#include "SocketCAN.h"
 #else
 /* Internal fields */
 static bool internal_new_message[256] = { false };
@@ -92,6 +94,8 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[]) {
 	/* Implement your CAN send 8 bytes message function for the AVR platform */
 #elif PROCESSOR_CHOICE == QT_USB
 	status = QT_USB_Transmit(ID, data, 8);
+#elif PROCESSOR_CHOICE == SOCKETCAN
+  status = socketcan_transmit(ID, data, 8);
 #elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
 	/* Call our callback function */
 	Callback_Function_Send(ID, 8, data);
@@ -131,6 +135,8 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[]) {
 	/* Implement your CAN send 3 bytes message function for the AVR platform */
 #elif PROCESSOR_CHOICE == QT_USB
 	status = QT_USB_Transmit(ID, PGN, 3);                       /* PGN is always 3 bytes */
+#elif PROCESSOR_CHOICE == SOCKETCAN
+  status = socketcan_transmit(ID, PGN, 3);
 #elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
 	/* Call our callback function */
 	Callback_Function_Send(ID, 3, PGN);
@@ -161,6 +167,8 @@ bool CAN_Read_Message(uint32_t* ID, uint8_t data[]) {
 	/* Implement your CAN function to get ID, data[] and the flag is_new_message here for the AVR platform */
 #elif PROCESSOR_CHOICE == QT_USB
 	QT_USB_Get_ID_Data(ID, data, &is_new_message);
+#elif PROCESSOR_CHOICE == SOCKETCAN
+  socketcan_receive(ID, data, &is_new_message);
 #elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
 	Callback_Function_Read(ID, data, &is_new_message);
 #else
@@ -200,6 +208,10 @@ void CAN_Delay(uint8_t milliseconds) {
 
 #elif PROCESSOR_CHOICE == INTERNAL_CALLBACK
 	Callback_Function_Delay_ms(milliseconds);
+
+#elif PROCESSOR_CHOICE == SOCKETCAN
+  #include <unistd.h>
+  usleep(milliseconds*1000);
 #else
 	/* Nothing */
 #endif

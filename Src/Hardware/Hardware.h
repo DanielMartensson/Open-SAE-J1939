@@ -16,6 +16,7 @@
 #define AVR 4
 #define QT_USB 5
 #define INTERNAL_CALLBACK 6
+#define SOCKETCAN 7
 #ifndef PROCESSOR_CHOICE
 #define PROCESSOR_CHOICE NO_PROCESSOR
 #endif
