@@ -8,8 +8,8 @@
 #ifndef HARDWARE_HARDWARE_H_
 #define HARDWARE_HARDWARE_H_
 
-/* Select your processor choice here */
-#define NO_PROCESSOR 0
+/* Select your target platform here */
+#define NO_PLATFORM 0
 #define STM32 1
 #define ARDUINO 2
 #define PIC 3
@@ -17,8 +17,8 @@
 #define QT_USB 5
 #define INTERNAL_CALLBACK 6
 #define SOCKETCAN 7
-#ifndef PROCESSOR_CHOICE
-#define PROCESSOR_CHOICE NO_PROCESSOR
+#ifndef TARGET_PLATFORM
+#define TARGET_PLATFORM NO_PLATFORM
 #endif
 
 /* C Standard library */

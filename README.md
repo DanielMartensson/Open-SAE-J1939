@@ -25,8 +25,26 @@ After you have got a basic understanding of the project, you are able to build o
 SAE J1939 standard!
 
 After you have understand the structure of the project, then select processor choice in `Hardware -> Hardware.h` file.
-Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc. or if you want to run it on PC first, then select `PROCESSOR_CHOICE 0` and run some examples.
+Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc. or if you want to run it on PC first, then build with the define `TARGET_PLATFORM` and run some examples.
 That's the debugging mode for internal CAN feedback.
+
+## Building with CMake
+
+This project can be built with CMake. The build can be configured to target different hardware platforms.
+Per default, no specific hardware platform is selected and all CAN messages are sent and received locally
+over an internal memory bus. However, if you want to send messages on a specific platform, you can set the
+'TARGET_PLATFORM' compile definition during build. Here is an example of how to build the project using
+SOCKETCAN as a targeted platform.
+
+```bash
+git clone https://github.com/DanielMartensson/Open-SAE-J1939.git
+cd Open-SAE-J1939
+mkdir build
+cmake -B build -DTARGET_PLATFORM=SOCKETCAN .
+cmake --build build
+```
+
+Please feel free to contribute to this project if you add platform support for another target.
 
 # How to use the project
 
