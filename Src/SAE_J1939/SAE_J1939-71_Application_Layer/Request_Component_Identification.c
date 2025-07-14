@@ -83,5 +83,8 @@ void SAE_J1939_Read_Response_Request_Component_Identification(J1939 *j1939, uint
 		j1939->from_other_ecu_identifications.component_identification.component_unit_name[i] = data[i + length_of_each_field*3];
 	}
 	j1939->from_other_ecu_identifications.component_identification.from_ecu_address = SA;
+  if (Callback_Function_Component_Identification) {
+    Callback_Function_Component_Identification(&j1939->from_other_ecu_identifications.component_identification);
+  }
 }
 

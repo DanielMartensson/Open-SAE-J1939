@@ -65,4 +65,7 @@ void SAE_J1939_Read_Response_Request_Proprietary_A(J1939* j1939, uint8_t SA, uin
 	uint16_t total_bytes = j1939->from_other_ecu_proprietary.proprietary_A.total_bytes;
 	memcpy(j1939->from_other_ecu_proprietary.proprietary_A.data, data, total_bytes);
 	j1939->from_other_ecu_proprietary.proprietary_A.from_ecu_address = SA;
+  if (Callback_Function_Proprietary_A) {
+    Callback_Function_Proprietary_A(&j1939->from_other_ecu_proprietary.proprietary_A);
+  }
 }
