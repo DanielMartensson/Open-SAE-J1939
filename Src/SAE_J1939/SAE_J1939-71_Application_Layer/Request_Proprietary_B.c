@@ -11,9 +11,6 @@
 #include "../SAE_J1939-21_Transport_Layer/Transport_Layer.h"
 #include "../../Hardware/Hardware.h"
 
-/* This is a call back function e.g listener, that will be called once SAE J1939 data is going to be sent */
-static void (*Callback_Function_Proprietary_B_)(uint32_t, uint8_t[]) = NULL;
-
 /*
  * Request Proprietary B to another ECU
  * PGN: 0x00FF00 <-> 0x00FFFF
