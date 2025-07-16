@@ -92,7 +92,10 @@ void SAE_J1939_Read_Response_Request_Proprietary_B(J1939* j1939, uint8_t SA, uin
 	uint16_t total_bytes = proprietary_B->total_bytes;
 	memcpy(proprietary_B->data, data, total_bytes);
 	proprietary_B->from_ecu_address = SA;
-  if (Callback_Function_Proprietary_B) {
-    Callback_Function_Proprietary_B(proprietary_B);
+  if (Callback_Function_Application) {
+    SAE_Application_Info info;
+    info.type = PROPRIETARY_B;
+    info.proprietary_b = proprietary_B;
+    Callback_Function_Application(info);
   }
 }

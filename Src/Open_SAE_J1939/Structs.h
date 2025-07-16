@@ -284,5 +284,25 @@ typedef struct {
 
 } J1939;
 
+/* Enum for SAE J1939 application information */
+typedef enum {
+  IDENTIFICATION_SOFTWARE,
+  IDENTIFICATION_ECU,
+  IDENTIFICATION_COMPONENT,
+  PROPRIETARY_A,
+  PROPRIETARY_B
+} SAE_Application_Info_Type;
+
+/* This struct is used to signal application information sent from another ECU over SAE J1939 */
+typedef struct{
+  SAE_Application_Info_Type type;
+  union {
+    struct Software_identification *software_identification;
+    struct ECU_identification *ecu_identification;
+    struct Component_identification *component_identification;
+    struct Proprietary_A *proprietary_a;
+    struct Proprietary_B *proprietary_b;
+  };
+} SAE_Application_Info;
 
 #endif /* OPEN_SAE_J1939_OPEN_SAE_J1939_STRUCTS_H_ */
