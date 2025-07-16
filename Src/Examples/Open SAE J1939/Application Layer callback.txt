@@ -1,0 +1,272 @@
+*
+ * Main.c
+ *
+ * The purpose of this file is to show how one can build
+ * applications using the SAE J1939 Application layer callback.
+ * This example program uses SOCKETCAN as a targeted platform
+ * and can act as both a sender and a receiver of data.
+ * If the --send argument is used, it will send requests
+ * for data to be retrieved from the other node.
+ *
+ *  Created on: 16 juli 2025
+ *      Author: Rickard Hallerbäck
+ */
+#include <cstring>
+#include <iostream>
+#include <stdio.h>
+#include <string>
+
+/* Include Open SAE J1939 */
+#include "Open_SAE_J1939/Open_SAE_J1939.h"
+
+/* Include ISO 11783 */
+#include "ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
+
+/* For using the SOCKETCAN backend */
+#include "Hardware/SocketCAN.h"
+
+constexpr int DEBUG_NONE = 0;
+constexpr int DEBUG_LOW = 1;
+constexpr int DEBUG_MEDIUM = 2;
+constexpr int DEBUG_HIGH = 3;
+
+typedef struct ECUArguments {
+  uint8_t this_ECU_address = 0x50;
+  uint32_t identity_number = 100;
+  std::string ifname = "vcan0"; // SOCKETCAN is used for this program
+  int debug = DEBUG_NONE;
+  bool send = false;
+} ECUArguments;
+
+ECUArguments args;
+
+/* J1939 stack */
+J1939 j1939 = {0};
+
+/* This function reads the CAN traffic */
+void Callback_Function_Traffic(uint32_t ID, uint8_t DLC, uint8_t data[],
+                               bool is_TX) {
+  if (args.debug > DEBUG_LOW) {
+    /* Print if it is TX or RX */
+    printf("%s\t", is_TX ? "TX" : "RX");
+
+    /* Print ID as hex */
+    printf("%08X\t", ID);
+
+    /* Print the data */
+    uint8_t i;
+    for (i = 0U; i < DLC; i++) {
+      printf("%X\t", data[i]);
+    }
+
+    /* Print the non-data */
+    for (i = DLC; i < 8U; i++) {
+      printf("%X\t", 0U);
+    }
+
+    /* New line */
+    printf("\n");
+  }
+}
+
+void printHelp(const char *programName) {
+  std::cout
+      << "Usage: " << programName << " [OPTIONS]\n\n"
+      << "Options:\n"
+      << "  -e, --ecu-address <hex/dec>     Set ECU address (default: 0x50)\n"
+      << "  -i, --identity-number <number>  Set ECU identity number (default: "
+         "100)\n"
+      << "  -c, --can-interface <string>    Set ifname of socketcan interface "
+         "(default: vcan0)\n"
+      << "  --debug <int>                   Set debug level (default 0 - no "
+         "debug)\n"
+      << "  -h, --help                      Show this help message\n";
+}
+
+void parseArguments(int argc, char *argv[]) {
+  for (int i = 1; i < argc; ++i) {
+    if ((strcmp(argv[i], "--ecu-address") == 0 || strcmp(argv[i], "-e") == 0) &&
+        i + 1 < argc) {
+      args.this_ECU_address =
+          static_cast<uint8_t>(strtoul(argv[++i], nullptr, 0));
+    } else if ((strcmp(argv[i], "--identity-number") == 0 ||
+                strcmp(argv[i], "-i") == 0) &&
+               i + 1 < argc) {
+      args.identity_number =
+          static_cast<uint32_t>(strtoul(argv[++i], nullptr, 0));
+    } else if (strcmp(argv[i], "--debug") == 0 && i + 1 < argc) {
+      args.debug = static_cast<int>(strtoul(argv[++i], nullptr, 0));
+    } else if ((strcmp(argv[i], "--can-interface") == 0 ||
+                strcmp(argv[i], "-c") == 0) &&
+               i + 1 < argc) {
+      args.ifname = argv[++i];
+    } else if (strcmp(argv[i], "--send") == 0) {
+      args.send = true;
+    } else if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0) {
+      printHelp(argv[0]);
+      std::exit(0);
+    } else {
+      std::cerr << "Unknown or malformed option: " << argv[i] << "\n";
+      printHelp(argv[0]);
+      std::exit(EXIT_FAILURE);
+    }
+  }
+}
+
+void handle_ecu_identification(ECU_identification *id) {
+  printf("--- Incoming ECU identification Message ---\n");
+  printf("    From ECU: %d\n", id->from_ecu_address);
+  printf("    Serial: %s\n", id->ecu_serial_number);
+  printf("    Part: %s\n", id->ecu_part_number);
+  printf("    Location: %s\n", id->ecu_location);
+  printf("    Type: %s\n", id->ecu_type);
+  printf("-------------------------------------------\n");
+}
+
+void handle_proprietary_b(Proprietary_B *msg) {
+  printf("--- Incoming Proprietary B Message ---\n");
+  printf("    From ECU: %d\n", msg->from_ecu_address);
+  printf("    PGN: %d\n", msg->pgn);
+  printf("    total bytes: %d\n", msg->total_bytes);
+  printf("    data: ");
+  int i = 0;
+  while (i < msg->total_bytes) {
+    printf("%c", msg->data[i]);
+    i++;
+  }
+  printf("\n");
+  printf("--------------------------------------\n");
+  SAE_J1939_Send_Request(&j1939, args.this_ECU_address + 1,
+                         PGN_ECU_IDENTIFICATION);
+}
+
+void handle_incoming(SAE_Application_Info msg) {
+  switch (msg.type) {
+  case PROPRIETARY_B: {
+    handle_proprietary_b(msg.proprietary_b);
+    break;
+  }
+  case IDENTIFICATION_ECU: {
+    handle_ecu_identification(msg.ecu_identification);
+    break;
+  }
+  default:
+    /* Handles for IDENTIFICATION_SOFTWARE, IDENTIFICATION_COMPONENT,
+     * PROPRIETARY_A can be added here likewise */
+    break;
+  }
+}
+
+void setupThisJ1939ECU() {
+  /* Create our J1939 structure */
+  j1939.information_this_ECU.this_ECU_address = args.this_ECU_address;
+  j1939.information_this_ECU.this_name.identity_number = args.identity_number;
+  j1939.information_this_ECU.this_name.manufacturer_code =
+      400; /* From 0 to 2047 */
+  j1939.information_this_ECU.this_name.function_instance =
+      20;                                                /* From 0 to 31 */
+  j1939.information_this_ECU.this_name.ECU_instance = 1; /* From 0 to 7 */
+  j1939.information_this_ECU.this_name.function =
+      FUNCTION_VDC_MODULE;                                  /* From 0 to 255 */
+  j1939.information_this_ECU.this_name.vehicle_system = 50; /* From 0 to 127 */
+  j1939.information_this_ECU.this_name.arbitrary_address_capable =
+      0; /* From 0 to 1 */
+  j1939.information_this_ECU.this_name.industry_group =
+      INDUSTRY_GROUP_GLOBAL; /* From 0 to 7 */
+  j1939.information_this_ECU.this_name.vehicle_system_instance = 10;
+
+  // Set the ECU length of each field to 6 as an example (can be max 30).
+  j1939.information_this_ECU.this_identifications.ecu_identification
+      .length_of_each_field = 6;
+  char ecu_part_number[] = "Part1";
+  char ecu_serial_number[] = "12345";
+  char ecu_location[] = "corner";
+  char ecu_type[] = "random";
+  memcpy(j1939.information_this_ECU.this_identifications.ecu_identification
+             .ecu_part_number,
+         ecu_part_number, 6);
+  memcpy(j1939.information_this_ECU.this_identifications.ecu_identification
+             .ecu_serial_number,
+         ecu_serial_number, 6);
+  memcpy(j1939.information_this_ECU.this_identifications.ecu_identification
+             .ecu_location,
+         ecu_location, 6);
+  memcpy(j1939.information_this_ECU.this_identifications.ecu_identification
+             .ecu_type,
+         ecu_type, 6);
+
+  uint8_t i;
+  for (i = 0; i < 255; i++) {
+    j1939.other_ECU_address[i] = 0xFF;
+  }
+
+  char content[] = "This is sent as a proprietary B message";
+  size_t message_size = strlen(content);
+
+  if (!args.send) {
+    j1939.this_proprietary.proprietary_B[0].pgn = 65280;
+    j1939.this_proprietary.proprietary_B[0].total_bytes = message_size;
+    memset(j1939.this_proprietary.proprietary_B[0].data, 0, MAX_PROPRIETARY_B);
+    memcpy(j1939.this_proprietary.proprietary_B[0].data, content,
+           sizeof(content));
+  } else {
+    j1939.from_other_ecu_proprietary.proprietary_B[0].pgn = 65280;
+    j1939.from_other_ecu_proprietary.proprietary_B[0].total_bytes =
+        message_size;
+  }
+  if (!args.send) {
+    printf("this_proprietary.Proprietary_B[0].pgn: %d [%d bytes] [WILL SEND "
+           "THIS]\n",
+           j1939.this_proprietary.proprietary_B[0].pgn,
+           j1939.this_proprietary.proprietary_B[0].total_bytes);
+  } else {
+    printf("from_other_ecu_proprietary.Proprietary_B[0].pgn: %d [%d bytes] "
+           "[WILL REQUEST THIS]\n",
+           j1939.from_other_ecu_proprietary.proprietary_B[0].pgn,
+           j1939.from_other_ecu_proprietary.proprietary_B[0].total_bytes);
+  }
+}
+
+int main(int argc, char *argv[]) {
+  uint8_t other_ecu = 0xFE;
+
+  parseArguments(argc, argv);
+
+  // Setup socketcan
+  socketcan_setup(args.ifname.c_str());
+
+  // Setup this J1939 stack
+  setupThisJ1939ECU();
+
+  printf("This ECU address: %d\n", j1939.information_this_ECU.this_ECU_address);
+
+  /* This broadcast out this ECU NAME + address to all other ECU:s */
+  SAE_J1939_Response_Request_Address_Claimed(&j1939);
+
+  /* This asking all ECU about their NAME + address */
+  SAE_J1939_Send_Request_Address_Claimed(&j1939, 0xFF);
+
+  /* Callback for monitoring CAN activity */
+  CAN_Set_Callback_Functions(NULL, NULL, Callback_Function_Traffic, NULL);
+
+  /* Callback for handling SAE J1939 application layer */
+  SAE_J1939_Set_Application_Callback_Function(handle_incoming);
+
+  /* SAE J1939 process */
+  bool run = true;
+
+  if (args.send) {
+    SAE_J1939_Send_Request(&j1939, args.this_ECU_address + 1, 0xff00);
+  }
+
+  while (run) {
+    /* Read incoming messages */
+    Open_SAE_J1939_Listen_For_Messages(&j1939);
+  }
+
+  /* Save your ECU information */
+  Open_SAE_J1939_Closedown_ECU(&j1939);
+
+  return 0;
+}
+
