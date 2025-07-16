@@ -83,4 +83,10 @@ void SAE_J1939_Read_Response_Request_ECU_Identification(J1939 *j1939, uint8_t SA
 		j1939->from_other_ecu_identifications.ecu_identification.ecu_type[i] = data[i + length_of_each_field*3];
 	}
 	j1939->from_other_ecu_identifications.ecu_identification.from_ecu_address = SA;
+  if (Callback_Function_Application) {
+    SAE_Application_Info info;
+    info.type = IDENTIFICATION_ECU;
+    info.ecu_identification = &j1939->from_other_ecu_identifications.ecu_identification;
+    Callback_Function_Application(info);
+  }
 }

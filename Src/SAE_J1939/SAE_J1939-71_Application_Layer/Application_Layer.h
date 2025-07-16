@@ -22,6 +22,11 @@
 extern "C" {
 #endif
 
+extern void (*Callback_Function_Application)(SAE_Application_Info);
+
+/* Callback functions */
+void SAE_J1939_Set_Application_Callback_Function(void (*Callback_Function_Application_)(SAE_Application_Info));
+
 /* Software identification */
 ENUM_J1939_STATUS_CODES SAE_J1939_Send_Request_Software_Identification(J1939 *j1939, uint8_t DA);
 ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Software_Identification(J1939* j1939, uint8_t DA);

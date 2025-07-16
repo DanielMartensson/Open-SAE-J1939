@@ -72,12 +72,16 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	case PGN_SOFTWARE_IDENTIFICATION:
 		SAE_J1939_Read_Response_Request_Software_Identification(j1939, SA, complete_data);
 		break;
-	case PGN_ECU_IDENTIFICATION:
+	case PGN_ECU_IDENTIFICATION: { 
+		j1939->from_other_ecu_identifications.ecu_identification.length_of_each_field = total_message_size/4;
 		SAE_J1939_Read_Response_Request_ECU_Identification(j1939, SA, complete_data);
 		break;
-	case PGN_COMPONENT_IDENTIFICATION:
+  }
+	case PGN_COMPONENT_IDENTIFICATION: {
+		j1939->from_other_ecu_identifications.component_identification.length_of_each_field = total_message_size/4;
 		SAE_J1939_Read_Response_Request_Component_Identification(j1939, SA, complete_data);
 		break;
+  }
 	case PGN_PROPRIETARY_A:
 		SAE_J1939_Read_Response_Request_Proprietary_A(j1939, SA, complete_data);
 		break;
