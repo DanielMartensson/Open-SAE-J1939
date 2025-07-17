@@ -46,6 +46,78 @@ cmake --build build
 
 Please feel free to contribute to this project if you add platform support for another target.
 
+### Including the project as a library
+
+In CMake the library is named opensaej1939.
+To link it with your executable use it with
+the target_link_libraries command, as an example:
+
+```cmake
+# Fetch all dependencies from git
+include(FetchContent)
+# Fetch Open-SAE-J1939
+FetchContent_Declare(
+    opensaej1939
+    GIT_REPOSITORY https://github.com/DanielMartensson/Open-SAE-J1939.git
+    GIT_TAG main
+)
+# This line actually downloads and adds the project
+FetchContent_MakeAvailable(opensaej1939)
+
+# Your executable
+add_executable(your_executable main.c)
+
+# Link against the Open SAE J1939 library
+target_link_libraries(your_executable PRIVATE opensaej1939)
+```
+
+If you instead work with Git submodules in your repository, you can
+include the CMakeLists.txt from this project using the add\_subdirectory command like this:
+
+```cmake
+# Add the Open-SAE-J1939 submodule as a subdirectory
+add_subdirectory(external/Open-SAE-J1939)
+
+# Your executable
+add_executable(your_executable main.c)
+
+# Link against the Open SAE J1939 library
+target_link_libraries(your_executable PRIVATE opensaej1939)
+```
+
+The build can also be configurable. You can set the target platform
+with the TARGET_PLATFORM define, as established above.
+You can also set some more detailed behaviour of the inner
+workings of the stack with compile time definitions.
+The project follows an embedded-target philosophy, where memory
+is statically allocated at startup and does not grow dynamically at runtime.
+This has a consequence when working with data transfer support.
+We don't want to allocate more memory than necessary.
+You can configure the number of data transfer PGNS as well as
+their data sizes accordingly:
+
+
+| Definition               | Description                                                                 |
+|--------------------------|-----------------------------------------------------------------------------|
+| `MAX_PROPRIETARY_A`      | The maximum size (in bytes) of the Proprietary A data.                     |
+| `MAX_PROPRIETARY_B`      | The maximum supported size (in bytes) of a single Proprietary B data unit. |
+| `MAX_PROPRIETARY_B_PGNS` | The maximum number of distinct Proprietary B PGNs that can be handled.     |
+
+If not specifically set during the cmake build setup stage, they will attain these default values:
+
+| Definition               | Default Value |
+|--------------------------|---------------|
+| `MAX_PROPRIETARY_A`      | 15U           |
+| `MAX_PROPRIETARY_B`      | 60            |
+| `MAX_PROPRIETARY_B_PGNS` | 2             |
+
+As an example, this command would set up your project to use the SocketCAN backend
+as well as setting the maximum number of distinct Proprietary B PGNs to 124 for your project.
+
+```bash
+cmake -B build -DTARGET_PLATFORM=SOCKETCAN -DMAX_PROPRIETARY_B_PGNS=124.
+```
+
 # How to use the project
 
  - Step 1: Download this repository

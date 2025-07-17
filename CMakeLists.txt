@@ -10,6 +10,19 @@ endif()
 # Make it a compile definition
 add_compile_definitions(TARGET_PLATFORM=${TARGET_PLATFORM})
 
+# Configurable Open SAE compile time definitions
+if(DEFINED MAX_PROPRIETARY_A)
+    add_compile_definitions(MAX_PROPRIETARY_A=${MAX_PROPRIETARY_A})
+endif()
+
+if(DEFINED MAX_PROPRIETARY_B)
+    add_compile_definitions(MAX_PROPRIETARY_B=${MAX_PROPRIETARY_B})
+endif()
+
+if(DEFINED MAX_PROPRIETARY_B_PGNS)
+    add_compile_definitions(MAX_PROPRIETARY_B_PGNS=${MAX_PROPRIETARY_B_PGNS})
+endif()
+
 # Collect sources
 file(GLOB_RECURSE ALL_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Src/*.c")
 set(MAIN_SRC "${CMAKE_CURRENT_SOURCE_DIR}/Src/Main.c")
@@ -23,6 +36,16 @@ endif()
 # Library
 add_library(opensaej1939 STATIC ${ALL_SOURCE_FILES})
 target_include_directories(opensaej1939 PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Src")
+
+if(DEFINED MAX_PROPRIETARY_A)
+    target_compile_definitions(opensaej1939 PUBLIC MAX_PROPRIETARY_A=${MAX_PROPRIETARY_A})
+endif()
+if(DEFINED MAX_PROPRIETARY_B)
+    target_compile_definitions(opensaej1939 PUBLIC MAX_PROPRIETARY_B=${MAX_PROPRIETARY_B})
+endif()
+if(DEFINED MAX_PROPRIETARY_B_PGNS)
+    target_compile_definitions(opensaej1939 PUBLIC MAX_PROPRIETARY_B_PGNS=${MAX_PROPRIETARY_B_PGNS})
+endif()
 
 # Executable
 add_executable(main ${MAIN_SRC})
