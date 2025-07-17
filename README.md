@@ -53,11 +53,39 @@ To link it with your executable use it with
 the target_link_libraries command, as an example:
 
 ```cmake
+# Fetch all dependencies from git
+include(FetchContent)
+# Fetch Open-SAE-J1939
+FetchContent_Declare(
+    opensaej1939
+    GIT_REPOSITORY https://github.com/DanielMartensson/Open-SAE-J1939.git
+    GIT_TAG main
+)
+# This line actually downloads and adds the project
+FetchContent_MakeAvailable(opensaej1939)
+
+# Your executable
+add_executable(your_executable main.c)
+
 # Link against the Open SAE J1939 library
 target_link_libraries(your_executable PRIVATE opensaej1939)
 ```
 
-The build can be configurable. You can set the target platform
+If you instead work with Git submodules in your repository, you can
+include the CMakeLists.txt from this project using the add\_subdirectory command like this:
+
+```cmake
+# Add the Open-SAE-J1939 submodule as a subdirectory
+add_subdirectory(external/Open-SAE-J1939)
+
+# Your executable
+add_executable(your_executable main.c)
+
+# Link against the Open SAE J1939 library
+target_link_libraries(your_executable PRIVATE opensaej1939)
+```
+
+The build can also be configurable. You can set the target platform
 with the TARGET_PLATFORM define, as established above.
 You can also set some more detailed behaviour of the inner
 workings of the stack with compile time definitions.
