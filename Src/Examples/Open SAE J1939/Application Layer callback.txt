@@ -1,5 +1,5 @@
 *
- * Main.c
+ * Main.cpp
  *
  * The purpose of this file is to show how one can build
  * applications using the SAE J1939 Application layer callback.

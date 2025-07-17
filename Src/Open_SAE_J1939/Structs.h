@@ -23,10 +23,16 @@
 #define MAX_TP_DT 1785U
 #define MAX_IDENTIFICATION 30U
 #define MAX_DM_FIELD 10U
+#ifndef MAX_PROPRIETARY_A
 #define MAX_PROPRIETARY_A 15U
+#endif
+#ifndef MAX_PROPRIETARY_B
 #define MAX_PROPRIETARY_B 60U
+#endif
+#ifndef MAX_PROPRIETARY_B_PGNS
 #define MAX_PROPRIETARY_B_PGNS 2U					/* The maximum number of PGNs that the ECUs will be aware of. 
 													 * If proprietary B PGNs are not used, set this to 0 to save memory */
+#endif
 
 /* PGN: 0x00E800 - Storing the Acknowledgement from the reading process */
 struct Acknowledgement {
