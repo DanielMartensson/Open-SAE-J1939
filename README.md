@@ -40,7 +40,7 @@ SOCKETCAN as a targeted platform.
 git clone https://github.com/DanielMartensson/Open-SAE-J1939.git
 cd Open-SAE-J1939
 mkdir build
-cmake -B build -DTARGET_PLATFORM=SOCKETCAN .
+cmake -B build -DOPENSAE_J1939_TARGET_PLATFORM=SOCKETCAN .
 cmake --build build
 ```
 
@@ -115,7 +115,7 @@ As an example, this command would set up your project to use the SocketCAN backe
 as well as setting the maximum number of distinct Proprietary B PGNs to 124 for your project.
 
 ```bash
-cmake -B build -DTARGET_PLATFORM=SOCKETCAN -DMAX_PROPRIETARY_B_PGNS=124.
+cmake -B build -DOPENSAE_J1939_TARGET_PLATFORM=SOCKETCAN -DMAX_PROPRIETARY_B_PGNS=124.
 ```
 
 # How to use the project
