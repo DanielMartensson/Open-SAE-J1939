@@ -18,13 +18,13 @@
  * key						 -> seed
  */
 void FLASH_EEPROM_RAM_Memory(uint16_t *number_of_requested_bytes, uint8_t pointer_type, uint8_t *command, uint32_t *pointer, uint8_t *pointer_extension, uint16_t *key, uint8_t raw_binary_data[]){
-#if TARGET_PLATFORM == STM32
+#if OPENSAE_J1939_TARGET_PLATFORM == STM32
 	/* Implement your memory handler function for the STM32 platform */
-#elif TARGET_PLATFORM == ARDUINO
+#elif OPENSAE_J1939_TARGET_PLATFORM == ARDUINO
 	/* Implement your memory handler function for the Arduino platform */
-#elif TARGET_PLATFORM == PIC
+#elif OPENSAE_J1939_TARGET_PLATFORM == PIC
 	/* Implement your memory handler function for the PIC platform */
-#elif TARGET_PLATFORM == AVR
+#elif OPENSAE_J1939_TARGET_PLATFORM == AVR
 	/* Implement your memory handler function for the AVR platform */
 #else
 	/* If no processor are used, use internal feedback for debugging */

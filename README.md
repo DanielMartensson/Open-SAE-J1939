@@ -25,7 +25,7 @@ After you have got a basic understanding of the project, you are able to build o
 SAE J1939 standard!
 
 After you have understand the structure of the project, then select processor choice in `Hardware -> Hardware.h` file.
-Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc. or if you want to run it on PC first, then build with the define `TARGET_PLATFORM` and run some examples.
+Here you can select for example `STM32`, `Arduino`, `PIC`, `AVR` etc. or if you want to run it on PC first, then build with the define `OPENSAE_J1939_TARGET_PLATFORM` and run some examples.
 That's the debugging mode for internal CAN feedback.
 
 ## Building with CMake
@@ -33,7 +33,7 @@ That's the debugging mode for internal CAN feedback.
 This project can be built with CMake. The build can be configured to target different hardware platforms.
 Per default, no specific hardware platform is selected and all CAN messages are sent and received locally
 over an internal memory bus. However, if you want to send messages on a specific platform, you can set the
-'TARGET_PLATFORM' compile definition during build. Here is an example of how to build the project using
+'OPENSAE_J1939_TARGET_PLATFORM' compile definition during build. Here is an example of how to build the project using
 SOCKETCAN as a targeted platform.
 
 ```bash
@@ -86,7 +86,7 @@ target_link_libraries(your_executable PRIVATE opensaej1939)
 ```
 
 The build can also be configurable. You can set the target platform
-with the TARGET_PLATFORM define, as established above.
+with the OPENSAE_J1939_TARGET_PLATFORM define, as established above.
 You can also set some more detailed behaviour of the inner
 workings of the stack with compile time definitions.
 The project follows an embedded-target philosophy, where memory
