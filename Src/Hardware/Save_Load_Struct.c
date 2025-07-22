@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 bool Save_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
-#if TARGET_PLATFORM == STM32
+#if OPENSAE_J1939_TARGET_PLATFORM == STM32
 	/* Save it to SD card */
 	if(STM32_PLC_SD_Mont_Card() != FR_OK){
 		return false;
@@ -21,11 +21,11 @@ bool Save_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 	STM32_PLC_SD_Close_File();
 	STM32_PLC_SD_Unmount_Card();
 	return true;
-#elif TARGET_PLATFORM == ARDUINO
+#elif OPENSAE_J1939_TARGET_PLATFORM == ARDUINO
 	/* Implement your memory handler function for the Arduino platform */
-#elif TARGET_PLATFORM == PIC
+#elif OPENSAE_J1939_TARGET_PLATFORM == PIC
 	/* Implement your memory handler function for the PIC platform */
-#elif TARGET_PLATFORM == AVR
+#elif OPENSAE_J1939_TARGET_PLATFORM == AVR
 	/* Implement your memory handler function for the AVR platform */
 #else
 	/* Write a file */
@@ -41,7 +41,7 @@ bool Save_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 }
 
 bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
-#if TARGET_PLATFORM == STM32
+#if OPENSAE_J1939_TARGET_PLATFORM == STM32
 	/* Load it from SD card */
 	if(STM32_PLC_SD_Mont_Card() != FR_OK){
 		return false;
@@ -51,11 +51,11 @@ bool Load_Struct(uint8_t data[], uint32_t data_length, char file_name[]){
 	STM32_PLC_SD_Close_File();
 	STM32_PLC_SD_Unmount_Card();
 	return true;
-#elif TARGET_PLATFORM == ARDUINO
+#elif OPENSAE_J1939_TARGET_PLATFORM == ARDUINO
 	/* Implement your memory handler function for the Arduino platform */
-#elif TARGET_PLATFORM == PIC
+#elif OPENSAE_J1939_TARGET_PLATFORM == PIC
 	/* Implement your memory handler function for the PIC platform */
-#elif TARGET_PLATFORM == AVR
+#elif OPENSAE_J1939_TARGET_PLATFORM == AVR
 	/* Implement your memory handler function for the AVR platform */
 #else
 	/* Read a file */

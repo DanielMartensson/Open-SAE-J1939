@@ -15,16 +15,16 @@ static void (*Callback_Function_Traffic)(uint32_t, uint8_t, uint8_t[], bool) = N
 static void (*Callback_Function_Delay_ms)(uint8_t) = NULL;
 
 /* Platform independent library headers for CAN */
-#if TARGET_PLATFORM == STM32
+#if OPENSAE_J1939_TARGET_PLATFORM == STM32
 #include "main.h"
-#elif TARGET_PLATFORM == ARDUINO
-#elif TARGET_PLATFORM == PIC
-#elif TARGET_PLATFORM == AVR
-#elif TARGET_PLATFORM == QT_USB
+#elif OPENSAE_J1939_TARGET_PLATFORM == ARDUINO
+#elif OPENSAE_J1939_TARGET_PLATFORM == PIC
+#elif OPENSAE_J1939_TARGET_PLATFORM == AVR
+#elif OPENSAE_J1939_TARGET_PLATFORM == QT_USB
 #include "CAN_to_USB/can_to_usb.h"
-#elif TARGET_PLATFORM == INTERNAL_CALLBACK
+#elif OPENSAE_J1939_TARGET_PLATFORM == INTERNAL_CALLBACK
 /* Nothing here because else statement should not be running */
-#elif TARGET_PLATFORM == SOCKETCAN
+#elif OPENSAE_J1939_TARGET_PLATFORM == SOCKETCAN
 #include "SocketCAN.h"
 #else
 /* Internal fields */
@@ -77,7 +77,7 @@ static void Internal_Receive(uint32_t* ID, uint8_t data[], bool* is_new_message)
 
 ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[]) {
 	ENUM_J1939_STATUS_CODES status = STATUS_SEND_BUSY;
-#if TARGET_PLATFORM == STM32
+#if OPENSAE_J1939_TARGET_PLATFORM == STM32
 	CAN_TxHeaderTypeDef TxHeader;
 	TxHeader.DLC = 8;											/* Here we are sending 8 bytes */
 	TxHeader.RTR = CAN_RTR_DATA;								/* Data frame */
@@ -86,17 +86,17 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[]) {
 	TxHeader.ExtId = ID;
 	TxHeader.StdId = 0x00; 										/* Not used */
 	status = STM32_PLC_CAN_Transmit(data, &TxHeader);
-#elif TARGET_PLATFORM == ARDUINO
+#elif OPENSAE_J1939_TARGET_PLATFORM == ARDUINO
 	/* Implement your CAN send 8 bytes message function for the Arduino platform */
-#elif TARGET_PLATFORM == PIC
+#elif OPENSAE_J1939_TARGET_PLATFORM == PIC
 	/* Implement your CAN send 8 bytes message function for the PIC platform */
-#elif TARGET_PLATFORM == AVR
+#elif OPENSAE_J1939_TARGET_PLATFORM == AVR
 	/* Implement your CAN send 8 bytes message function for the AVR platform */
-#elif TARGET_PLATFORM == QT_USB
+#elif OPENSAE_J1939_TARGET_PLATFORM == QT_USB
 	status = QT_USB_Transmit(ID, data, 8);
-#elif TARGET_PLATFORM == SOCKETCAN
+#elif OPENSAE_J1939_TARGET_PLATFORM == SOCKETCAN
   status = socketcan_transmit(ID, data, 8);
-#elif TARGET_PLATFORM == INTERNAL_CALLBACK
+#elif OPENSAE_J1939_TARGET_PLATFORM == INTERNAL_CALLBACK
 	/* Call our callback function */
 	Callback_Function_Send(ID, 8, data);
 	status = STATUS_SEND_OK;
@@ -118,7 +118,7 @@ ENUM_J1939_STATUS_CODES CAN_Send_Message(uint32_t ID, uint8_t data[]) {
  */
 ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[]) {
 	ENUM_J1939_STATUS_CODES status = STATUS_SEND_BUSY;
-#if TARGET_PLATFORM == STM32
+#if OPENSAE_J1939_TARGET_PLATFORM == STM32
 	CAN_TxHeaderTypeDef TxHeader;
 	TxHeader.DLC = 3;											/* Here we are only sending 3 bytes */
 	TxHeader.RTR = CAN_RTR_DATA;								/* Data frame */
@@ -127,17 +127,17 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[]) {
 	TxHeader.ExtId = ID;
 	TxHeader.StdId = 0x00; 										/* Not used */
 	status = STM32_PLC_CAN_Transmit(PGN, &TxHeader);
-#elif TARGET_PLATFORM == ARDUINO
+#elif OPENSAE_J1939_TARGET_PLATFORM == ARDUINO
 	/* Implement your CAN send 3 bytes message function for the Arduino platform */
-#elif TARGET_PLATFORM == PIC
+#elif OPENSAE_J1939_TARGET_PLATFORM == PIC
 	/* Implement your CAN send 3 bytes message function for the PIC platform */
-#elif TARGET_PLATFORM == AVR
+#elif OPENSAE_J1939_TARGET_PLATFORM == AVR
 	/* Implement your CAN send 3 bytes message function for the AVR platform */
-#elif TARGET_PLATFORM == QT_USB
+#elif OPENSAE_J1939_TARGET_PLATFORM == QT_USB
 	status = QT_USB_Transmit(ID, PGN, 3);                       /* PGN is always 3 bytes */
-#elif TARGET_PLATFORM == SOCKETCAN
+#elif OPENSAE_J1939_TARGET_PLATFORM == SOCKETCAN
   status = socketcan_transmit(ID, PGN, 3);
-#elif TARGET_PLATFORM == INTERNAL_CALLBACK
+#elif OPENSAE_J1939_TARGET_PLATFORM == INTERNAL_CALLBACK
 	/* Call our callback function */
 	Callback_Function_Send(ID, 3, PGN);
 	status = STATUS_SEND_OK;
@@ -157,19 +157,19 @@ ENUM_J1939_STATUS_CODES CAN_Send_Request(uint32_t ID, uint8_t PGN[]) {
 /* Read the current CAN-bus message. Returning false if the message has been read before, else true */
 bool CAN_Read_Message(uint32_t* ID, uint8_t data[]) {
 	bool is_new_message = false;
-#if TARGET_PLATFORM == STM32
+#if OPENSAE_J1939_TARGET_PLATFORM == STM32
 	STM32_PLC_CAN_Get_ID_Data(ID, data, &is_new_message);
-#elif TARGET_PLATFORM == ARDUINO
+#elif OPENSAE_J1939_TARGET_PLATFORM == ARDUINO
 	/* Implement your CAN function to get ID, data[] and the flag is_new_message here for the Arduino platform */
-#elif TARGET_PLATFORM == PIC
+#elif OPENSAE_J1939_TARGET_PLATFORM == PIC
 	/* Implement your CAN function to get ID, data[] and the flag is_new_message here for the PIC platform */
-#elif TARGET_PLATFORM == AVR
+#elif OPENSAE_J1939_TARGET_PLATFORM == AVR
 	/* Implement your CAN function to get ID, data[] and the flag is_new_message here for the AVR platform */
-#elif TARGET_PLATFORM == QT_USB
+#elif OPENSAE_J1939_TARGET_PLATFORM == QT_USB
 	QT_USB_Get_ID_Data(ID, data, &is_new_message);
-#elif TARGET_PLATFORM == SOCKETCAN
+#elif OPENSAE_J1939_TARGET_PLATFORM == SOCKETCAN
   socketcan_receive(ID, data, &is_new_message);
-#elif TARGET_PLATFORM == INTERNAL_CALLBACK
+#elif OPENSAE_J1939_TARGET_PLATFORM == INTERNAL_CALLBACK
 	Callback_Function_Read(ID, data, &is_new_message);
 #else
 	/* If no processor are used, use internal feedback for debugging */
@@ -196,20 +196,20 @@ void CAN_Set_Callback_Functions(void (*Callback_Function_Send_)(uint32_t, uint8_
 }
 
 void CAN_Delay(uint8_t milliseconds) {
-#if TARGET_PLATFORM == STM32
+#if OPENSAE_J1939_TARGET_PLATFORM == STM32
 
-#elif TARGET_PLATFORM == ARDUINO
+#elif OPENSAE_J1939_TARGET_PLATFORM == ARDUINO
 
-#elif TARGET_PLATFORM == PIC
+#elif OPENSAE_J1939_TARGET_PLATFORM == PIC
 
-#elif TARGET_PLATFORM == AVR
+#elif OPENSAE_J1939_TARGET_PLATFORM == AVR
 
-#elif TARGET_PLATFORM == QT_USB
+#elif OPENSAE_J1939_TARGET_PLATFORM == QT_USB
 
-#elif TARGET_PLATFORM == INTERNAL_CALLBACK
+#elif OPENSAE_J1939_TARGET_PLATFORM == INTERNAL_CALLBACK
 	Callback_Function_Delay_ms(milliseconds);
 
-#elif TARGET_PLATFORM == SOCKETCAN
+#elif OPENSAE_J1939_TARGET_PLATFORM == SOCKETCAN
   #include <unistd.h>
   usleep(milliseconds*1000);
 #else
