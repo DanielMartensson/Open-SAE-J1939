@@ -30,7 +30,8 @@ bool can_initialized = false;
 int socketcan_setup(const char *ifname) {
   struct ifreq ifr;
   struct sockaddr_can addr;
-  struct timeval tv = {.tv_sec = SOCKETCAN_RCVTIMEOUT, .tv_usec = 0};
+  struct timeval tv = {.tv_sec = SOCKETCAN_RCVTIMEOUT / 1000,
+                       .tv_usec = (SOCKETCAN_RCVTIMEOUT % 1000) * 1000};
 
   if (can_initialized) {
     return 0; // Already initialized

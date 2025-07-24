@@ -10,7 +10,7 @@ extern "C" {
 #endif
 
 #ifndef SOCKETCAN_RCVTIMEOUT
-/* Set the read timeout of the bus in seconds, 0 means no timeout and it will block on read operations */
+/* Set the read timeout of the bus in milliseconds, 0 means no timeout and it will block on read operations */
 #define SOCKETCAN_RCVTIMEOUT 1
 #endif
 
