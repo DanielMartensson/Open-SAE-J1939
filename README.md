@@ -33,7 +33,7 @@ That's the debugging mode for internal CAN feedback.
 This project can be built with CMake. The build can be configured to target different hardware platforms.
 Per default, no specific hardware platform is selected and all CAN messages are sent and received locally
 over an internal memory bus. However, if you want to send messages on a specific platform, you can set the
-'OPENSAE_J1939_TARGET_PLATFORM' compile definition during build. Here is an example of how to build the project using
+`OPENSAE_J1939_TARGET_PLATFORM` compile definition during build. Here is an example of how to build the project using
 SOCKETCAN as a targeted platform.
 
 ```bash
@@ -115,7 +115,7 @@ As an example, this command would set up your project to use the SocketCAN backe
 as well as setting the maximum number of distinct Proprietary B PGNs to 124 for your project.
 
 ```bash
-cmake -B build -DOPENSAE_J1939_TARGET_PLATFORM=SOCKETCAN -DMAX_PROPRIETARY_B_PGNS=124.
+cmake -B build -DOPENSAE_J1939_TARGET_PLATFORM=SOCKETCAN -DMAX_PROPRIETARY_B_PGNS=124 .
 ```
 
 # How to use the project
