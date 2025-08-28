@@ -7,6 +7,7 @@
 
  /* Layer */
 #include "Hardware.h"
+#include <unistd.h>
 
 /* This is a call back function e.g listener, that will be called once SAE J1939 data is going to be sent */
 static void (*Callback_Function_Send)(uint32_t, uint8_t, uint8_t[]) = NULL;
@@ -210,7 +211,6 @@ void CAN_Delay(uint8_t milliseconds) {
 	Callback_Function_Delay_ms(milliseconds);
 
 #elif OPENSAE_J1939_TARGET_PLATFORM == SOCKETCAN
-  #include <unistd.h>
   usleep(milliseconds*1000);
 #else
 	/* Nothing */
