@@ -25,6 +25,7 @@ static void (*Callback_Function_Delay_ms)(uint8_t) = NULL;
 #elif OPENSAE_J1939_TARGET_PLATFORM == INTERNAL_CALLBACK
 /* Nothing here because else statement should not be running */
 #elif OPENSAE_J1939_TARGET_PLATFORM == SOCKETCAN
+#include <unistd.h>
 #include "SocketCAN.h"
 #else
 /* Internal fields */
@@ -210,7 +211,6 @@ void CAN_Delay(uint8_t milliseconds) {
 	Callback_Function_Delay_ms(milliseconds);
 
 #elif OPENSAE_J1939_TARGET_PLATFORM == SOCKETCAN
-  #include <unistd.h>
   usleep(milliseconds*1000);
 #else
 	/* Nothing */
