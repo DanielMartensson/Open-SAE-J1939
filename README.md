@@ -11,11 +11,15 @@ With this library, you can communicate with valves, engines, actuators, machiner
 Looking for C CANopen library for embedded systems?
 https://github.com/DanielMartensson/Easy-CANopen
 
-Looking for a C++ GUI framework that uses Open SAE J1939 over the USB?
-https://github.com/DanielMartensson/GoobySoft
-
 Looking for a C STM32 project with Open SAE J1939?
 https://github.com/DanielMartensson/STM32-PLC
+
+# GUI version
+
+There is a GUI logging software that can analyze CANopen messages ad even SAE J1939 messages as well.
+Head over to [GoobySoft](https://github.com/DanielMartensson/GoobySoft)
+
+![a](https://raw.githubusercontent.com/DanielMartensson/Open-SAE-J1939/refs/heads/main/pictures/GoobySoft.png)
 
 # Getting started
 
