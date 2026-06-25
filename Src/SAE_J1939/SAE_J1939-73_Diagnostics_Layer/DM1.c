@@ -46,7 +46,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_DM1(J1939* j1939, uint8_t DA)
 		j1939->this_ecu_tp_dt.data[1] = (j1939->this_dm.dm1.SAE_flash_lamp_malfunction_indicator << 6) | (j1939->this_dm.dm1.SAE_flash_lamp_red_stop << 4) | (j1939->this_dm.dm1.SAE_flash_lamp_amber_warning << 2) | (j1939->this_dm.dm1.SAE_flash_lamp_protect_lamp);
 		/* Load DTCs into TP data package */
 		uint8_t i;
-		for (i = 0; i < j1939->this_ecu_tp_cm.total_message_size_being_transmitted; i++){
+		for (i = 0; i < j1939->this_dm.errors_dm1_active; i++){
 			j1939->this_ecu_tp_dt.data[i*4 + 2] = j1939->this_dm.dm1.SPN[i];
 			j1939->this_ecu_tp_dt.data[i*4 + 3] = j1939->this_dm.dm1.SPN[i] >> 8;
 			j1939->this_ecu_tp_dt.data[i*4 + 4] = ((j1939->this_dm.dm1.SPN[i] >> 11) & 0b11100000) | j1939->this_dm.dm1.FMI[i];
@@ -100,7 +100,7 @@ void SAE_J1939_Read_Response_Request_DM1(J1939 *j1939, uint8_t SA, uint8_t data[
 		j1939->from_other_ecu_dm.dm1.from_ecu_address[i] = SA;
 	}
 
-	/* Check if we have no fault cause 
+	/* Check if we have no fault cause
 	 * When there is a single DM1 code, and the SPN is 0, this signals all DM1 messages have cleared and no active messages are left */
 	if (errors_dm1_active == 1 && j1939->from_other_ecu_dm.dm1.SPN[0] == 0) {
 		j1939->from_other_ecu_dm.errors_dm1_active = 0;

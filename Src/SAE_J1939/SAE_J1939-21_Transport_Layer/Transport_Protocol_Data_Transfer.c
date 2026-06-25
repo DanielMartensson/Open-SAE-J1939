@@ -130,21 +130,31 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Data_Transfer(J1939 *j
 		}
 		break;
 	case CONTROL_BYTE_TP_CM_CTS:
-		package[0] = j1939->from_other_ecu_tp_cm.next_packet_number_transmitted;				/* Next number of package */
-		bytes_sent = (j1939->from_other_ecu_tp_cm.next_packet_number_transmitted -1) * 7;
-		for (j = 0; j < 7; j++) {
-			if (bytes_sent < j1939->this_ecu_tp_cm.total_message_size_being_transmitted) {
-				package[j + 1] = j1939->this_ecu_tp_dt.data[bytes_sent++];						/* Data that we have collected */
+		bytes_sent = (j1939->from_other_ecu_tp_cm.next_packet_number_transmitted - 1U) * 7U;
+		for (i = 0; i < j1939->from_other_ecu_tp_cm.number_of_packets_to_be_transmitted; i++) {
+			uint8_t sequence_number = j1939->from_other_ecu_tp_cm.next_packet_number_transmitted + i;
+			if (sequence_number > j1939->this_ecu_tp_cm.number_of_packages_being_transmitted) {
+				break;
 			}
-			else {
-				package[j + 1] = 0xFF; 															/* Reserved */
+
+			package[0] = sequence_number;											/* Next number of package */
+			for (j = 0; j < 7; j++) {
+				if (bytes_sent < j1939->this_ecu_tp_cm.total_message_size_being_transmitted) {
+					package[j + 1] = j1939->this_ecu_tp_dt.data[bytes_sent++];				/* Data that we have collected */
+				}
+				else {
+					package[j + 1] = 0xFF;										/* Reserved */
+				}
+			}
+
+			/* Transmitt message */
+			status = CAN_Send_Message(ID, package);
+			if (status != STATUS_SEND_OK) {
+				break;
 			}
 		}
-
-		/* Transmitt message */
-		status = CAN_Send_Message(ID, package);
 		break;
 	}
-	
+
 	return status;
 }
