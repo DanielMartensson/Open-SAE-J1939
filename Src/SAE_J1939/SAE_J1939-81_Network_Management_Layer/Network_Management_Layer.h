@@ -13,6 +13,8 @@
 
 /* Enums and structs */
 #include "../../Open_SAE_J1939/Structs.h"
+#include "../SAE_J1939_Enums/Enum_Abort_Reason.h"
+#include "../SAE_J1939_Enums/Enum_Abort_Sender.h"
 #include "../SAE_J1939_Enums/Enum_Control_Byte.h"
 #include "../SAE_J1939_Enums/Enum_DM1_DM2.h"
 #include "../SAE_J1939_Enums/Enum_DM14_DM15.h"
