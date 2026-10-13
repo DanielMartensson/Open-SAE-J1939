@@ -6,6 +6,7 @@
  */
 
 #include "Transport_Layer.h"
+#include "SAE_J1939/SAE_J1939_Enums/Enum_Abort_Sender.h"
 
 /*
  * Store information about sequence data packages from other ECU who are going to send to this ECU
@@ -23,31 +24,39 @@ void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8
 
 	/* Check the control byte */
 	switch (data[0]) {
-	case CONTROL_BYTE_TP_CM_RTS:
-		/* Set the RTS values */
-		j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted = (data[2] << 8) | data[1];
-		j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted = data[3];
+		case CONTROL_BYTE_TP_CM_RTS:
+			/* Set the RTS values */
+			j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted = (data[2] << 8) | data[1];
+			j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted = data[3];
 
-		/* Send CTS */
-		j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_CTS;
-		j1939->this_ecu_tp_cm.number_of_packets_to_be_transmitted = 1;
-		j1939->this_ecu_tp_cm.next_packet_number_transmitted = 1;
-		j1939->this_ecu_tp_cm.PGN_of_the_packeted_message = (data[7] << 16) | (data[6] << 8) | data[5];
-		SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
-		break;
-	case CONTROL_BYTE_TP_CM_CTS:
-		j1939->from_other_ecu_tp_cm.number_of_packets_to_be_transmitted = data[1];
-		j1939->from_other_ecu_tp_cm.next_packet_number_transmitted = data[2];
-		SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, SA);
-		break;
-	case CONTROL_BYTE_TP_CM_BAM:
-		j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted = (data[2] << 8) | data[1];
-		j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted = data[3];
-		SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, SA);
-		break;
-	case CONTROL_BYTE_TP_CM_EndOfMsgACK:
-		j1939->from_other_ecu_tp_cm.total_number_of_bytes_received = (data[2] << 8) | data[1];
-		j1939->from_other_ecu_tp_cm.total_number_of_packages_received = data[3];
+			/* Send CTS */
+			j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_CTS;
+			j1939->this_ecu_tp_cm.number_of_packets_to_be_transmitted = 1;
+			j1939->this_ecu_tp_cm.next_packet_number_transmitted = 1;
+			j1939->this_ecu_tp_cm.PGN_of_the_packeted_message = (data[7] << 16) | (data[6] << 8) | data[5];
+			SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
+			break;
+		case CONTROL_BYTE_TP_CM_CTS:
+			j1939->from_other_ecu_tp_cm.number_of_packets_to_be_transmitted = data[1];
+			j1939->from_other_ecu_tp_cm.next_packet_number_transmitted = data[2];
+			SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, SA);
+			break;
+		case CONTROL_BYTE_TP_CM_BAM:
+			j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted = (data[2] << 8) | data[1];
+			j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted = data[3];
+			SAE_J1939_Send_Transport_Protocol_Data_Transfer(j1939, SA);
+			break;
+		case CONTROL_BYTE_TP_CM_EndOfMsgACK:
+			j1939->from_other_ecu_tp_cm.total_number_of_bytes_received = (data[2] << 8) | data[1];
+			j1939->from_other_ecu_tp_cm.total_number_of_packages_received = data[3];
+			/* End of transmission, reset the SN array */
+			for (int i = 0; i < 256; i++) {
+				j1939->this_ecu_tp_cm.previous_sequence_numbers[i] = false;
+			}
+			break;
+		case CONTROL_BYTE_TP_CM_ABORT:
+			j1939->from_other_ecu_tp_cm.connecting_abort_reason = data[1];
+			j1939->from_other_ecu_tp_cm.connecting_abort_sender = data[2];
 	}
 }
 
@@ -64,29 +73,53 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(
 
 	/* Check the control byte */
 	switch (data[0]) {
-	case CONTROL_BYTE_TP_CM_RTS:
-		data[1] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted;
-		data[2] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted >> 8;
-		data[3] = j1939->this_ecu_tp_cm.number_of_packages_being_transmitted;
-		data[4] = 0x01; 															/* Max number of packages to be transmitted at once */
-		break;
-	case CONTROL_BYTE_TP_CM_CTS:
-		data[1] = j1939->this_ecu_tp_cm.number_of_packets_to_be_transmitted;
-		data[2] = j1939->this_ecu_tp_cm.next_packet_number_transmitted;
-		data[3] = 0xFF; 															/* Reserved */
-		data[4] = 0xFF; 															/* Reserved */
-		break;
-	case CONTROL_BYTE_TP_CM_BAM:
-		data[1] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted;
-		data[2] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted >> 8;
-		data[3] = j1939->this_ecu_tp_cm.number_of_packages_being_transmitted;
-		data[4] = 0xFF; 															/* Reserved */
-		break;
-	case CONTROL_BYTE_TP_CM_EndOfMsgACK:
-		data[1] = j1939->this_ecu_tp_cm.total_number_of_bytes_received;
-		data[2] = j1939->this_ecu_tp_cm.total_number_of_bytes_received >> 8;
-		data[3] = j1939->this_ecu_tp_cm.total_number_of_packages_received;
-		data[4] = 0xFF; 															/* Reserved */
+		case CONTROL_BYTE_TP_CM_RTS:
+			data[1] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted;
+			data[2] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted >> 8;
+			data[3] = j1939->this_ecu_tp_cm.number_of_packages_being_transmitted;
+			data[4] = 0x01; 															/* Max number of packages to be transmitted at once */
+			break;
+		case CONTROL_BYTE_TP_CM_CTS:
+			data[1] = j1939->this_ecu_tp_cm.number_of_packets_to_be_transmitted;
+			data[2] = j1939->this_ecu_tp_cm.next_packet_number_transmitted;
+			data[3] = 0xFF; 															/* Reserved */
+			data[4] = 0xFF; 															/* Reserved */
+			break;
+		case CONTROL_BYTE_TP_CM_BAM:
+			data[1] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted;
+			data[2] = j1939->this_ecu_tp_cm.total_message_size_being_transmitted >> 8;
+			data[3] = j1939->this_ecu_tp_cm.number_of_packages_being_transmitted;
+			data[4] = 0xFF; 															/* Reserved */
+			break;
+		case CONTROL_BYTE_TP_CM_EndOfMsgACK:
+			/* End of transmission, reset the SN array */
+			for (int i = 0; i < 256; i++) {
+				j1939->this_ecu_tp_cm.previous_sequence_numbers[i] = false;
+			}
+			data[1] = j1939->this_ecu_tp_cm.total_number_of_bytes_received;
+			data[2] = j1939->this_ecu_tp_cm.total_number_of_bytes_received >> 8;
+			data[3] = j1939->this_ecu_tp_cm.total_number_of_packages_received;
+			data[4] = 0xFF; 															/* Reserved */
+		case CONTROL_BYTE_TP_CM_ABORT:
+			data[1] = j1939->this_ecu_tp_cm.connecting_abort_reason;
+			/*
+				J1939-21 specifies that Byte 3 is divided as such:
+					Bits 1-2: 	00b = abort sent from the Controller Application that sent the RTS (Originator)
+								01b = abort sent from the Controller Application that sent the CTS (Responder)
+								10b = Reserved by SAE
+								11b = Not specified/Not supported
+					Bits 3-8: Reserved, must be set to 1.
+				This produces:	11111100b = 0xFC for aborts generated by an originator
+								11111101b = 0xFD for aborts generated by a responder
+			*/
+			if (j1939->this_ecu_tp_cm.connecting_abort_sender != RESPONDER) {
+				data[2] = 0xFC; /* Originator causes the abort */
+			} else {
+				data[2] = 0xFD; /* Responder causes the abort */
+			}
+			data[3] = 0xFF;																/* Reserved */
+			data[4] = 0xFF;																/* Reserved */
+			break;
 	}
 	
 	/* PGN */

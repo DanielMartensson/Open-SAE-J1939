@@ -48,7 +48,8 @@ struct Acknowledgement {
 struct TP_CM {
 	/* General */
 	uint8_t control_byte;							/* What type of message are we going to send */
-	
+	bool previous_sequence_numbers[256];			/* Keep track of SNs already received. The standard allows up to 255 DT messages in one connection */
+
 	/* RTS */
 	uint16_t total_message_size_being_transmitted;	/* Total bytes our complete message includes - 9 to 1785 */
 	uint8_t number_of_packages_being_transmitted;	/* How many times we are going to send packages via TP_DT - 2 to 224 because 1785/8 is 224 rounded up */
@@ -63,6 +64,7 @@ struct TP_CM {
 
 	/* Abort */
 	uint8_t connecting_abort_reason;				/* Given a massage about the reason */
+	uint8_t connecting_abort_sender;				/* Who is sending the abort? */
 
 	/* General */
 	uint32_t PGN_of_the_packeted_message;			/* Our message is going to activate a PGN */

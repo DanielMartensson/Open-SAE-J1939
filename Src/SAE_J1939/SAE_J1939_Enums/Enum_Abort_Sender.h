@@ -1,0 +1,14 @@
+//
+// Created by ale-polimi on 13/10/26.
+//
+
+#ifndef SAE_J1939_SAE_J1939_ENUMS_SAE_J1939_ENUM_ABORT_SENDER_H
+#define SAE_J1939_SAE_J1939_ENUMS_SAE_J1939_ENUM_ABORT_SENDER_H
+
+/* Abort reason sender enums */
+typedef enum {
+    ORIGINATOR = 0x01U,
+    RESPONDER = 0x02U
+}ENUM_ABORT_SENDER_CODES;
+
+#endif //SAE_J1939_SAE_J1939_ENUMS_SAE_J1939_ENUM_ABORT_SENDER_H

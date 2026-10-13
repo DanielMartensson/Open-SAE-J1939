@@ -17,6 +17,7 @@
  * PGN: 0x00EB00 (60160)
  */
 void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, uint8_t data[]) {
+	bool abortCommunication = false;
 	/* Save the sequence data */
 	j1939->from_other_ecu_tp_dt.sequence_number = data[0];
 	j1939->from_other_ecu_tp_dt.from_ecu_address = SA;
@@ -24,82 +25,106 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	for (i = 1; i < 8; i++){
 		j1939->from_other_ecu_tp_dt.data[index*7 + i-1] = data[i]; /* For every package, we send 7 bytes of data where the first byte data[0] is the sequence number */
 	}
-	/* Check if we have completed our message - Return = Not completed */
-	if (j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted != j1939->from_other_ecu_tp_dt.sequence_number || j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted == 0){
-		if (j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS) {
-			/* Send new CTS */
-			j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_CTS;
-			j1939->this_ecu_tp_cm.next_packet_number_transmitted++;
+	
+	/* Check if The SN has already been received - NOT APPLICABLE FOR BAM*/
+	if (j1939->this_ecu_tp_cm.previous_sequence_numbers[data[0]] == true && j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS) {
+		j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_ABORT;
+		j1939->this_ecu_tp_cm.connecting_abort_reason = DUPLICATE_SN;
+		j1939->this_ecu_tp_cm.connecting_abort_sender = RESPONDER;
+		SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
+		abortCommunication = true;
+	} /* Check if the received frame has the correct sequence number - NOT APPLICABLE FOR BAM*/
+	else if (j1939->this_ecu_tp_cm.next_packet_number_transmitted != j1939->from_other_ecu_tp_dt.sequence_number && j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS) {
+		j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_ABORT;
+		j1939->this_ecu_tp_cm.connecting_abort_reason = BAD_SN;
+		j1939->this_ecu_tp_cm.connecting_abort_sender = RESPONDER;
+		SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
+		abortCommunication = true;
+	}
+	/* Check for more abort reasons... */
+
+	if (!abortCommunication) {
+		/* After checking, we can put the SN in the previously received SNs */
+		j1939->this_ecu_tp_cm.previous_sequence_numbers[data[0]] = true;
+
+		/* Check if we have completed our message - Return = Not completed */
+		if (j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted != j1939->from_other_ecu_tp_dt.sequence_number || j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted == 0){
+			if (j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS) {
+				/* Send new CTS */
+				j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_CTS;
+				j1939->this_ecu_tp_cm.next_packet_number_transmitted++;
+				SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
+			}
+			return;
+		}
+
+
+		/* Our message are complete - Build it and call it complete_data[total_message_size] */
+		uint32_t PGN = j1939->from_other_ecu_tp_cm.PGN_of_the_packeted_message;
+		uint16_t total_message_size = j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted;
+		uint8_t complete_data[MAX_TP_DT];
+		uint16_t inserted_bytes = 0;
+		for (i = 0; i < j1939->from_other_ecu_tp_dt.sequence_number; i++){
+			for (j = 0; j < 7; j++){
+				if (inserted_bytes < total_message_size){
+					complete_data[inserted_bytes++] = j1939->from_other_ecu_tp_dt.data[i*7 + j];
+				}
+			}
+		}
+
+		/* Send an end of message ACK back */
+		if(j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS){
+			j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_EndOfMsgACK;
+			j1939->this_ecu_tp_cm.total_number_of_bytes_received = j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted;
+			j1939->this_ecu_tp_cm.total_number_of_packages_received = j1939->from_other_ecu_tp_dt.sequence_number;
 			SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
 		}
-		return;
-	}
-
-	/* Our message are complete - Build it and call it complete_data[total_message_size] */
-	uint32_t PGN = j1939->from_other_ecu_tp_cm.PGN_of_the_packeted_message;
-	uint16_t total_message_size = j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted;
-	uint8_t complete_data[MAX_TP_DT];
-	uint16_t inserted_bytes = 0;
-	for (i = 0; i < j1939->from_other_ecu_tp_dt.sequence_number; i++){
-		for (j = 0; j < 7; j++){
-			if (inserted_bytes < total_message_size){
-				complete_data[inserted_bytes++] = j1939->from_other_ecu_tp_dt.data[i*7 + j];
+		/* Check what type of function that message want this ECU to do */
+		switch (PGN) {
+			case PGN_COMMANDED_ADDRESS:
+				SAE_J1939_Read_Commanded_Address(j1939, complete_data);								/* Insert new name and new address to this ECU */
+				break;
+			case PGN_DM1:
+				SAE_J1939_Read_Response_Request_DM1(j1939, SA, complete_data, (total_message_size-2)/4); 	/* Number of DTCs = 4 bytes per DTC excluding 2 bytes for the lamp */
+				break;
+			case PGN_DM2:
+				SAE_J1939_Read_Response_Request_DM2(j1939, SA, complete_data, (total_message_size-2)/4); 	/* Number of DTCs = 4 bytes per DTC excluding 2 bytes for the lamp */
+				break;
+			case PGN_DM16:
+				SAE_J1939_Read_Binary_Data_Transfer_DM16(j1939, SA, complete_data);
+				break;
+			case PGN_SOFTWARE_IDENTIFICATION:
+				SAE_J1939_Read_Response_Request_Software_Identification(j1939, SA, complete_data);
+				break;
+			case PGN_ECU_IDENTIFICATION: {
+				j1939->from_other_ecu_identifications.ecu_identification.length_of_each_field = total_message_size/4;
+				SAE_J1939_Read_Response_Request_ECU_Identification(j1939, SA, complete_data);
+				break;
 			}
+			case PGN_COMPONENT_IDENTIFICATION: {
+				j1939->from_other_ecu_identifications.component_identification.length_of_each_field = total_message_size/4;
+				SAE_J1939_Read_Response_Request_Component_Identification(j1939, SA, complete_data);
+				break;
+			}
+			case PGN_PROPRIETARY_A:
+				SAE_J1939_Read_Response_Request_Proprietary_A(j1939, SA, complete_data);
+				break;
+			case PGN_VEHICLE_IDENTIFICATION:
+				SAE_J1939_Read_Response_Request_Vehicle_Identification(j1939, SA, complete_data);
+				break;
+				/* Add more here */
+			default:
+				if (((PGN >= PGN_PROPRIETARY_B_START) && (PGN <= PGN_PROPRIETARY_B_END)) ||
+					((PGN >= PGN_PROPRIETARY_B2_START) && (PGN <= PGN_PROPRIETARY_B2_END))) {
+					SAE_J1939_Read_Response_Request_Proprietary_B(j1939, SA, PGN, complete_data);
+					}
+				break;
 		}
-	}
 
-	/* Send an end of message ACK back */
-	if(j1939->from_other_ecu_tp_cm.control_byte == CONTROL_BYTE_TP_CM_RTS){
-		j1939->this_ecu_tp_cm.control_byte = CONTROL_BYTE_TP_CM_EndOfMsgACK;
-		j1939->this_ecu_tp_cm.total_number_of_bytes_received = j1939->from_other_ecu_tp_cm.total_message_size_being_transmitted;
-		j1939->this_ecu_tp_cm.total_number_of_packages_received = j1939->from_other_ecu_tp_dt.sequence_number;
-		SAE_J1939_Send_Transport_Protocol_Connection_Management(j1939, SA);
+		/* Delete TP DT and TP CM */
+		memset(&j1939->from_other_ecu_tp_dt, 0, sizeof(j1939->from_other_ecu_tp_dt));
+		memset(&j1939->from_other_ecu_tp_cm, 0, sizeof(j1939->from_other_ecu_tp_cm));
 	}
-	/* Check what type of function that message want this ECU to do */
-	switch (PGN) {
-	case PGN_COMMANDED_ADDRESS:
-		SAE_J1939_Read_Commanded_Address(j1939, complete_data);								/* Insert new name and new address to this ECU */
-		break;
-	case PGN_DM1:
-		SAE_J1939_Read_Response_Request_DM1(j1939, SA, complete_data, (total_message_size-2)/4); 	/* Number of DTCs = 4 bytes per DTC excluding 2 bytes for the lamp */
-		break;
-	case PGN_DM2:
-		SAE_J1939_Read_Response_Request_DM2(j1939, SA, complete_data, (total_message_size-2)/4); 	/* Number of DTCs = 4 bytes per DTC excluding 2 bytes for the lamp */
-		break;
-	case PGN_DM16:
-		SAE_J1939_Read_Binary_Data_Transfer_DM16(j1939, SA, complete_data);
-		break;
-	case PGN_SOFTWARE_IDENTIFICATION:
-		SAE_J1939_Read_Response_Request_Software_Identification(j1939, SA, complete_data);
-		break;
-	case PGN_ECU_IDENTIFICATION: { 
-		j1939->from_other_ecu_identifications.ecu_identification.length_of_each_field = total_message_size/4;
-		SAE_J1939_Read_Response_Request_ECU_Identification(j1939, SA, complete_data);
-		break;
-  }
-	case PGN_COMPONENT_IDENTIFICATION: {
-		j1939->from_other_ecu_identifications.component_identification.length_of_each_field = total_message_size/4;
-		SAE_J1939_Read_Response_Request_Component_Identification(j1939, SA, complete_data);
-		break;
-  }
-	case PGN_PROPRIETARY_A:
-		SAE_J1939_Read_Response_Request_Proprietary_A(j1939, SA, complete_data);
-		break;
-	case PGN_VEHICLE_IDENTIFICATION:
-		SAE_J1939_Read_Response_Request_Vehicle_Identification(j1939, SA, complete_data);
-		break;
-	/* Add more here */
-	default:
-		if (((PGN >= PGN_PROPRIETARY_B_START) && (PGN <= PGN_PROPRIETARY_B_END)) || 
-		    ((PGN >= PGN_PROPRIETARY_B2_START) && (PGN <= PGN_PROPRIETARY_B2_END))) {
-			SAE_J1939_Read_Response_Request_Proprietary_B(j1939, SA, PGN, complete_data);
-			}
-		break;
-	}
-
-	/* Delete TP DT and TP CM */
-	memset(&j1939->from_other_ecu_tp_dt, 0, sizeof(j1939->from_other_ecu_tp_dt));
-	memset(&j1939->from_other_ecu_tp_cm, 0, sizeof(j1939->from_other_ecu_tp_cm));
 }
 
 /*
