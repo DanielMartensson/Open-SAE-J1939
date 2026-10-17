@@ -100,6 +100,7 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Send_Transport_Protocol_Connection_Management(
 			data[2] = j1939->this_ecu_tp_cm.total_number_of_bytes_received >> 8;
 			data[3] = j1939->this_ecu_tp_cm.total_number_of_packages_received;
 			data[4] = 0xFF; 															/* Reserved */
+			break;
 		case CONTROL_BYTE_TP_CM_ABORT:
 			data[1] = j1939->this_ecu_tp_cm.connecting_abort_reason;
 			/*
