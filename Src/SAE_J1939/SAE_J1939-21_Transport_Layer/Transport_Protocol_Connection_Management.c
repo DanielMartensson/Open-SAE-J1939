@@ -22,6 +22,14 @@ void SAE_J1939_Read_Transport_Protocol_Connection_Management(J1939 *j1939, uint8
 	/* Source address */
 	j1939->from_other_ecu_tp_cm.from_ecu_address = SA;
 
+	/* A connection management BAM/RTS must announce a message that fits the
+	 * receive buffer used by TP_DT (J1939-21 caps this at 1785 bytes). */
+	if ((data[0] == CONTROL_BYTE_TP_CM_RTS || data[0] == CONTROL_BYTE_TP_CM_BAM) &&
+			(((data[2] << 8) | data[1]) > MAX_TP_DT || data[3] == 0)) {
+		j1939->from_other_ecu_tp_cm.control_byte = 0;
+		return;
+	}
+
 	/* Check the control byte */
 	switch (data[0]) {
 		case CONTROL_BYTE_TP_CM_RTS:

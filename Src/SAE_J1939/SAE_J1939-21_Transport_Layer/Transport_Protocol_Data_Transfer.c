@@ -21,6 +21,11 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 	/* Save the sequence data */
 	j1939->from_other_ecu_tp_dt.sequence_number = data[0];
 	j1939->from_other_ecu_tp_dt.from_ecu_address = SA;
+	/* Only sequence numbers within the announced package count are valid.
+	 * Rejecting 0 also prevents data[0]-1 from wrapping to 255. */
+	if (data[0] == 0 || data[0] > j1939->from_other_ecu_tp_cm.number_of_packages_being_transmitted) {
+		return;
+	}
 	uint8_t i, j, index = data[0] - 1;
 	for (i = 1; i < 8; i++){
 		j1939->from_other_ecu_tp_dt.data[index*7 + i-1] = data[i]; /* For every package, we send 7 bytes of data where the first byte data[0] is the sequence number */
@@ -97,12 +102,14 @@ void SAE_J1939_Read_Transport_Protocol_Data_Transfer(J1939 *j1939, uint8_t SA, u
 				SAE_J1939_Read_Response_Request_Software_Identification(j1939, SA, complete_data);
 				break;
 			case PGN_ECU_IDENTIFICATION: {
-				j1939->from_other_ecu_identifications.ecu_identification.length_of_each_field = total_message_size/4;
+				j1939->from_other_ecu_identifications.ecu_identification.length_of_each_field =
+						total_message_size/4 > MAX_IDENTIFICATION ? MAX_IDENTIFICATION : total_message_size/4;
 				SAE_J1939_Read_Response_Request_ECU_Identification(j1939, SA, complete_data);
 				break;
 			}
 			case PGN_COMPONENT_IDENTIFICATION: {
-				j1939->from_other_ecu_identifications.component_identification.length_of_each_field = total_message_size/4;
+				j1939->from_other_ecu_identifications.component_identification.length_of_each_field =
+						total_message_size/4 > MAX_IDENTIFICATION ? MAX_IDENTIFICATION : total_message_size/4;
 				SAE_J1939_Read_Response_Request_Component_Identification(j1939, SA, complete_data);
 				break;
 			}
