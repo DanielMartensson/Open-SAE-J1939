@@ -63,6 +63,9 @@ ENUM_J1939_STATUS_CODES SAE_J1939_Response_Request_Proprietary_A(J1939* j1939, u
 void SAE_J1939_Read_Response_Request_Proprietary_A(J1939* j1939, uint8_t SA, uint8_t data[]) {
 	/* Proprietary A have 1 fixed field in the J1939 struct */
 	uint16_t total_bytes = j1939->from_other_ecu_proprietary.proprietary_A.total_bytes;
+	if (total_bytes > sizeof(j1939->from_other_ecu_proprietary.proprietary_A.data)) {
+		total_bytes = sizeof(j1939->from_other_ecu_proprietary.proprietary_A.data);
+	}
 	memcpy(j1939->from_other_ecu_proprietary.proprietary_A.data, data, total_bytes);
 	j1939->from_other_ecu_proprietary.proprietary_A.from_ecu_address = SA;
   if (Callback_Function_Application) {

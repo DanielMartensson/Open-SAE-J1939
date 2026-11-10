@@ -90,6 +90,9 @@ void SAE_J1939_Read_Response_Request_Proprietary_B(J1939* j1939, uint8_t SA, uin
 	}
 
 	uint16_t total_bytes = proprietary_B->total_bytes;
+	if (total_bytes > sizeof(proprietary_B->data)) {
+		total_bytes = sizeof(proprietary_B->data);
+	}
 	memcpy(proprietary_B->data, data, total_bytes);
 	proprietary_B->from_ecu_address = SA;
   if (Callback_Function_Application) {

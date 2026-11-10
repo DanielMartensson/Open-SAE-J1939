@@ -11,3 +11,7 @@ enable_testing()
 add_executable(transport_eom transport_eom.c)
 target_link_libraries(transport_eom PRIVATE opensaej1939)
 add_test(NAME transport_eom COMMAND transport_eom)
+
+add_executable(component_identification component_identification.c)
+target_link_libraries(component_identification PRIVATE opensaej1939)
+add_test(NAME component_identification COMMAND component_identification)
