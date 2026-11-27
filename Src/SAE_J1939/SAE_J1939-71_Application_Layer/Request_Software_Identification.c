@@ -66,7 +66,10 @@ void SAE_J1939_Read_Response_Request_Software_Identification(J1939 *j1939, uint8
 	j1939->from_other_ecu_identifications.software_identification.number_of_fields = data[0];			 /* How many fields we have */
 	j1939->from_other_ecu_identifications.software_identification.from_ecu_address = SA;
 	uint8_t i;
-	for(i = 0; i < data[0]; i++){
+	uint8_t n = data[0];
+	if (n > 7) n = 7;						 /* a single frame carries at most 7 payload bytes */
+	if (n > MAX_IDENTIFICATION) n = MAX_IDENTIFICATION;
+	for(i = 0; i < n; i++){
 		j1939->from_other_ecu_identifications.software_identification.identifications[i] = data[i+1];	 /* 1 for the number of fields */
 	}
   if (Callback_Function_Application) {
